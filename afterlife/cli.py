@@ -9,6 +9,7 @@
     afterlife export
     afterlife findings
     afterlife conformance
+    afterlife results
 
 The landing zone is `data/` by default, or an S3 bucket when
 AFTERLIFE_LANDING=s3://bucket. The lake is `data/lake` by default, or a Unity
@@ -53,8 +54,19 @@ def write_run(command: str, report: dict, started: float) -> Path:
     return path
 
 
+def _landed_today(store: Store, source: str) -> str | None:
+    """A manifest for today's snapshot, if one exists. Checked before a fetch,
+    not after: landing is idempotent anyway, but a metered OpenAlex fetch would
+    already have been paid for by the time the duplicate was noticed."""
+    key = f"landing/{source}/snapshot_date={date.today().isoformat()}/_manifest.json"
+    return key if store.exists(key) else None
+
+
 def cmd_fetch(args) -> dict:
     store = store_from_env()
+    source_dir = {"openalex": "openalex", "pubmed": "pubmed"}.get(args.source)
+    if source_dir and not args.force and (key := _landed_today(store, source_dir)):
+        return {"skipped": "already landed today", "manifest": key}
     if args.source == "retraction-watch":
         from afterlife.sources import retraction_watch as rw
 
@@ -151,6 +163,12 @@ def cmd_conformance(args) -> dict:
     return conformance.run(build=not args.no_build)
 
 
+def cmd_results(args) -> dict:
+    from afterlife import results
+
+    return results.run(findings=args.findings)
+
+
 def cmd_findings(args) -> dict:
     from afterlife import findings
 
@@ -169,6 +187,7 @@ def main(argv: list[str] | None = None) -> int:
     f.add_argument("--since")
     f.add_argument("--budget", type=float, default=0.09, help="USD cap for metered APIs")
     f.add_argument("--workers", type=int, default=16)
+    f.add_argument("--force", action="store_true", help="fetch even if today is landed")
     f.set_defaults(func=cmd_fetch)
 
     sub.add_parser("bronze").set_defaults(func=cmd_bronze)
@@ -182,6 +201,9 @@ def main(argv: list[str] | None = None) -> int:
     e.add_argument("--out", default="data/export")
     e.set_defaults(func=cmd_export)
     sub.add_parser("findings").set_defaults(func=cmd_findings)
+    r = sub.add_parser("results", help="render RESULTS.md from run reports")
+    r.add_argument("--findings", help="a runs/*-findings.json (default: the newest)")
+    r.set_defaults(func=cmd_results)
     c = sub.add_parser("conformance", help="build gold on DuckDB and Spark, compare every row")
     c.add_argument("--no-build", action="store_true")
     c.set_defaults(func=cmd_conformance)
