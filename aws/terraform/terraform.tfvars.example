@@ -1,0 +1,33 @@
+# Copy to terraform.tfvars (gitignored by convention; it holds an email and,
+# optionally, a Databricks token) and edit.
+
+region      = "us-east-1"
+environment = "dev"
+name_prefix = "afterlife"
+
+# Required. SNS sends a confirmation link; alarms are silent until it is clicked.
+alert_email        = "you@example.com"
+monthly_budget_usd = 10
+
+# step_functions runs all three fetches in parallel and then the Databricks
+# job; scheduler runs each fetch on its own schedule.
+orchestrator        = "step_functions"
+schedule_expression = "cron(30 23 * * ? *)"
+
+openalex_budget_usd      = 0.09
+openalex_api_key_enabled = false
+openalex_image_tag       = "0.1.0"
+
+# Leave empty to skip the Databricks step.
+databricks_host   = ""
+databricks_job_id = 0
+# databricks_token = "set with TF_VAR_databricks_token, not in this file"
+
+api_throttle_burst = 50
+api_throttle_rate  = 25
+cors_allow_origins = ["*"]
+
+athena_bytes_scanned_cutoff = 1073741824
+
+github_repository           = "TanayPratapSingh/afterlife"
+create_github_oidc_provider = true
