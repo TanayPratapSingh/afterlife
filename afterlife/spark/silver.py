@@ -26,8 +26,6 @@ snapshot, explode citation counts by year.
 
 from __future__ import annotations
 
-from datetime import date
-
 from pyspark.sql import DataFrame, SparkSession, Window
 from pyspark.sql import functions as F
 
@@ -395,7 +393,11 @@ def _key(nature: str) -> F.Column:
         F.col("nature") == nature,
         F.struct(
             F.col("notice_date").isNotNull().alias("dated"),
-            F.coalesce(F.col("notice_date"), F.lit(date.min)).alias("d"),
+            # A Spark side literal, not F.lit(date.min): PySpark ships a Python
+            # date through strftime("%Y-%m-%d"), which glibc renders as
+            # "1-01-01" for year 1 and java.sql.Date rejects. It passed on
+            # macOS and failed on Linux CI, and Databricks runs Linux.
+            F.coalesce(F.col("notice_date"), F.lit("0001-01-01").cast("date")).alias("d"),
             F.lit(_RANK[nature]).alias("rank"),
         ),
     )
