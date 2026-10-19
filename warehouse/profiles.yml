@@ -1,0 +1,59 @@
+afterlife:
+  target: duckdb
+  outputs:
+    # Executed locally. Reads silver Delta tables through DuckDB's delta extension.
+    duckdb:
+      type: duckdb
+      path: "{{ env_var('AFTERLIFE_DUCKDB', 'afterlife.duckdb') }}"
+      extensions: [delta]
+      threads: 4
+
+    # Executed locally. Spark SQL in process with Delta, the same engine
+    # Databricks runs, so this is the closest local stand in for the cloud target.
+    spark:
+      type: spark
+      method: session
+      host: NA
+      schema: gold
+      server_side_parameters:
+        spark.sql.extensions: io.delta.sql.DeltaSparkSessionExtension
+        spark.sql.catalog.spark_catalog: org.apache.spark.sql.delta.catalog.DeltaCatalog
+        spark.jars.packages: io.delta:delta-spark_2.12:3.3.2
+        spark.sql.session.timeZone: UTC
+        # Same as afterlife/spark/session.py. Spark's 1g default runs out of
+        # heap joining the 12.5 million row PMC id map (measured: OOM).
+        spark.driver.memory: 4g
+        spark.sql.shuffle.partitions: "8"
+        spark.ui.enabled: "false"
+        spark.ui.showConsoleProgress: "false"
+
+    # Not executed: needs a workspace. Free Edition gives a serverless SQL warehouse.
+    databricks:
+      type: databricks
+      host: "{{ env_var('DATABRICKS_HOST', 'unset') }}"
+      http_path: "{{ env_var('DATABRICKS_HTTP_PATH', 'unset') }}"
+      token: "{{ env_var('DATABRICKS_TOKEN', 'unset') }}"
+      catalog: "{{ env_var('AFTERLIFE_SILVER_DATABASE', 'afterlife') }}"
+      schema: gold
+      threads: 4
+
+    # Not executed: needs an account. Silver is loaded from the parquet export.
+    snowflake:
+      type: snowflake
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT', 'unset') }}"
+      user: "{{ env_var('SNOWFLAKE_USER', 'unset') }}"
+      authenticator: externalbrowser
+      role: "{{ env_var('SNOWFLAKE_ROLE', 'AFTERLIFE') }}"
+      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', 'AFTERLIFE_XS') }}"
+      database: "{{ env_var('AFTERLIFE_SILVER_DATABASE', 'AFTERLIFE') }}"
+      schema: gold
+      threads: 4
+
+    # Not executed: needs a project. The BigQuery sandbox is free and needs no card.
+    bigquery:
+      type: bigquery
+      method: oauth
+      project: "{{ env_var('AFTERLIFE_SILVER_DATABASE', 'unset') }}"
+      dataset: gold
+      location: US
+      threads: 4

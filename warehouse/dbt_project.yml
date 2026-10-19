@@ -1,0 +1,45 @@
+name: afterlife
+version: "0.1.0"
+config-version: 2
+profile: afterlife
+
+# Gold. Silver is built by the Spark jobs in afterlife/spark; these models read
+# it and publish the marts the API, the findings, and EvidenceOps consume.
+#
+# The same models run on four engines. DuckDB and Spark SQL (the engine under
+# Databricks) are executed locally and compared row by row by
+# afterlife/conformance.py. Databricks, Snowflake, and BigQuery profiles exist
+# and compile; they have not been run against a live warehouse.
+# Engine differences live in macros/cross_engine.sql behind adapter.dispatch,
+# never inline in a model.
+
+model-paths: ["models"]
+macro-paths: ["macros"]
+test-paths: ["tests"]
+target-path: "target"
+clean-targets: ["target", "dbt_packages"]
+
+vars:
+  # Catalog (Databricks), database (Snowflake), or project (BigQuery) holding
+  # silver. Override with --vars; vars here are not Jinja rendered.
+  silver_database: afterlife
+  # OpenAlex counts_by_year starts here (measured: counts_by_year_min_year in
+  # the OpenAlex landing manifest). Citation windows before it are unknown.
+  citation_window_start: 2012
+
+on-run-start:
+  - "{{ register_silver_sources() }}"
+
+models:
+  afterlife:
+    +persist_docs:
+      relation: true
+      columns: true
+    intermediate:
+      +materialized: view
+      +schema: gold
+    marts:
+      +materialized: table
+      +schema: gold
+      +file_format: "{{ 'delta' if target.type in ['spark', 'databricks'] else none }}"
+      +location_root: "{{ env_var('AFTERLIFE_LAKE_ABS', '../data/lake') ~ '/gold' if target.type == 'spark' else none }}"
