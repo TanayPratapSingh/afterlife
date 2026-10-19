@@ -14,9 +14,11 @@ published) that refuses to cite retracted papers. EvidenceOps needs a registry t
 against. This project builds one, and found that no single public source is
 good enough to be it.
 
-Everything below was run on real public data on 2026-10-19, on a laptop.
-Every number names the run report it came from. The canonical one is
-`runs/20261019T203916Z-findings.json`; [RESULTS.md](RESULTS.md) has every
+Everything below was run on real public data on 2026-10-19, on a laptop, and
+the same code was then deployed to a live AWS account and a Databricks Free
+Edition workspace (see [Live deployment](#live-deployment)). Every number
+names the run report it came from. The canonical one is
+`runs/20261019T224600Z-findings.json`; [RESULTS.md](RESULTS.md) has every
 table with its key.
 
 ---
@@ -127,13 +129,13 @@ a test. They are why the design looks the way it does.
 | Layer | Technology | What it does here | Status |
 | --- | --- | --- | --- |
 | Landing | S3 (locally, a directory) | Raw bytes, sha256 manifests, `If-None-Match: *` writes that refuse to overwrite | executed locally; S3 path tested with moto |
-| Ingest | Lambda, ECS Fargate, ECR, EventBridge Scheduler, Step Functions, SQS | Daily fetchers. OpenAlex runs on Fargate: its fetch took 9 minutes 42 seconds, two thirds of Lambda's 15 minute ceiling | moto tests, `terraform test` with a mock provider |
-| Transform | Spark 3.5 and Delta Lake, Databricks Unity Catalog, serverless | Manifest driven bronze; SCD2 replay of 39 snapshots with Delta MERGE and change data feed; the quality gate | executed locally on Spark; bundle validated |
-| Orchestration | Databricks Asset Bundle, Lakeflow Jobs, Lakeflow Declarative Pipeline | Daily DAG; pipeline expectations as a publication contract | bundle loads in Databricks CLI v1.21.0; transforms unit tested |
-| Gold | dbt on DuckDB, Spark SQL, Databricks, Snowflake, BigQuery | Identity across DOI, PMID, PMCID; registry, agreement, lag, afterlife, reasons, mutability | DuckDB and Spark executed and compared row by row; others `dbt parse` |
-| Serving | DynamoDB, Lambda, API Gateway HTTP API | `GET /v1/lookup/{id}` with a plain English, per source explanation | moto tests |
-| Analytics | Glue Data Catalog, Athena | Partition projected Parquet, a bytes scanned cutoff per query | `terraform validate` |
-| Platform | Terraform, KMS, IAM, GitHub OIDC, CloudWatch, SNS, AWS Budgets | Least privilege roles, alarms, a monthly cost budget | checkov 390 passed, 0 failed, 25 skipped with reasons (`runs/20261019T203857Z-checkov.json`) |
+| Ingest | Lambda, ECS Fargate, ECR, EventBridge Scheduler, Step Functions, SQS | Daily fetchers. OpenAlex runs on Fargate: its fetch took 9 minutes 42 seconds, two thirds of Lambda's 15 minute ceiling | **deployed**: Lambda and Fargate fetches and the Step Functions run succeeded live |
+| Transform | Spark 3.5 and Delta Lake, Databricks Unity Catalog, serverless | Manifest driven bronze; SCD2 replay of 39 snapshots with Delta MERGE and change data feed; the quality gate | **deployed**: the Databricks job built the same SCD2 history as the laptop (152,336 versions) |
+| Orchestration | Databricks Asset Bundle, Lakeflow Jobs, Lakeflow Declarative Pipeline | Daily DAG; pipeline expectations as a publication contract | **deployed**: job and pipeline ran green on Free Edition |
+| Gold | dbt on DuckDB, Spark SQL, Databricks, Snowflake, BigQuery | Identity across DOI, PMID, PMCID; registry, agreement, lag, afterlife, reasons, mutability | DuckDB and Spark compared row by row; **ran on a Databricks SQL warehouse**; Snowflake and BigQuery `dbt parse` only |
+| Serving | DynamoDB, Lambda, API Gateway HTTP API | `GET /v1/lookup/{id}` with a plain English, per source explanation | **deployed**: 214,646 items loaded, lookups answered live |
+| Analytics | Glue Data Catalog, Athena | Partition projected Parquet, a bytes scanned cutoff per query | **deployed**: a live query matched gold, 5,012 bytes scanned |
+| Platform | Terraform, KMS, IAM, GitHub OIDC, CloudWatch, SNS, AWS Budgets | Least privilege roles, alarms, a monthly cost budget | **deployed** except the GitHub OIDC role (the account's SCP denies it); checkov 390 passed, 0 failed, 25 skipped with reasons (`runs/20261019T203857Z-checkov.json`) |
 | CI | GitHub Actions | Core on Python 3.11 and 3.12, Spark on 3.5.3 and 4.0.1, dbt parse, Terraform | green; its first run found two bugs (incidents 9 and 10) |
 
 **Cross engine conformance.** The same dbt models are built on DuckDB and on
@@ -172,17 +174,58 @@ To deploy, follow [aws/README.md](aws/README.md) (an AWS free tier account,
 then `terraform apply`) and [databricks/README.md](databricks/README.md)
 (Databricks Free Edition, then `databricks bundle deploy -t free`).
 
+## Live deployment
+
+On 2026-10-19 the stack was applied to a new AWS free plan account
+(`us-east-2`) and the bundle to a Databricks Free Edition workspace. What ran:
+
+- **AWS.** Terraform created the stack (everything except the GitHub OIDC
+  deploy role, which the account's Organization denies by SCP). The fetch
+  Lambda landed PubMed in 24.3 s with the same sha256 as the laptop's object;
+  the OpenAlex container on Fargate landed 136,873 works in 709 calls; the
+  nightly Step Functions workflow succeeded; the loader wrote 214,646 items
+  for 92,097 documents into DynamoDB in about 55 s; the HTTP API answered
+  lookups by DOI, PMID, and DOI URL; Athena returned gold's verdict counts.
+- **Databricks.** The daily job ran every task green: setup, bronze, silver,
+  the Lakeflow quality pipeline, dbt gold on the serverless SQL warehouse, and
+  the export. Silver built the same history as the laptop (152,336 versions of
+  73,334 records, the same snapshot quarantined with the same 5,520 lossy
+  records), and after one fix the uncompressed export is byte identical to the
+  laptop's, all 92,097 documents.
+
+The live run found six bugs the local suite had not, each now fixed with a
+test or a documented change:
+
+11. **An SCP on free plan accounts denies `iam:CreateOpenIDConnectProvider`.**
+    The GitHub deploy role is optional (`enable_github_deploy_role`).
+12. **Terraform cannot read `aws login` credentials**; `aws/tf.sh` exports the
+    session for one process.
+13. **The loader refused the first export whole**: 126 verdicts were `ok`, a
+    value outside the serving contract. Lone reinstatement records are now
+    published as `reinstated`, and a test reads the loader's accepted values
+    from its source.
+14. **API Gateway collapses `//`**, so a DOI URL arrived as `https:/doi.org/...`
+    and got a 400. Both forms are accepted, in Python and in Spark.
+15. **The read only Fargate container could not write its run report.**
+    Reports now go to `s3://<bucket>/runs/`.
+16. **`F.first` chose a different PMID on Databricks than on the laptop** for 2
+    papers whose Retraction Watch records disagree (3 papers in all). The
+    choice is now deterministic: the retraction record's PMID first.
+
+Live endpoint, while the stack is up:
+`https://76gt9n1650.execute-api.us-east-2.amazonaws.com/v1/lookup/10.1056/NEJMoa2007621`
+
 ## What ran where
 
-| | Executed on real data | Executed on synthetic data | Validated statically | Not executed |
+| | Executed live in the cloud | Executed on real data locally | Executed on synthetic data | Validated statically |
 | --- | --- | --- | --- | --- |
-| Fetchers, landing, CLI | yes | fake APIs | | |
-| Bronze and silver on Spark | yes | SCD2 lifecycle tests | | Databricks runtime |
-| dbt gold on DuckDB and Spark SQL | yes, compared row by row | | | |
-| dbt on Databricks, Snowflake, BigQuery | | | `dbt parse` | live warehouse |
-| Lambda handlers | | moto | | AWS |
-| Terraform | | `terraform test`, mock provider | fmt, validate, checkov | `plan`, `apply` |
-| Databricks bundle and pipeline | | pipeline transforms, entry points | CLI schema, bundle load | workspace |
+| Fetchers, landing, CLI | Lambda and Fargate | yes | fake APIs | |
+| Bronze and silver on Spark | Databricks job | yes | SCD2 lifecycle tests | |
+| dbt gold | Databricks SQL warehouse | DuckDB and Spark SQL, compared row by row | | Snowflake, BigQuery: `dbt parse` |
+| Lambda handlers and API | yes | | moto | |
+| Terraform | applied | | `terraform test`, mock provider | fmt, validate, checkov |
+| Databricks bundle and pipeline | deployed and run | | pipeline transforms, entry points | CLI schema |
+| GitHub deploy role | blocked by the account's SCP | | | |
 
 ## Limitations
 
