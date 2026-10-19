@@ -1,0 +1,59 @@
+version: 2
+
+models:
+  - name: registry
+    description: One row per paper any registry flags, with each registry's flag and a verdict.
+    columns:
+      - name: paper_key
+        tests: [not_null, unique]
+      - name: verdict
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [retracted, disputed, concern, corrected, reinstated, ok]
+      - name: n_flagging
+        tests: [not_null]
+
+  - name: flag_exclusions
+    description: Source rows left out of the registry because they are notices, not papers.
+    tests:
+      - unique_combination:
+          arguments:
+            columns: [source, notice_reason]
+
+  - name: registry_agreement
+    description: Per registry, how many eligible papers it flags, against the union of all flags.
+    columns:
+      - name: source
+        tests: [not_null, unique]
+
+  - name: retraction_lag
+    description: Days from publication to retraction for each dated Retraction Watch notice.
+    columns:
+      - name: record_id
+        tests: [not_null, unique]
+      - name: lag_days
+        tests: [not_null]
+
+  - name: afterlife_citations
+    description: Citations after the retraction year, per retracted paper found in OpenAlex.
+    columns:
+      - name: paper_key
+        tests: [not_null, unique]
+      - name: citations_after
+        tests: [not_null]
+
+  - name: reason_trends
+    description: Reasons stated in retraction notices, counted by notice year.
+    tests:
+      - unique_combination:
+          arguments:
+            columns: [retraction_year, reason]
+
+  - name: record_mutability
+    description: Records changed after first publication, by snapshot date and column.
+    tests:
+      - unique_combination:
+          arguments:
+            columns: [change_date, column_name]
