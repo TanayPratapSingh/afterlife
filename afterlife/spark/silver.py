@@ -410,8 +410,23 @@ def paper_status(n: DataFrame) -> DataFrame:
         F.max(_key("Expression of concern")).alias("ke"),
         F.max(_key("Reinstatement")).alias("ki"),
         F.max(F.col("nature") == "Correction").alias("has_c"),
-        F.first("doi", ignorenulls=True).alias("doi"),
-        F.first("pmid", ignorenulls=True).alias("pmid"),
+        # Deterministic, never F.first: Retraction Watch records for one DOI
+        # can disagree on the PMID (a correction filed under another PMID),
+        # and F.first picked differently on a laptop and on Databricks, which
+        # made 2 of 92,097 exported documents differ between the two runs.
+        # Prefer a record that has a PMID, then a retraction, then the latest
+        # notice, then the highest record id.
+        F.max("doi").alias("doi"),
+        F.max_by(
+            "pmid",
+            F.struct(
+                F.col("pmid").isNotNull(),
+                F.col("nature") == "Retraction",
+                F.coalesce(F.col("notice_date"), F.lit("0001-01-01").cast("date")),
+                F.col("record_id"),
+            ),
+        ).alias("pmid"),
+        F.count_distinct("pmid").alias("distinct_pmids"),
         F.min(F.when(F.col("nature") == "Retraction", F.col("notice_date"))).alias(
             "first_retraction_date"
         ),

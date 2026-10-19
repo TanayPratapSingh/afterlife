@@ -228,8 +228,14 @@ def upstream(con, lake: str) -> dict:
                      then record_id end) as records_nature_changed
         from c""",
     )
+    conflicting = _one(
+        con,
+        f"""select count(*) as papers_with_conflicting_pmids
+            from delta_scan('{lake}/silver/rw_paper_status') where distinct_pmids > 1""",
+    )
     return {
         "records_edited_after_first_appearance": edited,
+        **conflicting,
         "replay_report": source,
         "snapshots": len(replay),
         "quarantined": [
