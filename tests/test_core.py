@@ -84,7 +84,7 @@ def test_classify_prefers_pmid_for_bare_numbers():
 
 # status ------------------------------------------------------------------
 
-R, E, C, I = Nature.RETRACTION, Nature.CONCERN, Nature.CORRECTION, Nature.REINSTATEMENT
+R, E, C, RI = Nature.RETRACTION, Nature.CONCERN, Nature.CORRECTION, Nature.REINSTATEMENT
 
 
 @pytest.mark.parametrize(
@@ -95,15 +95,15 @@ R, E, C, I = Nature.RETRACTION, Nature.CONCERN, Nature.CORRECTION, Nature.REINST
         ([(R, date(2020, 1, 1))], Status.RETRACTED),
         ([(E, date(2020, 1, 1)), (R, date(2021, 1, 1))], Status.RETRACTED),
         ([(R, date(2020, 1, 1)), (E, date(2021, 1, 1))], Status.RETRACTED),
-        ([(R, date(2020, 1, 1)), (I, date(2021, 1, 1))], Status.REINSTATED),
-        ([(R, date(2020, 1, 1)), (I, date(2021, 1, 1)), (E, date(2022, 1, 1))], Status.CONCERN),
+        ([(R, date(2020, 1, 1)), (RI, date(2021, 1, 1))], Status.REINSTATED),
+        ([(R, date(2020, 1, 1)), (RI, date(2021, 1, 1)), (E, date(2022, 1, 1))], Status.CONCERN),
         ([(R, date(2020, 1, 1)), (C, date(2021, 1, 1))], Status.RETRACTED),
         # Same day: the more severe notice wins.
         ([(R, date(2020, 1, 1)), (C, date(2020, 1, 1))], Status.RETRACTED),
         # A reinstatement with nothing to reinstate changes nothing.
-        ([(I, date(2020, 1, 1))], Status.OK),
+        ([(RI, date(2020, 1, 1))], Status.OK),
         # An undated retraction cannot override a dated reinstatement.
-        ([(I, date(2020, 1, 1)), (R, None)], Status.REINSTATED),
+        ([(RI, date(2020, 1, 1)), (R, None)], Status.REINSTATED),
     ],
 )
 def test_fold(events, expected):
@@ -115,7 +115,7 @@ def _closed(events):
         keys = [order_key(n, d) for n, d in events if n is kind]
         return max(keys) if keys else None
 
-    return closed_form(last(R), last(E), last(I), any(n is C for n, _ in events))
+    return closed_form(last(R), last(E), last(RI), any(n is C for n, _ in events))
 
 
 def test_closed_form_matches_fold_exhaustively():
@@ -179,8 +179,9 @@ def test_budget_stops_before_overspend():
 
 def test_land_is_idempotent_and_immutable(tmp_path):
     store = LocalStore(tmp_path)
-    kw = dict(source="s", snapshot_date="2026-01-02", name="x.csv",
-              origin_url="u", origin_version="v")
+    kw = dict(
+        source="s", snapshot_date="2026-01-02", name="x.csv", origin_url="u", origin_version="v"
+    )
     m1, new1 = land(store, raw=b"a,b\n1,2\n", **kw)
     m2, new2 = land(store, raw=b"a,b\n1,2\n", **kw)
     assert new1 and not new2 and m1.sha256 == m2.sha256
@@ -192,8 +193,14 @@ def test_land_is_idempotent_and_immutable(tmp_path):
 
 def test_land_stored_bytes_are_deterministic(tmp_path):
     a, b = LocalStore(tmp_path / "a"), LocalStore(tmp_path / "b")
-    kw = dict(source="s", snapshot_date="2026-01-02", name="x", raw=b"same",
-              origin_url="u", origin_version="v")
+    kw = dict(
+        source="s",
+        snapshot_date="2026-01-02",
+        name="x",
+        raw=b"same",
+        origin_url="u",
+        origin_version="v",
+    )
     land(a, **kw)
     land(b, **kw)
     key = "landing/s/snapshot_date=2026-01-02/x.gz"
@@ -205,15 +212,29 @@ def test_land_recovers_from_crash_between_object_and_manifest(tmp_path):
     store = LocalStore(tmp_path)
     key = "landing/s/snapshot_date=2026-01-02/x.gz"
     store.write_new(key, gzip.compress(b"payload", mtime=0))
-    m, new = land(store, source="s", snapshot_date="2026-01-02", name="x",
-                  raw=b"payload", origin_url="u", origin_version="v")
+    m, new = land(
+        store,
+        source="s",
+        snapshot_date="2026-01-02",
+        name="x",
+        raw=b"payload",
+        origin_url="u",
+        origin_version="v",
+    )
     assert new and m.object_key == key
 
 
 def test_land_rejects_bad_dates(tmp_path):
     with pytest.raises(ValueError):
-        land(LocalStore(tmp_path), source="s", snapshot_date="2026-13-01", name="x",
-             raw=b"", origin_url="u", origin_version="v")
+        land(
+            LocalStore(tmp_path),
+            source="s",
+            snapshot_date="2026-13-01",
+            name="x",
+            raw=b"",
+            origin_url="u",
+            origin_version="v",
+        )
 
 
 def test_s3_store_conditional_writes():
@@ -225,8 +246,9 @@ def test_s3_store_conditional_writes():
         client = boto3.client("s3", region_name="us-east-1")
         client.create_bucket(Bucket="landing")
         store = S3Store("landing", client=client)
-        kw = dict(source="s", snapshot_date="2026-01-02", name="x",
-                  origin_url="u", origin_version="v")
+        kw = dict(
+            source="s", snapshot_date="2026-01-02", name="x", origin_url="u", origin_version="v"
+        )
         _, new1 = land(store, raw=b"one", **kw)
         _, new2 = land(store, raw=b"one", **kw)
         assert new1 and not new2

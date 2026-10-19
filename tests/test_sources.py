@@ -26,11 +26,23 @@ HEADER = ",".join(rw.EXPECTED_COLUMNS) + ","
 def test_list_snapshots_dedupes_by_data_date_and_follows_pages():
     pages = {
         1: [
-            {"id": "c3", "created_at": "2026-01-03T23:00:00Z", "title": "Retraction Watch data for 2026-01-03"},
-            {"id": "c2b", "created_at": "2026-01-02T23:30:00Z", "title": "Retraction Watch data for 2026-01-02"},
+            {
+                "id": "c3",
+                "created_at": "2026-01-03T23:00:00Z",
+                "title": "Retraction Watch data for 2026-01-03",
+            },
+            {
+                "id": "c2b",
+                "created_at": "2026-01-02T23:30:00Z",
+                "title": "Retraction Watch data for 2026-01-02",
+            },
         ],
         2: [
-            {"id": "c2a", "created_at": "2026-01-02T23:00:00Z", "title": "Retraction Watch data for 2026-01-02"},
+            {
+                "id": "c2a",
+                "created_at": "2026-01-02T23:00:00Z",
+                "title": "Retraction Watch data for 2026-01-02",
+            },
             {"id": "c1", "created_at": "2026-01-01T09:00:00Z", "title": "manual fix"},
         ],
     }
@@ -45,11 +57,17 @@ def test_list_snapshots_dedupes_by_data_date_and_follows_pages():
 
 
 def test_select_monthly_plus_recent_always_includes_newest():
-    snaps = [rw.Snapshot(f"s{i}", "", date(2026, m, d)) for i, (m, d) in
-             enumerate([(1, 1), (1, 15), (2, 3), (2, 20), (3, 1), (3, 2)])]
+    snaps = [
+        rw.Snapshot(f"s{i}", "", date(2026, m, d))
+        for i, (m, d) in enumerate([(1, 1), (1, 15), (2, 3), (2, 20), (3, 1), (3, 2)])
+    ]
     picked = rw.select(snaps, monthly=True, last_days=1)
-    assert [s.snapshot_date for s in picked] == [date(2026, 1, 1), date(2026, 2, 3),
-                                                 date(2026, 3, 1), date(2026, 3, 2)]
+    assert [s.snapshot_date for s in picked] == [
+        date(2026, 1, 1),
+        date(2026, 2, 3),
+        date(2026, 3, 1),
+        date(2026, 3, 2),
+    ]
 
 
 def test_validate_header_rejects_schema_drift():
@@ -62,8 +80,9 @@ def test_fetch_snapshot_records_encoding(tmp_path):
     row = '1,"People’s paper",,,,,,,,,1/2/2020 0:00,,0,1/1/2019 0:00,10.1/x,0,Retraction,,No,,'
     raw = (HEADER + "\n" + row + "\n").encode("cp1252")
     snap = rw.Snapshot("abc", "2026-01-01T00:00:00Z", date(2026, 1, 1))
-    m, new = rw.fetch_snapshot(LocalStore(tmp_path), snap,
-                               get=lambda url, timeout: Response(url, 200, {}, raw))
+    m, new = rw.fetch_snapshot(
+        LocalStore(tmp_path), snap, get=lambda url, timeout: Response(url, 200, {}, raw)
+    )
     assert new and m.records == 1
     assert m.notes["encoding"] == "cp1252" and m.notes["invalid_utf8_bytes"] == 1
 
@@ -88,13 +107,19 @@ class FakeOpenAlex:
         per, page = params["per-page"], params.get("page", 1)
         if page * per > self.ceiling and per > 1:
             raise AssertionError("fetcher paged past the basic paging ceiling")
-        rows = hits[(page - 1) * per: page * per]
+        rows = hits[(page - 1) * per : page * per]
         return _resp({"meta": {"count": len(hits), "cost_usd": 0.0001}, "results": rows})
 
 
 def _work(i, day):
-    return {"id": f"https://openalex.org/W{i}", "publication_date": day, "doi": None, "ids": {},
-            "counts_by_year": [{"year": 2025, "cited_by_count": 1}], "primary_topic": None}
+    return {
+        "id": f"https://openalex.org/W{i}",
+        "publication_date": day,
+        "doi": None,
+        "ids": {},
+        "counts_by_year": [{"year": 2025, "cited_by_count": 1}],
+        "primary_topic": None,
+    }
 
 
 def test_openalex_partitions_until_slices_fit(monkeypatch):
@@ -112,15 +137,22 @@ def test_openalex_partitions_until_slices_fit(monkeypatch):
 def test_openalex_stops_cleanly_on_budget(monkeypatch):
     monkeypatch.delenv("OPENALEX_API_KEY", raising=False)
     works = [_work(i, "2023-01-01") for i in range(3)]
-    rows, info = openalex.fetch_retracted(Budget(0.0002), per_page=1,
-                                          get=FakeOpenAlex(works, ceiling=10), today=date(2001, 1, 1))
+    rows, info = openalex.fetch_retracted(
+        Budget(0.0002), per_page=1, get=FakeOpenAlex(works, ceiling=10), today=date(2001, 1, 1)
+    )
     assert info["complete"] is False and info["pending"]
     assert info["calls"] == 2
 
 
 def test_openalex_slim_keeps_only_used_fields():
-    w = {"id": "W1", "ids": {"pmid": "p", "mag": "m"}, "primary_topic":
-         {"field": {"display_name": "Medicine"}, "domain": {"display_name": "Health Sciences"}}}
+    w = {
+        "id": "W1",
+        "ids": {"pmid": "p", "mag": "m"},
+        "primary_topic": {
+            "field": {"display_name": "Medicine"},
+            "domain": {"display_name": "Health Sciences"},
+        },
+    }
     s = openalex._slim(w)
     assert s["ids"] == {"pmid": "p"} and s["field"] == "Medicine" and "primary_topic" not in s
 
