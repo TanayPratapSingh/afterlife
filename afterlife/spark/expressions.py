@@ -18,14 +18,24 @@ from pyspark.sql import functions as F
 
 from afterlife.core import ids
 
-_DOI_SHAPE = r"^10\.[0-9]{4,9}(\.[0-9]+)*/[^\s]+$"
+# Whitespace exactly as Python's str.strip() and `\s` define it: Unicode
+# White_Space under Java's (?U) flag, plus U+001C to U+001F, which Python counts
+# and Java does not. F.trim strips only U+0020, so it is not used on ids. The
+# Databricks layer review caught the difference on a non breaking space.
+_WS = r"[\s\x{1C}-\x{1F}]"
+_DOI_SHAPE = r"(?U)^10\.[0-9]{4,9}(\.[0-9]+)*/[^\s\x{1C}-\x{1F}]+$"
 _PREFIX = r"^(https?://(dx\.)?doi\.org/|doi\.org/|doi:)"
+
+
+def strip(col: Column) -> Column:
+    """Python's str.strip(), as a native expression."""
+    return F.regexp_replace(col, rf"(?U)^{_WS}+|{_WS}+$", "")
 
 
 def doi(col: Column | str) -> Column:
     c = F.col(col) if isinstance(col, str) else col
-    v = F.lower(F.trim(c))
-    v = F.trim(F.regexp_replace(v, _PREFIX, ""))
+    v = F.lower(strip(c))
+    v = strip(F.regexp_replace(v, _PREFIX, ""))
     placeholders = F.array(*[F.lit(p) for p in sorted(ids.PLACEHOLDERS)])
     return (
         F.when(c.isNull(), F.lit(None))
@@ -38,7 +48,7 @@ def doi(col: Column | str) -> Column:
 
 def pmid(col: Column | str) -> Column:
     c = F.col(col) if isinstance(col, str) else col
-    v = F.trim(c.cast("string"))
+    v = strip(c.cast("string"))
     v = F.regexp_replace(v, r"^https?://pubmed\.ncbi\.nlm\.nih\.gov/", "")
     v = F.regexp_replace(v, r"/+$", "")
     v = F.regexp_replace(v, r"\.0$", "")
@@ -47,7 +57,7 @@ def pmid(col: Column | str) -> Column:
 
 def pmcid(col: Column | str) -> Column:
     c = F.col(col) if isinstance(col, str) else col
-    v = F.upper(F.trim(c))
+    v = F.upper(strip(c))
     v = F.regexp_replace(
         v,
         r"^HTTPS://(WWW\.NCBI\.NLM\.NIH\.GOV/PMC/ARTICLES/|PMC\.NCBI\.NLM\.NIH\.GOV/ARTICLES/)",
@@ -61,7 +71,7 @@ def pmcid(col: Column | str) -> Column:
 
 def openalex_id(col: Column | str) -> Column:
     c = F.col(col) if isinstance(col, str) else col
-    v = F.upper(F.element_at(F.split(F.trim(c), "/"), -1))
+    v = F.upper(F.element_at(F.split(strip(c), "/"), -1))
     return F.when(v.rlike(r"^W[0-9]+$"), v).otherwise(F.lit(None)).cast("string")
 
 
