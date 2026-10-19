@@ -134,7 +134,7 @@ a test. They are why the design looks the way it does.
 | Serving | DynamoDB, Lambda, API Gateway HTTP API | `GET /v1/lookup/{id}` with a plain English, per source explanation | moto tests |
 | Analytics | Glue Data Catalog, Athena | Partition projected Parquet, a bytes scanned cutoff per query | `terraform validate` |
 | Platform | Terraform, KMS, IAM, GitHub OIDC, CloudWatch, SNS, AWS Budgets | Least privilege roles, alarms, a monthly cost budget | checkov 390 passed, 0 failed, 25 skipped with reasons (`runs/20261019T203857Z-checkov.json`) |
-| CI | GitHub Actions | Core on Python 3.11 and 3.12, Spark on 3.5.3 and 4.0.1, dbt parse, Terraform | written; runs once the repo is pushed |
+| CI | GitHub Actions | Core on Python 3.11 and 3.12, Spark on 3.5.3 and 4.0.1, dbt parse, Terraform | green; its first run found two bugs (incidents 9 and 10) |
 
 **Cross engine conformance.** The same dbt models are built on DuckDB and on
 Spark SQL, then every row of every mart is compared: 7 marts, 210,111 rows,
