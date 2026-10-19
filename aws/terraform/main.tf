@@ -97,6 +97,10 @@ module "analytics" {
 
 module "ci" {
   source = "./modules/ci"
+  # Off for accounts whose organization denies iam:CreateOpenIDConnectProvider
+  # through a service control policy, as AWS's free plan project accounts do
+  # (found on the first apply, 2026-10-19). Deploys then run from a laptop.
+  count = var.enable_github_deploy_role ? 1 : 0
 
   name_prefix          = var.name_prefix
   github_repository    = var.github_repository

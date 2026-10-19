@@ -215,6 +215,12 @@ variable "github_branch" {
   default     = "main"
 }
 
+variable "enable_github_deploy_role" {
+  description = "Create the GitHub OIDC deploy role. Needs iam:CreateOpenIDConnectProvider, which some organizations deny by SCP."
+  type        = bool
+  default     = true
+}
+
 variable "create_github_oidc_provider" {
   description = "An account holds one GitHub OIDC provider. Set false if it already exists."
   type        = bool

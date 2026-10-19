@@ -45,7 +45,7 @@ output "athena_workgroup" {
 
 output "github_deploy_role_arn" {
   description = "Role the main branch's GitHub Actions workflows assume."
-  value       = module.ci.deploy_role_arn
+  value       = var.enable_github_deploy_role ? module.ci[0].deploy_role_arn : null
 }
 
 output "alerts_topic_arn" {
