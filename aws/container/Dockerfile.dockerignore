@@ -1,0 +1,7 @@
+# Read by BuildKit when building with -f aws/container/Dockerfile from the
+# repository root. Everything is excluded except the package the task runs.
+*
+!afterlife/
+afterlife/spark/
+**/__pycache__/
+**/*.pyc
