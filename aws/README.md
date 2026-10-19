@@ -246,19 +246,25 @@ make once `items_written` from a real load is known.
 
 Tanay does these steps himself; nothing here creates an account.
 
-1. **Create the AWS account** (free tier), enable MFA on the root user, create
-   an IAM Identity Center user with administrator access, and stop using root.
-2. **Configure the CLI:** `aws configure sso` (or `aws configure` with that
-   user's keys). Check with `aws sts get-caller-identity`.
+1. **Create the AWS account.** New accounts on AWS's free plan (2026) are
+   "projects" inside an AWS managed Organization: you sign in with AWS Builder
+   ID (here, through GitHub) and receive `AccountFullAccessRole`; there is no
+   root user to use day to day. Put MFA on the Builder ID and on GitHub.
+2. **Configure the CLI:** `aws login --profile afterlife` (AWS CLI 2.32 or
+   later) reuses the console sign in; check with
+   `aws sts get-caller-identity --profile afterlife`. Terraform's AWS provider
+   cannot read `aws login` credentials yet, so run Terraform through
+   `aws/tf.sh`, which exports the short lived session for one process.
+   On a free plan account set `enable_github_deploy_role = false`: the
+   Organization's SCP denies `iam:CreateOpenIDConnectProvider`.
 3. **Build the zips:** `python aws/build.py` writes `aws/build/*.zip` and prints
    each `source_code_hash`.
 4. **Apply:**
    ```bash
-   cd aws/terraform
-   cp terraform.tfvars.example terraform.tfvars    # set alert_email
-   ../../.tools/terraform init
-   ../../.tools/terraform plan -out tfplan
-   ../../.tools/terraform apply tfplan
+   cp aws/terraform/terraform.tfvars.example aws/terraform/terraform.tfvars   # set alert_email
+   aws/tf.sh init
+   aws/tf.sh plan -out tfplan
+   aws/tf.sh apply tfplan
    ```
    Confirm the SNS subscription email, or alarms go nowhere.
 5. **Build and push the OpenAlex image** before the first 23:30 UTC run:
@@ -299,12 +305,31 @@ Databricks token, if set, is in state.
 | **Executed** | `terraform test` with a mock AWS provider: renders the state machine and the schedules in both orchestrator modes and with Databricks on | 5 passed |
 | **Executed** | checkov 3.3.29 on `aws/terraform` | 390 passed, 0 failed, 25 skipped, each skip with an inline reason |
 | **Executed** | checkov on `aws/container/Dockerfile` | 35 passed, 0 failed, 0 skipped |
-| **Validated statically** | IAM policies, KMS key policy, S3 bucket policies | checkov and `terraform test` only; no policy has been evaluated by AWS |
-| **Validated statically** | State machine definition (ASL) | rendered and structurally asserted under a mock provider; never accepted or run by Step Functions |
-| **Not executed** | Any `terraform plan` or `apply` against AWS | no account |
-| **Not executed** | `docker build` of the OpenAlex image | needs a base image pull; the Dockerfile is scanned only |
-| **Not executed** | S3 event delivery, Scheduler, Step Functions, ECS, the HTTP Task to Databricks, API Gateway routing and CORS, alarms, budgets | need AWS |
-| **Not executed** | The fetchers against the live sources from AWS | they have run from a laptop (see the repository runs), not from Lambda or Fargate |
+| **Executed live** | `aws/tf.sh apply` in account 247011206392, `us-east-2`, 2026-10-19 | everything except the GitHub OIDC provider and its deploy role (SCP deny, see below); a later plan shows no drift |
+| **Executed live** | Fetch Lambda for PubMed | 24.3 s, 35,169 PMIDs; the landed object's sha256 equals the laptop's |
+| **Executed live** | Fetch Lambda for Retraction Watch | 8.4 s, the 2026-10-16 snapshot, 73,283 records |
+| **Executed live** | OpenAlex on Fargate (image `0.1.0`) through Step Functions | landed 136,873 works in 709 calls ($0.0709), then crashed writing its run report; fixed in `0.1.1` |
+| **Executed live** | Step Functions `afterlife-daily` with image `0.1.1` | SUCCEEDED in 45 s; the OpenAlex task skipped in 1.3 s because today was landed, and its report is in `s3://.../runs/` |
+| **Executed live** | Export upload, S3 event, loader Lambda | refused the first export whole (126 verdicts outside the contract); after the fix wrote 214,646 items for 92,097 documents in about 55 s |
+| **Executed live** | HTTP API | `/health` 200; `/v1/lookup` by DOI, PMID, and DOI URL 200 with a per source explanation; an unknown DOI 200 `not_flagged` with the caveat; a junk id 400; `/v1/coverage` 200; before the first load, 503 `registry_not_loaded` |
+| **Executed live** | Athena over the Parquet export | verdict counts equal gold; 5,012 bytes scanned in 662 ms |
+| **Not executed** | The HTTP Task to Databricks | `databricks_host` left empty; the Databricks job was started from the bundle instead |
+
+### What the live deploy found
+
+1. **The free plan Organization denies `iam:CreateOpenIDConnectProvider`.**
+   The GitHub deploy role is now optional (`enable_github_deploy_role`).
+2. **Terraform cannot read `aws login` credentials** ("No valid credential
+   sources found"). `aws/tf.sh` exports them for one process.
+3. **The loader refused an export with 126 documents whose verdict was `ok`**,
+   a value gold produced and the contract did not list. Gold now publishes them
+   as `reinstated`, and `tests/test_gold.py` reads `VERDICTS` from this
+   handler's source so the two sides cannot drift again.
+4. **API Gateway collapses `//` in paths**, so `/v1/lookup/https://doi.org/...`
+   arrived as `https:/doi.org/...` and got a 400. The DOI rules accept both.
+5. **The Fargate task could not write its run report.** The root filesystem is
+   read only and the `/tmp` bind mount is owned by root while the container
+   runs as user 10001. Reports now go to `s3://<bucket>/runs/`.
 
 What moto proves and what it does not: the handlers call S3, DynamoDB, and
 Secrets Manager correctly and behave as specified (idempotent landing,
