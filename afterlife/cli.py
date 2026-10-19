@@ -28,7 +28,11 @@ from pathlib import Path
 
 from afterlife.core.landing import LocalStore, S3Store, Store
 
-RUNS = Path(os.environ.get("AFTERLIFE_RUNS", "runs"))
+
+def runs_target() -> str:
+    """Where run reports go: a directory, or s3://bucket/prefix in a container
+    whose root filesystem is read only (the Fargate task)."""
+    return os.environ.get("AFTERLIFE_RUNS", "runs")
 
 
 def store_from_env() -> Store:
@@ -38,10 +42,8 @@ def store_from_env() -> Store:
     return LocalStore(target)
 
 
-def write_run(command: str, report: dict, started: float) -> Path:
-    RUNS.mkdir(parents=True, exist_ok=True)
+def write_run(command: str, report: dict, started: float) -> str:
     stamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
-    path = RUNS / f"{stamp}-{command}.json"
     body = {
         "command": command,
         "argv": sys.argv[1:],
@@ -50,8 +52,18 @@ def write_run(command: str, report: dict, started: float) -> Path:
         "seconds": round(time.time() - started, 1),
         "report": report,
     }
-    path.write_text(json.dumps(body, indent=2, default=str) + "\n")
-    return path
+    data = (json.dumps(body, indent=2, default=str) + "\n").encode()
+    target = runs_target()
+    if target.startswith("s3://"):
+        bucket, _, prefix = target.removeprefix("s3://").partition("/")
+        key = f"{prefix.strip('/')}/{stamp}-{command}.json".lstrip("/")
+        S3Store(bucket).write_new(key, data)
+        return f"s3://{bucket}/{key}"
+    path = Path(target)
+    path.mkdir(parents=True, exist_ok=True)
+    out = path / f"{stamp}-{command}.json"
+    out.write_bytes(data)
+    return str(out)
 
 
 def _landed_today(store: Store, source: str) -> str | None:

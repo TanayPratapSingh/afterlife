@@ -257,3 +257,29 @@ def test_s3_store_conditional_writes():
             store.write_new("landing/s/snapshot_date=2026-01-02/x.gz", b"other")
         with pytest.raises(ImmutableWriteError):
             land(store, raw=b"two", **kw)
+
+
+def test_run_reports_go_to_s3_when_asked(monkeypatch):
+    """The Fargate task has a read only root filesystem; the first live run
+    fetched OpenAlex and then died writing its report locally."""
+    boto3 = pytest.importorskip("boto3")
+    moto = pytest.importorskip("moto")
+    from afterlife import cli
+
+    with moto.mock_aws():
+        boto3.client("s3", region_name="us-east-1").create_bucket(Bucket="lake")
+        monkeypatch.setenv("AWS_DEFAULT_REGION", "us-east-1")
+        monkeypatch.setenv("AFTERLIFE_RUNS", "s3://lake/runs")
+        where = cli.write_run("fetch-openalex", {"records": 1}, started=0.0)
+        assert where.startswith("s3://lake/runs/") and where.endswith("-fetch-openalex.json")
+        key = where.removeprefix("s3://lake/")
+        body = boto3.client("s3", region_name="us-east-1").get_object(Bucket="lake", Key=key)
+        assert b'"records": 1' in body["Body"].read()
+
+
+def test_run_reports_default_to_a_directory(tmp_path, monkeypatch):
+    from afterlife import cli
+
+    monkeypatch.setenv("AFTERLIFE_RUNS", str(tmp_path / "runs"))
+    where = cli.write_run("bronze", {"ok": True}, started=0.0)
+    assert where.endswith("-bronze.json") and (tmp_path / "runs").exists()

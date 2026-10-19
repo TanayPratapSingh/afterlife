@@ -200,7 +200,7 @@ resource "aws_ecs_task_definition" "openalex" {
     mountPoints            = [{ sourceVolume = "tmp", containerPath = "/tmp", readOnly = false }]
     environment = [
       { name = "AFTERLIFE_LANDING", value = "s3://${var.bucket_id}" },
-      { name = "AFTERLIFE_RUNS", value = "/tmp/runs" },
+      { name = "AFTERLIFE_RUNS", value = "s3://${var.bucket_id}/runs" },
       { name = "AWS_DEFAULT_REGION", value = var.region },
     ]
     secrets = var.openalex_api_key_enabled ? [

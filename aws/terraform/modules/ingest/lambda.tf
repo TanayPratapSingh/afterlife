@@ -74,6 +74,15 @@ data "aws_iam_policy_document" "landing_writer" {
     }
   }
 
+  # Run reports from the container. The first Fargate run fetched and landed
+  # OpenAlex, then died writing its report to a read only root filesystem;
+  # a report kept in S3 also outlives the task.
+  statement {
+    sid       = "CreateRunReports"
+    actions   = ["s3:PutObject"]
+    resources = ["${var.bucket_arn}/runs/*"]
+  }
+
   statement {
     sid       = "UseLakeKey"
     actions   = ["kms:Decrypt", "kms:GenerateDataKey"]
