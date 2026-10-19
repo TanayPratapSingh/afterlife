@@ -221,6 +221,34 @@ resolves through the distribution metadata and exits 2 on an empty landing
 zone. `tests/test_databricks.py::test_pyproject_packages_the_entry_point`
 skips until the change is made, then enforces it.
 
+## Deployed to Free Edition, 2026-10-19
+
+The bundle was deployed to a Free Edition workspace and the job run twice.
+
+- **Catalog.** `databricks catalogs create afterlife` was refused: the account
+  uses Default Storage, which only the UI can attach to a new catalog. The
+  bundle was deployed into the existing `workspace` catalog instead:
+  `--var catalog=workspace --var landing_root=/Volumes/workspace/landing/files
+  --var exports_root=/Volumes/workspace/ops/exports --var warehouse_id=<id>`.
+- **Validation.** `bundle validate -t free` passed against the live workspace.
+- **Setup.** The SQL file task ran in about 40 s and created the schemas and
+  volumes, so `IDENTIFIER(:catalog)` in a SQL file task works.
+- **Landing.** `databricks fs cp -r data/landing ...` uploaded 769 MB, 86 files,
+  in 172 s.
+- **First full run** (fetch tasks off): every task succeeded in about 36
+  minutes. Silver replayed all 39 snapshots and built the same history as the
+  laptop: 152,336 versions of 73,334 records, 73,283 current, and the same
+  2026-10-15 snapshot quarantined with 5,520 lossy records. Gold row counts
+  matched the laptop for every mart.
+- **One difference found:** 2 of 92,097 exported documents carried a different
+  PMID than the laptop export, because `F.first` in silver is order dependent.
+  It is now a deterministic `max_by`.
+- **Second run** (incremental: bronze and the replay skipped): succeeded in
+  510 s. The uncompressed export is byte identical to the laptop's; the gzip
+  streams differ only because the two Pythons link different zlib builds.
+- **Not exercised:** the fetch tasks (off on Free Edition), the `aws` target,
+  and the AWS Step Functions HTTP Task that would start this job.
+
 ## Executed locally, validated statically, not executed
 
 Local means this laptop on 2026-10-19: pyspark 3.5.7, delta-spark 3.3.2,
