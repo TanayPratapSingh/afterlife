@@ -1,0 +1,72 @@
+{
+  "command": "export",
+  "argv": [
+    "export"
+  ],
+  "started_at": "2026-10-19T21:43:51.967959+00:00",
+  "finished_at": "2026-10-19T21:44:22.898261+00:00",
+  "seconds": 30.9,
+  "report": {
+    "as_of": "2026-10-19",
+    "documents": 92097,
+    "registry_dir": "data/export/registry/as_of=2026-10-19",
+    "evidenceops_records": 20202,
+    "coverage": {
+      "as_of": "2026-10-19",
+      "registry": {
+        "papers": 92097,
+        "by_verdict": {
+          "retracted": 89576,
+          "concern": 1640,
+          "corrected": 646,
+          "reinstated": 130,
+          "disputed": 105
+        }
+      },
+      "sources": {
+        "retraction_watch": {
+          "snapshot_date": "2026-10-16",
+          "records": 73283,
+          "committed_at": "2026-10-16T23:00:12.000+00:00",
+          "encoding": "utf-8",
+          "invalid_utf8_bytes": 0
+        },
+        "openalex": {
+          "snapshot_date": "2026-10-19",
+          "records": 136873,
+          "calls": 709,
+          "complete": true,
+          "counts_by_year_min_year": 2012,
+          "expected": 136970,
+          "fetched": 136873,
+          "filter": "is_retracted:true",
+          "limit_usd": 0.09,
+          "mode": "basic",
+          "slice_count_sum": 136873,
+          "spent_usd": 0.0709,
+          "uncovered_by_date_slices": 97,
+          "unique": 136873
+        },
+        "pubmed": {
+          "snapshot_date": "2026-10-19",
+          "records": 35169,
+          "complete": true,
+          "expected": 35169,
+          "records_in_more_than_one_slice": 3859,
+          "slice_count_sum": 39028,
+          "term": "\"retracted publication\"[pt]",
+          "unique_pmids": 35169
+        },
+        "pmc_metadata": {
+          "snapshot_date": "2026-10-19",
+          "records": 43616,
+          "flagged_retracted": 18935,
+          "in_open_data": 38172,
+          "not_in_open_data": 5444,
+          "requested": 43616,
+          "version_gt_1": 19
+        }
+      }
+    }
+  }
+}
