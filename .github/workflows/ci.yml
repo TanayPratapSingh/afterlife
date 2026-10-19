@@ -1,0 +1,85 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  core:
+    # Standard library core and the fetchers against fake APIs. No network.
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: pip install -e ".[dev,aws]" pyyaml
+      - run: ruff check afterlife tests aws databricks
+      - run: pytest -q -m "not spark"
+
+  spark:
+    # The Spark jobs on synthetic data, on the Spark line under Databricks
+    # Runtime 15.4 and 16.4 LTS (3.5) and the one under DBR 17 and serverless (4.0).
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - pyspark: "3.5.3"
+            delta: "3.3.2"
+          - pyspark: "4.0.1"
+            delta: "4.0.1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[dev]" pyyaml "pyspark==${{ matrix.pyspark }}" "delta-spark==${{ matrix.delta }}" pyarrow
+      - run: pytest -q -m spark
+
+  dbt:
+    # Every model, macro, and test compiles for every profile that has an
+    # adapter installed. Nothing here reaches a warehouse.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install "dbt-core>=1.8,<2" "dbt-duckdb>=1.8,<2" "dbt-spark>=1.8,<2" "dbt-databricks>=1.8,<2"
+      - working-directory: warehouse
+        env:
+          AFTERLIFE_LAKE_ABS: /tmp/lake
+        run: |
+          for t in duckdb spark databricks; do dbt parse --profiles-dir . --target "$t"; done
+
+  terraform:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: aws/terraform
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.9.8"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python ../build.py
+      - run: terraform fmt -check -recursive
+      - run: terraform init -backend=false -input=false
+      - run: terraform validate
+      - run: terraform test
+      - run: pip install checkov && checkov -d . --quiet --compact
