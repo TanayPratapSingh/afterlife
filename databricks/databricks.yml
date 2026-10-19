@@ -1,0 +1,109 @@
+# afterlife on Databricks: one bundle, two targets.
+#
+#   free  Databricks Free Edition, the default. Serverless compute only, Unity
+#         Catalog managed storage, the landing zone in a managed volume.
+#   aws   A paid workspace on AWS. A job cluster on DBR 15.4 LTS, the landing
+#         zone in an external volume over s3://afterlife-landing-<account>,
+#         the job runs as a service principal.
+#
+# The job and the pipeline are defined once, in resources/. What differs per
+# target is compute, where the landing zone lives, and who runs the job.
+# Compute is bound per target inside resources/afterlife_daily.job.yml: a
+# task cannot carry both an environment_key and a job_cluster_key, and a target
+# override can add a key but never remove one, so neither target's compute may
+# sit in the shared definition.
+#
+# Checked against the JSON schema of Databricks CLI v1.21.0
+# (`databricks bundle schema`). See README.md for what has and has not run.
+
+bundle:
+  name: afterlife
+  # environment_version (v0.268.0) and run_as on pipelines (v0.267.0).
+  databricks_cli_version: ">= 0.268.0"
+
+include:
+  - resources/*.yml
+
+# The dbt project is a sibling of this bundle, and a dbt task runs it from the
+# workspace, so it must be synced too. Paths here may leave the bundle root.
+sync:
+  paths:
+    - .
+    - ../warehouse
+
+artifacts:
+  # The afterlife wheel, built from the repository root: afterlife (core,
+  # sources, spark) plus afterlife_jobs from databricks/src, which needs the
+  # pyproject.toml change described in README.md.
+  afterlife_wheel:
+    type: whl
+    path: ..
+    build: python -m build --wheel
+
+variables:
+  catalog:
+    description: Unity Catalog catalog that holds every afterlife schema.
+    default: afterlife
+  landing_root:
+    description: >-
+      The landing zone as a POSIX path. A managed volume on Free Edition; an
+      external volume over the S3 landing bucket on AWS. Keep it consistent
+      with `catalog`.
+    default: /Volumes/afterlife/landing/files
+  exports_root:
+    description: Where the export task writes the registry documents.
+    default: /Volumes/afterlife/ops/exports
+  warehouse_id:
+    description: SQL warehouse for the setup SQL task and the dbt task.
+    lookup:
+      # Not verified against a live Free Edition workspace. If the lookup
+      # fails, pass the id: --var warehouse_id=<id> (SQL Warehouses page).
+      warehouse: Serverless Starter Warehouse
+  notification_email:
+    description: Address for job and pipeline failure email.
+    default: ${workspace.current_user.userName}
+  fetch_enabled:
+    description: >-
+      "true" runs the fetch tasks. Off by default: Free Edition restricts
+      outbound internet to a list of trusted domains, and on AWS the Lambda
+      fetchers in aws/ do the landing.
+    default: "false"
+  service_principal:
+    description: Application id of the service principal the aws target runs as.
+    default: replace-with-service-principal-application-id
+
+targets:
+  free:
+    mode: development
+    default: true
+    # No workspace.host: it comes from the profile that
+    # `databricks auth login --host <url>` writes. Pin it here once known.
+    presets:
+      # Serverless environments cache a wheel by name and version. Without
+      # this, a redeploy of afterlife 0.1.0 keeps running the old code.
+      artifacts_dynamic_version: true
+
+  aws:
+    mode: production
+    workspace:
+      # host: https://<deployment>.cloud.databricks.com
+      root_path: /Workspace/Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}
+    run_as:
+      service_principal_name: ${var.service_principal}
+    permissions:
+      - group_name: afterlife-engineers
+        level: CAN_MANAGE
+      - group_name: afterlife-readers
+        level: CAN_VIEW
+    variables:
+      # External volume over s3://afterlife-landing-<account>/ (sql/aws_landing.sql).
+      # Object keys keep the landing layout, so the AWS fetch Lambdas and
+      # this job read and write the same objects.
+      landing_root: /Volumes/afterlife/landing/s3
+      # s3://afterlife-landing-<account>/export/, the prefix whose
+      # registry/*.jsonl.gz objects trigger aws/lambdas/load_registry.
+      exports_root: /Volumes/afterlife/landing/s3/export
+      notification_email: afterlife-oncall@example.com
+      warehouse_id:
+        lookup:
+          warehouse: afterlife-serverless

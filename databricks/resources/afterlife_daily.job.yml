@@ -1,0 +1,297 @@
+# afterlife_daily: the whole lakehouse refresh as one Lakeflow Job.
+#
+#   setup -> fetch_gate -(true)-> fetch_retraction_watch -+
+#     |                  \-(true)-> fetch_pubmed ----------+
+#     +-------------------------------------------------- bronze -> silver
+#                                                                     |
+#                              export <- gold (dbt) <-----------------+
+#                                 ^                                   |
+#                                 +--- registry_quality (pipeline) <--+
+#
+# bronze runs with run_if NONE_FAILED and depends on setup as well as on the
+# fetch tasks. When fetch_enabled is "false" the fetch tasks are excluded,
+# setup has run and nothing failed, so bronze runs on whatever is already in
+# the landing volume. When a fetch fails, bronze does not run.
+#
+# At most two tasks run at once (the two fetches, or the pipeline and dbt).
+# Free Edition allows five concurrent job tasks per account.
+#
+# Paths are relative to this file: ../sql is databricks/sql, ../../warehouse
+# is the dbt project at the repository root.
+
+resources:
+  jobs:
+    afterlife_daily:
+      name: afterlife_daily
+      description: >-
+        Daily refresh of the afterlife retraction registry: Unity Catalog
+        setup, optional fetch, bronze, SCD2 silver, the registry_quality
+        pipeline, dbt gold, and the export the AWS serving layer loads.
+      max_concurrent_runs: 1
+      queue:
+        enabled: true
+      timeout_seconds: 14400
+      schedule:
+        # Crossref regenerates the Retraction Watch CSV at 23:00 UTC; 23:45
+        # leaves room for a late upstream commit. Development mode (the free
+        # target) deploys this schedule paused.
+        quartz_cron_expression: "0 45 23 * * ?"
+        timezone_id: UTC
+        pause_status: UNPAUSED
+      email_notifications:
+        on_failure:
+          - ${var.notification_email}
+        on_duration_warning_threshold_exceeded:
+          - ${var.notification_email}
+      notification_settings:
+        no_alert_for_skipped_runs: true
+        no_alert_for_canceled_runs: true
+      health:
+        rules:
+          # A threshold to alert on, not a measurement of how long a run takes.
+          - metric: RUN_DURATION_SECONDS
+            op: GREATER_THAN
+            value: 7200
+      tags:
+        project: afterlife
+        component: lakehouse
+        managed_by: databricks_asset_bundle
+      parameters:
+        - name: catalog
+          default: ${var.catalog}
+        - name: landing_root
+          default: ${var.landing_root}
+        - name: exports_root
+          default: ${var.exports_root}
+        - name: fetch_enabled
+          default: ${var.fetch_enabled}
+        - name: rw_last_days
+          default: "3"
+        - name: silver_rebuild
+          default: "false"
+
+      tasks:
+        - task_key: setup
+          description: Catalog, schemas, and volumes, created only if absent.
+          sql_task:
+            warehouse_id: ${var.warehouse_id}
+            file:
+              path: ../sql/setup.sql
+              source: WORKSPACE
+            parameters:
+              catalog: "{{job.parameters.catalog}}"
+          timeout_seconds: 600
+          max_retries: 1
+          min_retry_interval_millis: 60000
+
+        - task_key: fetch_gate
+          description: Skip both fetch tasks unless fetch_enabled is "true".
+          depends_on:
+            - task_key: setup
+          condition_task:
+            op: EQUAL_TO
+            left: "{{job.parameters.fetch_enabled}}"
+            right: "true"
+
+        - task_key: fetch_retraction_watch
+          description: Land the newest daily Retraction Watch snapshots from GitLab.
+          depends_on:
+            - task_key: fetch_gate
+              outcome: "true"
+          python_wheel_task:
+            package_name: afterlife
+            entry_point: afterlife_job
+            parameters:
+              - --task=fetch_retraction_watch
+              - --catalog={{job.parameters.catalog}}
+              - --landing-root={{job.parameters.landing_root}}
+              - --rw-last-days={{job.parameters.rw_last_days}}
+              - --run-id={{job.run_id}}
+          timeout_seconds: 1800
+          max_retries: 2
+          min_retry_interval_millis: 300000
+          retry_on_timeout: true
+
+        - task_key: fetch_pubmed
+          description: Land the PMIDs NLM flags as Retracted Publication.
+          depends_on:
+            - task_key: fetch_gate
+              outcome: "true"
+          python_wheel_task:
+            package_name: afterlife
+            entry_point: afterlife_job
+            parameters:
+              - --task=fetch_pubmed
+              - --catalog={{job.parameters.catalog}}
+              - --landing-root={{job.parameters.landing_root}}
+              - --run-id={{job.run_id}}
+          timeout_seconds: 1800
+          max_retries: 2
+          min_retry_interval_millis: 300000
+          retry_on_timeout: true
+
+        - task_key: bronze
+          description: Manifest driven ingest of every landed object not yet in bronze.
+          depends_on:
+            - task_key: setup
+            - task_key: fetch_retraction_watch
+            - task_key: fetch_pubmed
+          run_if: NONE_FAILED
+          python_wheel_task:
+            package_name: afterlife
+            entry_point: afterlife_job
+            parameters:
+              - --task=bronze
+              - --catalog={{job.parameters.catalog}}
+              - --landing-root={{job.parameters.landing_root}}
+              - --run-id={{job.run_id}}
+          timeout_seconds: 3600
+          max_retries: 1
+          min_retry_interval_millis: 120000
+
+        - task_key: silver
+          description: Replay new snapshots through the SCD2 MERGE, then rebuild silver.
+          depends_on:
+            - task_key: bronze
+          python_wheel_task:
+            package_name: afterlife
+            entry_point: afterlife_job
+            parameters:
+              - --task=silver
+              - --catalog={{job.parameters.catalog}}
+              - --landing-root={{job.parameters.landing_root}}
+              - --silver-rebuild={{job.parameters.silver_rebuild}}
+              - --run-id={{job.run_id}}
+          timeout_seconds: 7200
+          max_retries: 1
+          min_retry_interval_millis: 120000
+
+        - task_key: registry_quality
+          description: Publish contract checked notices and paper status.
+          depends_on:
+            - task_key: silver
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.registry_quality.id}
+            full_refresh: false
+          timeout_seconds: 3600
+
+        - task_key: gold
+          description: dbt build of the gold marts on the SQL warehouse.
+          depends_on:
+            - task_key: silver
+          dbt_task:
+            project_directory: ../../warehouse
+            source: WORKSPACE
+            # With warehouse_id set, the task writes the dbt profile itself,
+            # so no token or http_path appears anywhere in this bundle.
+            warehouse_id: ${var.warehouse_id}
+            catalog: ${var.catalog}
+            schema: gold
+            commands:
+              - dbt deps
+              - "dbt build --vars '{silver_database: ${var.catalog}}'"
+          timeout_seconds: 3600
+          max_retries: 1
+          min_retry_interval_millis: 120000
+
+        - task_key: export
+          description: Registry documents, parquet, coverage, and EvidenceOps trust lines.
+          depends_on:
+            - task_key: gold
+            - task_key: registry_quality
+          python_wheel_task:
+            package_name: afterlife
+            entry_point: afterlife_job
+            parameters:
+              - --task=export
+              - --catalog={{job.parameters.catalog}}
+              - --landing-root={{job.parameters.landing_root}}
+              - --exports-root={{job.parameters.exports_root}}
+              - --run-id={{job.run_id}}
+          timeout_seconds: 1800
+          max_retries: 1
+          min_retry_interval_millis: 120000
+
+# Compute, bound per target. Overrides merge into the tasks above by task_key
+# and only add keys, so each target's compute is stated exactly once.
+targets:
+  free:
+    resources:
+      jobs:
+        afterlife_daily:
+          environments:
+            - environment_key: afterlife
+              spec:
+                # Python 3.12, the version the CLI v1.21.0 templates generate.
+                environment_version: "5"
+                dependencies:
+                  - ../../dist/*.whl
+            - environment_key: dbt
+              spec:
+                environment_version: "5"
+                dependencies:
+                  - dbt-databricks>=1.8,<2
+          tasks:
+            - task_key: fetch_retraction_watch
+              environment_key: afterlife
+            - task_key: fetch_pubmed
+              environment_key: afterlife
+            - task_key: bronze
+              environment_key: afterlife
+            - task_key: silver
+              environment_key: afterlife
+            - task_key: gold
+              environment_key: dbt
+            - task_key: export
+              environment_key: afterlife
+
+  aws:
+    resources:
+      jobs:
+        afterlife_daily:
+          job_clusters:
+            - job_cluster_key: afterlife
+              new_cluster:
+                spark_version: 15.4.x-scala2.12
+                node_type_id: m6gd.xlarge
+                autoscale:
+                  min_workers: 1
+                  max_workers: 4
+                # Dedicated access mode: Unity Catalog, volumes through the
+                # POSIX path, and the identity is the job's run_as principal.
+                data_security_mode: SINGLE_USER
+                runtime_engine: STANDARD
+                aws_attributes:
+                  availability: SPOT_WITH_FALLBACK
+                  first_on_demand: 1
+                  zone_id: auto
+                spark_conf:
+                  spark.sql.session.timeZone: UTC
+                custom_tags:
+                  project: afterlife
+          tasks:
+            - task_key: fetch_retraction_watch
+              job_cluster_key: afterlife
+              libraries:
+                - whl: ../../dist/*.whl
+            - task_key: fetch_pubmed
+              job_cluster_key: afterlife
+              libraries:
+                - whl: ../../dist/*.whl
+            - task_key: bronze
+              job_cluster_key: afterlife
+              libraries:
+                - whl: ../../dist/*.whl
+            - task_key: silver
+              job_cluster_key: afterlife
+              libraries:
+                - whl: ../../dist/*.whl
+            - task_key: gold
+              job_cluster_key: afterlife
+              libraries:
+                - pypi:
+                    package: dbt-databricks>=1.8,<2
+            - task_key: export
+              job_cluster_key: afterlife
+              libraries:
+                - whl: ../../dist/*.whl
