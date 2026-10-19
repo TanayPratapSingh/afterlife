@@ -24,3 +24,4 @@ aws/terraform/terraform.tfvars
 aws/terraform/tfplan
 dist/
 /build/
+warehouse/.user.yml
