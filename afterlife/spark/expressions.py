@@ -24,7 +24,7 @@ from afterlife.core import ids
 # Databricks layer review caught the difference on a non breaking space.
 _WS = r"[\s\x{1C}-\x{1F}]"
 _DOI_SHAPE = r"(?U)^10\.[0-9]{4,9}(\.[0-9]+)*/[^\s\x{1C}-\x{1F}]+$"
-_PREFIX = r"^(https?://(dx\.)?doi\.org/|doi\.org/|doi:)"
+_PREFIX = r"^(https?:/{1,2}(dx\.)?doi\.org/|doi\.org/|doi:)"
 
 
 def strip(col: Column) -> Column:

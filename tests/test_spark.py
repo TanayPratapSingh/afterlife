@@ -62,6 +62,8 @@ EDGE_DOIS = [
     "10.1000/a b",
     "10.1000/é",
     "http://dx.doi.org/10.1000/Y",
+    "https:/doi.org/10.1000/collapsed",
+    "http:/dx.doi.org/10.1000/collapsed",
     # Whitespace Python strips and Spark's trim does not: no break space, tab,
     # line feed, the ASCII separators Python counts as whitespace, and the
     # ideographic space.

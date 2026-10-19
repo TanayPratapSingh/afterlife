@@ -373,7 +373,15 @@ def test_api_found_explains_who_says_what(api):
 
 
 def test_api_found_by_every_alias(api):
-    for raw in ("12345", "PMC123", "https://openalex.org/W123", "https://doi.org/10.1000/xyz"):
+    # "https:/doi.org/..." is how API Gateway delivers a DOI URL in the path
+    # after collapsing "//"; the first live lookup returned 400 for it.
+    for raw in (
+        "12345",
+        "PMC123",
+        "https://openalex.org/W123",
+        "https://doi.org/10.1000/xyz",
+        "https:/doi.org/10.1000/xyz",
+    ):
         status, _, body = _get(api, LOOKUP, raw)
         assert status == 200 and body["doc"]["paper_key"] == "doi:10.1000/xyz", raw
 

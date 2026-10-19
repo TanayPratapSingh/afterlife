@@ -35,6 +35,13 @@ DOI_PREFIXES = (
     "http://doi.org/",
     "https://dx.doi.org/",
     "http://dx.doi.org/",
+    # The same URLs after a proxy collapses "//" in a request path. API Gateway
+    # delivers GET /v1/lookup/https://doi.org/... to the API Lambda as
+    # "https:/doi.org/...", found on the first live lookup (2026-10-19).
+    "https:/doi.org/",
+    "http:/doi.org/",
+    "https:/dx.doi.org/",
+    "http:/dx.doi.org/",
     "doi.org/",
     "doi:",
 )

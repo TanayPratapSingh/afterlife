@@ -22,6 +22,7 @@ from afterlife.core.text import decode
         ("https://doi.org/10.1000/abc", "10.1000/abc"),
         ("http://dx.doi.org/10.1000/abc", "10.1000/abc"),
         ("doi:10.1000/abc", "10.1000/abc"),
+        ("https:/doi.org/10.1000/abc", "10.1000/abc"),
         ("  10.1000/abc  ", "10.1000/abc"),
         # A real DOI shape that ends in a parenthesis must survive intact.
         ("10.1061/(ASCE)0733-9399(2010)136:2(174)", "10.1061/(asce)0733-9399(2010)136:2(174)"),
