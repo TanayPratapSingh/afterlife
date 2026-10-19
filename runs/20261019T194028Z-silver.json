@@ -1,0 +1,452 @@
+{
+  "command": "silver",
+  "argv": [
+    "silver",
+    "--rebuild"
+  ],
+  "started_at": "2026-10-19T19:30:28.851660+00:00",
+  "finished_at": "2026-10-19T19:40:28.912740+00:00",
+  "seconds": 600.1,
+  "report": {
+    "replay": [
+      {
+        "snapshot_date": "2024-09-02",
+        "insert": 55804,
+        "deleted": 0,
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2024-10-01",
+        "quarantined": false,
+        "insert": 785,
+        "update": 6611,
+        "deleted": 0,
+        "lossy_records": 0,
+        "format_only": 0,
+        "lossy_by_column": {},
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2024-11-01",
+        "quarantined": false,
+        "insert": 1111,
+        "update": 59,
+        "deleted": 0,
+        "lossy_records": 0,
+        "format_only": 0,
+        "lossy_by_column": {},
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2024-12-02",
+        "quarantined": false,
+        "insert": 935,
+        "update": 26,
+        "deleted": 0,
+        "lossy_records": 0,
+        "format_only": 0,
+        "lossy_by_column": {},
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2025-01-07",
+        "quarantined": false,
+        "insert": 896,
+        "update": 122,
+        "deleted": 0,
+        "lossy_records": 0,
+        "format_only": 0,
+        "lossy_by_column": {},
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2025-02-03",
+        "quarantined": false,
+        "insert": 1120,
+        "update": 32,
+        "deleted": 0,
+        "lossy_records": 0,
+        "format_only": 1,
+        "lossy_by_column": {},
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2025-03-03",
+        "quarantined": false,
+        "insert": 1104,
+        "update": 28223,
+        "deleted": 1,
+        "lossy_records": 0,
+        "format_only": 1,
+        "lossy_by_column": {},
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2025-04-01",
+        "quarantined": false,
+        "insert": 994,
+        "update": 16539,
+        "deleted": 2,
+        "lossy_records": 0,
+        "format_only": 1,
+        "lossy_by_column": {},
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2025-05-01",
+        "quarantined": false,
+        "insert": 939,
+        "update": 186,
+        "deleted": 0,
+        "lossy_records": 0,
+        "format_only": 2,
+        "lossy_by_column": {},
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2025-06-02",
+        "quarantined": false,
+        "insert": 801,
+        "update": 74,
+        "deleted": 3,
+        "lossy_records": 0,
+        "format_only": 2,
+        "lossy_by_column": {},
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2025-07-01",
+        "quarantined": false,
+        "reappear": 1,
+        "insert": 864,
+        "update": 40,
+        "deleted": 0,
+        "lossy_records": 0,
+        "format_only": 3,
+        "lossy_by_column": {},
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2025-08-01",
+        "quarantined": false,
+        "insert": 601,
+        "update": 31,
+        "deleted": 3,
+        "lossy_records": 0,
+        "format_only": 3,
+        "lossy_by_column": {},
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2025-09-02",
+        "quarantined": false,
+        "insert": 365,
+        "update": 48,
+        "deleted": 0,
+        "lossy_records": 0,
+        "format_only": 65898,
+        "lossy_by_column": {},
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2025-10-01",
+        "quarantined": false,
+        "insert": 406,
+        "update": 31,
+        "deleted": 1,
+        "lossy_records": 0,
+        "format_only": 65868,
+        "lossy_by_column": {},
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2025-11-04",
+        "quarantined": false,
+        "insert": 584,
+        "update": 2912,
+        "deleted": 23,
+        "lossy_records": 0,
+        "format_only": 62963,
+        "lossy_by_column": {},
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2025-12-01",
+        "quarantined": false,
+        "reappear": 1,
+        "insert": 370,
+        "update": 21821,
+        "deleted": 2,
+        "lossy_records": 0,
+        "format_only": 42260,
+        "lossy_by_column": {},
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2026-01-02",
+        "quarantined": false,
+        "insert": 521,
+        "update": 10467,
+        "deleted": 1,
+        "lossy_records": 0,
+        "format_only": 33457,
+        "lossy_by_column": {},
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2026-02-02",
+        "quarantined": false,
+        "insert": 348,
+        "update": 58,
+        "deleted": 1,
+        "lossy_records": 0,
+        "format_only": 33447,
+        "lossy_by_column": {},
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2026-03-02",
+        "quarantined": false,
+        "reappear": 1,
+        "insert": 581,
+        "update": 85,
+        "deleted": 10,
+        "lossy_records": 0,
+        "format_only": 33416,
+        "lossy_by_column": {},
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2026-04-01",
+        "quarantined": false,
+        "insert": 361,
+        "update": 30,
+        "deleted": 0,
+        "lossy_records": 0,
+        "format_only": 33410,
+        "lossy_by_column": {},
+        "blank_rows_dropped": 32
+      },
+      {
+        "snapshot_date": "2026-05-01",
+        "quarantined": false,
+        "insert": 464,
+        "update": 45,
+        "deleted": 1,
+        "lossy_records": 0,
+        "format_only": 33396,
+        "lossy_by_column": {},
+        "blank_rows_dropped": 63
+      },
+      {
+        "snapshot_date": "2026-06-01",
+        "quarantined": false,
+        "insert": 223,
+        "update": 51,
+        "deleted": 1,
+        "lossy_records": 0,
+        "format_only": 33373,
+        "lossy_by_column": {},
+        "blank_rows_dropped": 279
+      },
+      {
+        "snapshot_date": "2026-07-01",
+        "quarantined": false,
+        "insert": 432,
+        "update": 62,
+        "deleted": 0,
+        "lossy_records": 0,
+        "format_only": 33340,
+        "lossy_by_column": {},
+        "blank_rows_dropped": 180
+      },
+      {
+        "snapshot_date": "2026-08-03",
+        "quarantined": false,
+        "insert": 762,
+        "update": 127,
+        "deleted": 0,
+        "lossy_records": 0,
+        "format_only": 33268,
+        "lossy_by_column": {},
+        "blank_rows_dropped": 215
+      },
+      {
+        "snapshot_date": "2026-09-01",
+        "quarantined": false,
+        "insert": 656,
+        "update": 80,
+        "deleted": 4,
+        "lossy_records": 0,
+        "format_only": 33251,
+        "lossy_by_column": {},
+        "blank_rows_dropped": 285
+      },
+      {
+        "snapshot_date": "2026-09-29",
+        "quarantined": false,
+        "insert": 782,
+        "update": 262,
+        "deleted": 1,
+        "lossy_records": 0,
+        "format_only": 33196,
+        "lossy_by_column": {},
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2026-09-30",
+        "quarantined": false,
+        "insert": 32,
+        "deleted": 0,
+        "lossy_records": 0,
+        "format_only": 33196,
+        "lossy_by_column": {},
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2026-10-01",
+        "quarantined": false,
+        "insert": 41,
+        "update": 2,
+        "deleted": 0,
+        "lossy_records": 0,
+        "format_only": 33196,
+        "lossy_by_column": {},
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2026-10-02",
+        "quarantined": false,
+        "insert": 39,
+        "deleted": 0,
+        "lossy_records": 0,
+        "format_only": 33196,
+        "lossy_by_column": {},
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2026-10-05",
+        "quarantined": false,
+        "insert": 49,
+        "deleted": 0,
+        "lossy_records": 0,
+        "format_only": 33196,
+        "lossy_by_column": {},
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2026-10-06",
+        "quarantined": false,
+        "insert": 44,
+        "update": 1,
+        "deleted": 0,
+        "lossy_records": 0,
+        "format_only": 33195,
+        "lossy_by_column": {},
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2026-10-07",
+        "quarantined": false,
+        "insert": 42,
+        "deleted": 0,
+        "lossy_records": 0,
+        "format_only": 33195,
+        "lossy_by_column": {},
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2026-10-08",
+        "quarantined": false,
+        "insert": 40,
+        "deleted": 0,
+        "lossy_records": 0,
+        "format_only": 33195,
+        "lossy_by_column": {},
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2026-10-09",
+        "quarantined": false,
+        "insert": 55,
+        "update": 655,
+        "deleted": 0,
+        "lossy_records": 0,
+        "format_only": 32542,
+        "lossy_by_column": {},
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2026-10-12",
+        "quarantined": false,
+        "insert": 44,
+        "update": 19,
+        "deleted": 0,
+        "lossy_records": 0,
+        "format_only": 32540,
+        "lossy_by_column": {},
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2026-10-13",
+        "quarantined": false,
+        "insert": 40,
+        "update": 28,
+        "deleted": 0,
+        "lossy_records": 0,
+        "format_only": 32535,
+        "lossy_by_column": {},
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2026-10-14",
+        "quarantined": false,
+        "insert": 30,
+        "update": 4,
+        "deleted": 0,
+        "lossy_records": 0,
+        "format_only": 32534,
+        "lossy_by_column": {},
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2026-10-15",
+        "quarantined": true,
+        "lossy_records": 5520,
+        "format_only": 67640,
+        "lossy_by_column": {
+          "title": 2298,
+          "institution": 366,
+          "journal": 2453,
+          "publisher": 2515,
+          "author": 2922,
+          "notes": 5
+        },
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2026-10-16",
+        "quarantined": false,
+        "insert": 69,
+        "update": 52,
+        "deleted": 0,
+        "lossy_records": 0,
+        "format_only": 32532,
+        "lossy_by_column": {},
+        "blank_rows_dropped": 0
+      }
+    ],
+    "rw": {
+      "notices": 73283,
+      "papers": 70195
+    },
+    "openalex": {
+      "works": 136873,
+      "snapshot_date": "2026-10-19"
+    },
+    "pubmed": {
+      "pmids": 35169,
+      "snapshot_date": "2026-10-19"
+    }
+  }
+}

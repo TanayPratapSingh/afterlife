@@ -1,0 +1,296 @@
+{
+  "command": "silver",
+  "argv": [
+    "silver",
+    "--rebuild"
+  ],
+  "started_at": "2026-10-19T19:22:36.221191+00:00",
+  "finished_at": "2026-10-19T19:26:29.679172+00:00",
+  "seconds": 233.5,
+  "report": {
+    "replay": [
+      {
+        "snapshot_date": "2024-09-02",
+        "insert": 55804,
+        "deleted": 0,
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2024-10-01",
+        "insert": 785,
+        "update": 6611,
+        "deleted": 0,
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2024-11-01",
+        "insert": 1111,
+        "update": 59,
+        "deleted": 0,
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2024-12-02",
+        "insert": 935,
+        "update": 26,
+        "deleted": 0,
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2025-01-07",
+        "insert": 896,
+        "update": 122,
+        "deleted": 0,
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2025-02-03",
+        "insert": 1120,
+        "update": 33,
+        "deleted": 0,
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2025-03-03",
+        "insert": 1104,
+        "update": 28223,
+        "deleted": 1,
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2025-04-01",
+        "insert": 994,
+        "update": 16539,
+        "deleted": 2,
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2025-05-01",
+        "insert": 939,
+        "update": 187,
+        "deleted": 0,
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2025-06-02",
+        "insert": 801,
+        "update": 74,
+        "deleted": 3,
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2025-07-01",
+        "reappear": 1,
+        "insert": 864,
+        "update": 41,
+        "deleted": 0,
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2025-08-01",
+        "insert": 601,
+        "update": 31,
+        "deleted": 3,
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2025-09-02",
+        "insert": 365,
+        "update": 65946,
+        "deleted": 0,
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2025-10-01",
+        "insert": 406,
+        "update": 31,
+        "deleted": 1,
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2025-11-04",
+        "insert": 584,
+        "update": 2917,
+        "deleted": 23,
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2025-12-01",
+        "reappear": 1,
+        "insert": 370,
+        "update": 21832,
+        "deleted": 2,
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2026-01-02",
+        "insert": 521,
+        "update": 10467,
+        "deleted": 1,
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2026-02-02",
+        "insert": 348,
+        "update": 58,
+        "deleted": 1,
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2026-03-02",
+        "reappear": 1,
+        "insert": 581,
+        "update": 85,
+        "deleted": 10,
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2026-04-01",
+        "insert": 361,
+        "update": 30,
+        "deleted": 0,
+        "blank_rows_dropped": 32
+      },
+      {
+        "snapshot_date": "2026-05-01",
+        "insert": 464,
+        "update": 45,
+        "deleted": 1,
+        "blank_rows_dropped": 63
+      },
+      {
+        "snapshot_date": "2026-06-01",
+        "insert": 223,
+        "update": 51,
+        "deleted": 1,
+        "blank_rows_dropped": 279
+      },
+      {
+        "snapshot_date": "2026-07-01",
+        "insert": 432,
+        "update": 62,
+        "deleted": 0,
+        "blank_rows_dropped": 180
+      },
+      {
+        "snapshot_date": "2026-08-03",
+        "insert": 762,
+        "update": 127,
+        "deleted": 0,
+        "blank_rows_dropped": 215
+      },
+      {
+        "snapshot_date": "2026-09-01",
+        "insert": 656,
+        "update": 80,
+        "deleted": 4,
+        "blank_rows_dropped": 285
+      },
+      {
+        "snapshot_date": "2026-09-29",
+        "insert": 782,
+        "update": 367,
+        "deleted": 1,
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2026-09-30",
+        "insert": 32,
+        "deleted": 0,
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2026-10-01",
+        "insert": 41,
+        "update": 2,
+        "deleted": 0,
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2026-10-02",
+        "insert": 39,
+        "deleted": 0,
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2026-10-05",
+        "insert": 49,
+        "deleted": 0,
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2026-10-06",
+        "insert": 44,
+        "update": 1,
+        "deleted": 0,
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2026-10-07",
+        "insert": 42,
+        "deleted": 0,
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2026-10-08",
+        "insert": 40,
+        "deleted": 0,
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2026-10-09",
+        "insert": 55,
+        "update": 655,
+        "deleted": 0,
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2026-10-12",
+        "insert": 44,
+        "update": 19,
+        "deleted": 0,
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2026-10-13",
+        "insert": 40,
+        "update": 28,
+        "deleted": 0,
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2026-10-14",
+        "insert": 30,
+        "update": 4,
+        "deleted": 0,
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2026-10-15",
+        "insert": 39,
+        "update": 73214,
+        "deleted": 0,
+        "blank_rows_dropped": 0
+      },
+      {
+        "snapshot_date": "2026-10-16",
+        "insert": 30,
+        "update": 73253,
+        "deleted": 0,
+        "blank_rows_dropped": 0
+      }
+    ],
+    "rw": {
+      "notices": 73283,
+      "papers": 70195
+    },
+    "openalex": {
+      "works": 136873,
+      "snapshot_date": "2026-10-19"
+    },
+    "pubmed": {
+      "pmids": 35169,
+      "snapshot_date": "2026-10-19"
+    }
+  }
+}

@@ -1,0 +1,906 @@
+{
+  "command": "findings",
+  "argv": [
+    "findings"
+  ],
+  "started_at": "2026-10-19T20:32:43.903453+00:00",
+  "finished_at": "2026-10-19T20:32:44.129270+00:00",
+  "seconds": 0.2,
+  "report": {
+    "caveat": "Measured on landed public snapshots; see coverage notes in the export.",
+    "registries": {
+      "by_verdict": {
+        "retracted": 89576,
+        "concern": 1640,
+        "corrected": 646,
+        "ok": 126,
+        "disputed": 105,
+        "reinstated": 4
+      },
+      "agreement": [
+        {
+          "source": "openalex",
+          "eligible": 84162,
+          "flagged": 68945,
+          "recall_vs_union": 0.8192
+        },
+        {
+          "source": "pmc",
+          "eligible": 19499,
+          "flagged": 18748,
+          "recall_vs_union": 0.9615
+        },
+        {
+          "source": "pubmed",
+          "eligible": 37495,
+          "flagged": 33302,
+          "recall_vs_union": 0.8882
+        },
+        {
+          "source": "retraction_watch",
+          "eligible": 89681,
+          "flagged": 67672,
+          "recall_vs_union": 0.7546
+        }
+      ],
+      "combinations": [
+        {
+          "rw": true,
+          "openalex": false,
+          "pubmed": false,
+          "pmc": null,
+          "papers": 20253
+        },
+        {
+          "rw": true,
+          "openalex": true,
+          "pubmed": false,
+          "pmc": null,
+          "papers": 19640
+        },
+        {
+          "rw": true,
+          "openalex": true,
+          "pubmed": true,
+          "pmc": true,
+          "papers": 15744
+        },
+        {
+          "rw": null,
+          "openalex": true,
+          "pubmed": false,
+          "pmc": null,
+          "papers": 15669
+        },
+        {
+          "rw": true,
+          "openalex": true,
+          "pubmed": true,
+          "pmc": null,
+          "papers": 11587
+        },
+        {
+          "rw": null,
+          "openalex": true,
+          "pubmed": true,
+          "pmc": true,
+          "papers": 2887
+        },
+        {
+          "rw": null,
+          "openalex": true,
+          "pubmed": true,
+          "pmc": null,
+          "papers": 2842
+        },
+        {
+          "rw": null,
+          "openalex": true,
+          "pubmed": false,
+          "pmc": false,
+          "papers": 405
+        },
+        {
+          "rw": true,
+          "openalex": true,
+          "pubmed": false,
+          "pmc": false,
+          "papers": 276
+        },
+        {
+          "rw": true,
+          "openalex": false,
+          "pubmed": true,
+          "pmc": null,
+          "papers": 95
+        },
+        {
+          "rw": true,
+          "openalex": true,
+          "pubmed": false,
+          "pmc": true,
+          "papers": 56
+        },
+        {
+          "rw": null,
+          "openalex": true,
+          "pubmed": true,
+          "pmc": false,
+          "papers": 50
+        }
+      ],
+      "excluded_as_notices": [
+        {
+          "source": "openalex",
+          "notice_reason": "openalex_type_retraction",
+          "rows_excluded": 38161
+        },
+        {
+          "source": "openalex",
+          "notice_reason": "rw_notice_doi",
+          "rows_excluded": 29228
+        },
+        {
+          "source": "pmc",
+          "notice_reason": "rw_notice_doi",
+          "rows_excluded": 17911
+        },
+        {
+          "source": "pubmed",
+          "notice_reason": "rw_notice_doi",
+          "rows_excluded": 1770
+        },
+        {
+          "source": "openalex",
+          "notice_reason": "rw_notice_pmid",
+          "rows_excluded": 155
+        },
+        {
+          "source": "pubmed",
+          "notice_reason": "rw_notice_pmid",
+          "rows_excluded": 95
+        },
+        {
+          "source": "pmc",
+          "notice_reason": "rw_notice_pmid",
+          "rows_excluded": 40
+        }
+      ],
+      "openalex_retracted_by_type": [
+        {
+          "type": "article",
+          "works": 78822
+        },
+        {
+          "type": "retraction",
+          "works": 38161
+        },
+        {
+          "type": "conference-paper",
+          "works": 14720
+        },
+        {
+          "type": "book-chapter",
+          "works": 1409
+        },
+        {
+          "type": "review",
+          "works": 961
+        },
+        {
+          "type": "preprint",
+          "works": 908
+        }
+      ],
+      "papers": 89681,
+      "all_eligible_agree": 46225,
+      "flagged_by_exactly_one": 36401
+    },
+    "retraction_lag": {
+      "notices": 67845,
+      "negative_lag_excluded": 1,
+      "median_days": 493.0,
+      "p25_days": 156.0,
+      "p75_days": 1074.0,
+      "by_retraction_year": [
+        {
+          "retraction_year": 2005,
+          "notices": 140,
+          "median_days": 255.5
+        },
+        {
+          "retraction_year": 2006,
+          "notices": 215,
+          "median_days": 364.0
+        },
+        {
+          "retraction_year": 2007,
+          "notices": 334,
+          "median_days": 167.5
+        },
+        {
+          "retraction_year": 2008,
+          "notices": 450,
+          "median_days": 203.0
+        },
+        {
+          "retraction_year": 2009,
+          "notices": 1186,
+          "median_days": 63.0
+        },
+        {
+          "retraction_year": 2010,
+          "notices": 5011,
+          "median_days": 54.0
+        },
+        {
+          "retraction_year": 2011,
+          "notices": 4937,
+          "median_days": 41.0
+        },
+        {
+          "retraction_year": 2012,
+          "notices": 1161,
+          "median_days": 306.0
+        },
+        {
+          "retraction_year": 2013,
+          "notices": 1450,
+          "median_days": 360.0
+        },
+        {
+          "retraction_year": 2014,
+          "notices": 1115,
+          "median_days": 476.0
+        },
+        {
+          "retraction_year": 2015,
+          "notices": 1545,
+          "median_days": 464.0
+        },
+        {
+          "retraction_year": 2016,
+          "notices": 1683,
+          "median_days": 547.0
+        },
+        {
+          "retraction_year": 2017,
+          "notices": 1712,
+          "median_days": 599.0
+        },
+        {
+          "retraction_year": 2018,
+          "notices": 2534,
+          "median_days": 344.0
+        },
+        {
+          "retraction_year": 2019,
+          "notices": 2907,
+          "median_days": 1217.0
+        },
+        {
+          "retraction_year": 2020,
+          "notices": 3080,
+          "median_days": 537.5
+        },
+        {
+          "retraction_year": 2021,
+          "notices": 3913,
+          "median_days": 601.0
+        },
+        {
+          "retraction_year": 2022,
+          "notices": 5591,
+          "median_days": 642.0
+        },
+        {
+          "retraction_year": 2023,
+          "notices": 13336,
+          "median_days": 513.0
+        },
+        {
+          "retraction_year": 2024,
+          "notices": 6501,
+          "median_days": 848.0
+        },
+        {
+          "retraction_year": 2025,
+          "notices": 5998,
+          "median_days": 672.0
+        },
+        {
+          "retraction_year": 2026,
+          "notices": 2119,
+          "median_days": 1001.0
+        }
+      ]
+    },
+    "afterlife": {
+      "papers": 47307,
+      "window_complete": 45043,
+      "headline_excluding_retract_and_replace": {
+        "papers": 44557,
+        "with_any_after": 29024,
+        "citations_after": 217376,
+        "citations_through_retraction_year": 600528,
+        "median_after": 1.0,
+        "p90_after": 11.0
+      },
+      "retract_and_replace_only": {
+        "papers": 486,
+        "with_any_after": 417,
+        "citations_after": 14325,
+        "citations_through_retraction_year": 18036,
+        "median_after": 8.0,
+        "p90_after": 67.5
+      },
+      "top_by_citations_after": [
+        {
+          "paper_key": "doi:10.7554/elife.12248",
+          "title": "A mathematical model explains saturating axon guidance responses to molecular gradients",
+          "retraction_year": 2018,
+          "citations_after": 1031,
+          "citations_through_retraction_year": 191
+        },
+        {
+          "paper_key": "doi:10.1021/nn900887m",
+          "title": "Carbon Nanotubes Are Able To Penetrate Plant Seed Coat and Dramatically Affect Seed Germination and Plant Growth",
+          "retraction_year": 2012,
+          "citations_after": 1013,
+          "citations_through_retraction_year": 39
+        },
+        {
+          "paper_key": "doi:10.4103/0974-1208.82352",
+          "title": "An overview of randomization techniques: An unbiased assessment of outcome in clinical research",
+          "retraction_year": 2017,
+          "citations_after": 859,
+          "citations_through_retraction_year": 207
+        },
+        {
+          "paper_key": "doi:10.1056/nejmoa2007621",
+          "title": "Cardiovascular Disease, Drug Therapy, and Mortality in Covid-19",
+          "retraction_year": 2020,
+          "citations_after": 783,
+          "citations_through_retraction_year": 645
+        },
+        {
+          "paper_key": "doi:10.1155/2014/943162",
+          "title": "A Comprehensive Review on Metabolic Syndrome",
+          "retraction_year": 2019,
+          "citations_after": 699,
+          "citations_through_retraction_year": 1188
+        },
+        {
+          "paper_key": "doi:10.5465/amj.2009.43670902",
+          "title": "Absorptive Capacity, Environmental Turbulence, and the Complementarity of Organizational Learning Processes",
+          "retraction_year": 2013,
+          "citations_after": 684,
+          "citations_through_retraction_year": 171
+        },
+        {
+          "paper_key": "doi:10.1001/jamainternmed.2018.3713",
+          "title": "Association Between Physician Burnout and Patient Safety, Professionalism, and Patient Satisfaction: A Systematic Review and Meta-analysis",
+          "retraction_year": 2020,
+          "citations_after": 611,
+          "citations_through_retraction_year": 373
+        },
+        {
+          "paper_key": "doi:10.1016/s0140-6736(20)31180-6",
+          "title": "Hydroxychloroquine or chloroquine with or without a macrolide for treatment of COVID-19: a multinational registry analysis",
+          "retraction_year": 2020,
+          "citations_after": 569,
+          "citations_through_retraction_year": 632
+        },
+        {
+          "paper_key": "doi:10.1155/2014/150845",
+          "title": "Apoptosis and Molecular Targeting Therapy in Cancer",
+          "retraction_year": 2020,
+          "citations_after": 438,
+          "citations_through_retraction_year": 682
+        },
+        {
+          "paper_key": "doi:10.1111/j.1574-695x.2007.00329.x",
+          "title": "The role of nitric oxide in inflammatory reactions",
+          "retraction_year": 2012,
+          "citations_after": 429,
+          "citations_through_retraction_year": 20
+        }
+      ]
+    },
+    "reasons": {
+      "last_complete_year": 2025,
+      "top_last_complete_year": [
+        {
+          "reason": "Investigation by Journal/Publisher",
+          "notices": 5080
+        },
+        {
+          "reason": "Unreliable Results and/or Conclusions",
+          "notices": 3278
+        },
+        {
+          "reason": "Concerns/Issues about Referencing/Attributions",
+          "notices": 2874
+        },
+        {
+          "reason": "Compromised Peer Review",
+          "notices": 2012
+        },
+        {
+          "reason": "Investigation by Third Party",
+          "notices": 1821
+        },
+        {
+          "reason": "Computer-Aided Content or Computer-Generated Content",
+          "notices": 1275
+        },
+        {
+          "reason": "Concerns/Issues about Third Party Involvement",
+          "notices": 1215
+        },
+        {
+          "reason": "Objections by Author(s)",
+          "notices": 1201
+        },
+        {
+          "reason": "Paper Mill",
+          "notices": 1115
+        },
+        {
+          "reason": "Concerns/Issues about Article",
+          "notices": 974
+        }
+      ],
+      "series": [
+        {
+          "retraction_year": 2015,
+          "reason": "Compromised Peer Review",
+          "notices": 178
+        },
+        {
+          "retraction_year": 2016,
+          "reason": "Compromised Peer Review",
+          "notices": 189
+        },
+        {
+          "retraction_year": 2017,
+          "reason": "Compromised Peer Review",
+          "notices": 168
+        },
+        {
+          "retraction_year": 2018,
+          "reason": "Compromised Peer Review",
+          "notices": 110
+        },
+        {
+          "retraction_year": 2019,
+          "reason": "Compromised Peer Review",
+          "notices": 88
+        },
+        {
+          "retraction_year": 2020,
+          "reason": "Compromised Peer Review",
+          "notices": 76
+        },
+        {
+          "retraction_year": 2021,
+          "reason": "Compromised Peer Review",
+          "notices": 590
+        },
+        {
+          "retraction_year": 2022,
+          "reason": "Compromised Peer Review",
+          "notices": 2461
+        },
+        {
+          "retraction_year": 2023,
+          "reason": "Compromised Peer Review",
+          "notices": 2768
+        },
+        {
+          "retraction_year": 2024,
+          "reason": "Compromised Peer Review",
+          "notices": 2075
+        },
+        {
+          "retraction_year": 2025,
+          "reason": "Compromised Peer Review",
+          "notices": 2012
+        },
+        {
+          "retraction_year": 2026,
+          "reason": "Compromised Peer Review",
+          "notices": 632
+        },
+        {
+          "retraction_year": 2015,
+          "reason": "Computer-Aided Content or Computer-Generated Content",
+          "notices": 9
+        },
+        {
+          "retraction_year": 2019,
+          "reason": "Computer-Aided Content or Computer-Generated Content",
+          "notices": 1
+        },
+        {
+          "retraction_year": 2020,
+          "reason": "Computer-Aided Content or Computer-Generated Content",
+          "notices": 39
+        },
+        {
+          "retraction_year": 2021,
+          "reason": "Computer-Aided Content or Computer-Generated Content",
+          "notices": 481
+        },
+        {
+          "retraction_year": 2022,
+          "reason": "Computer-Aided Content or Computer-Generated Content",
+          "notices": 383
+        },
+        {
+          "retraction_year": 2023,
+          "reason": "Computer-Aided Content or Computer-Generated Content",
+          "notices": 5588
+        },
+        {
+          "retraction_year": 2024,
+          "reason": "Computer-Aided Content or Computer-Generated Content",
+          "notices": 1453
+        },
+        {
+          "retraction_year": 2025,
+          "reason": "Computer-Aided Content or Computer-Generated Content",
+          "notices": 1275
+        },
+        {
+          "retraction_year": 2026,
+          "reason": "Computer-Aided Content or Computer-Generated Content",
+          "notices": 195
+        },
+        {
+          "retraction_year": 2015,
+          "reason": "Concerns/Issues about Peer Review",
+          "notices": 1
+        },
+        {
+          "retraction_year": 2016,
+          "reason": "Concerns/Issues about Peer Review",
+          "notices": 5
+        },
+        {
+          "retraction_year": 2017,
+          "reason": "Concerns/Issues about Peer Review",
+          "notices": 2
+        },
+        {
+          "retraction_year": 2018,
+          "reason": "Concerns/Issues about Peer Review",
+          "notices": 1
+        },
+        {
+          "retraction_year": 2020,
+          "reason": "Concerns/Issues about Peer Review",
+          "notices": 1
+        },
+        {
+          "retraction_year": 2021,
+          "reason": "Concerns/Issues about Peer Review",
+          "notices": 2
+        },
+        {
+          "retraction_year": 2022,
+          "reason": "Concerns/Issues about Peer Review",
+          "notices": 357
+        },
+        {
+          "retraction_year": 2023,
+          "reason": "Concerns/Issues about Peer Review",
+          "notices": 7870
+        },
+        {
+          "retraction_year": 2024,
+          "reason": "Concerns/Issues about Peer Review",
+          "notices": 2092
+        },
+        {
+          "retraction_year": 2025,
+          "reason": "Concerns/Issues about Peer Review",
+          "notices": 918
+        },
+        {
+          "retraction_year": 2026,
+          "reason": "Concerns/Issues about Peer Review",
+          "notices": 201
+        },
+        {
+          "retraction_year": 2016,
+          "reason": "Paper Mill",
+          "notices": 2
+        },
+        {
+          "retraction_year": 2017,
+          "reason": "Paper Mill",
+          "notices": 3
+        },
+        {
+          "retraction_year": 2018,
+          "reason": "Paper Mill",
+          "notices": 4
+        },
+        {
+          "retraction_year": 2019,
+          "reason": "Paper Mill",
+          "notices": 4
+        },
+        {
+          "retraction_year": 2020,
+          "reason": "Paper Mill",
+          "notices": 246
+        },
+        {
+          "retraction_year": 2021,
+          "reason": "Paper Mill",
+          "notices": 815
+        },
+        {
+          "retraction_year": 2022,
+          "reason": "Paper Mill",
+          "notices": 934
+        },
+        {
+          "retraction_year": 2023,
+          "reason": "Paper Mill",
+          "notices": 6782
+        },
+        {
+          "retraction_year": 2024,
+          "reason": "Paper Mill",
+          "notices": 1805
+        },
+        {
+          "retraction_year": 2025,
+          "reason": "Paper Mill",
+          "notices": 1115
+        },
+        {
+          "retraction_year": 2026,
+          "reason": "Paper Mill",
+          "notices": 3
+        },
+        {
+          "retraction_year": 2015,
+          "reason": "Taken via Peer Review",
+          "notices": 1
+        },
+        {
+          "retraction_year": 2016,
+          "reason": "Taken via Peer Review",
+          "notices": 1
+        },
+        {
+          "retraction_year": 2017,
+          "reason": "Taken via Peer Review",
+          "notices": 3
+        },
+        {
+          "retraction_year": 2018,
+          "reason": "Taken via Peer Review",
+          "notices": 2
+        },
+        {
+          "retraction_year": 2019,
+          "reason": "Taken via Peer Review",
+          "notices": 3
+        },
+        {
+          "retraction_year": 2020,
+          "reason": "Taken via Peer Review",
+          "notices": 2
+        },
+        {
+          "retraction_year": 2021,
+          "reason": "Taken via Peer Review",
+          "notices": 5
+        },
+        {
+          "retraction_year": 2022,
+          "reason": "Taken via Peer Review",
+          "notices": 1
+        },
+        {
+          "retraction_year": 2025,
+          "reason": "Taken via Peer Review",
+          "notices": 1
+        },
+        {
+          "retraction_year": 2026,
+          "reason": "Taken via Peer Review",
+          "notices": 2
+        }
+      ]
+    },
+    "upstream": {
+      "replay_report": "20261019T202854Z-silver.json",
+      "snapshots": 39,
+      "quarantined": [
+        {
+          "snapshot_date": "2026-10-15",
+          "lossy_records": 5520,
+          "lossy_by_column": {
+            "title": 2298,
+            "institution": 366,
+            "journal": 2453,
+            "publisher": 2515,
+            "author": 2922,
+            "notes": 5
+          }
+        }
+      ],
+      "blank_rows_dropped": 1054,
+      "format_only_total": 143447,
+      "semantic_updates_total": 78999,
+      "deleted_total": 54,
+      "reappeared_total": 3,
+      "largest_days": [
+        {
+          "snapshot_date": "2026-10-15",
+          "update": 0,
+          "format_only": 67640
+        },
+        {
+          "snapshot_date": "2025-09-02",
+          "update": 48,
+          "format_only": 65898
+        },
+        {
+          "snapshot_date": "2025-03-03",
+          "update": 28223,
+          "format_only": 0
+        },
+        {
+          "snapshot_date": "2025-12-01",
+          "update": 12037,
+          "format_only": 9795
+        },
+        {
+          "snapshot_date": "2025-04-01",
+          "update": 16539,
+          "format_only": 0
+        },
+        {
+          "snapshot_date": "2026-01-02",
+          "update": 10467,
+          "format_only": 0
+        }
+      ],
+      "top_reason_relabels": [
+        {
+          "change_date": "2025-04-01",
+          "removed": [
+            "unreliable results"
+          ],
+          "added": [
+            "unreliable results and/or conclusions"
+          ],
+          "records": 16379
+        },
+        {
+          "change_date": "2025-12-01",
+          "removed": [
+            "concerns/issues with peer review"
+          ],
+          "added": [
+            "concerns/issues about peer review"
+          ],
+          "records": 10557
+        },
+        {
+          "change_date": "2026-01-02",
+          "removed": [
+            "fake peer review"
+          ],
+          "added": [
+            "compromised peer review"
+          ],
+          "records": 10426
+        },
+        {
+          "change_date": "2025-03-03",
+          "removed": [
+            "date of retraction/other unknown"
+          ],
+          "added": [
+            "date of article and/or notice unknown"
+          ],
+          "records": 5646
+        },
+        {
+          "change_date": "2025-03-03",
+          "removed": [
+            "concerns/issues about results",
+            "randomly generated content"
+          ],
+          "added": [
+            "computer-aided content or computer-generated content",
+            "concerns/issues about results and/or conclusions"
+          ],
+          "records": 4496
+        },
+        {
+          "change_date": "2024-10-01",
+          "removed": [
+            "withdrawal"
+          ],
+          "added": [
+            "removed"
+          ],
+          "records": 3798
+        },
+        {
+          "change_date": "2025-03-03",
+          "removed": [
+            "duplication of article"
+          ],
+          "added": [
+            "duplication of/in article"
+          ],
+          "records": 3106
+        },
+        {
+          "change_date": "2025-03-03",
+          "removed": [
+            "duplication of image"
+          ],
+          "added": [
+            "duplication of/in image"
+          ],
+          "records": 3019
+        },
+        {
+          "change_date": "2025-11-04",
+          "removed": [
+            "plagiarism of article"
+          ],
+          "added": [
+            "plagiarism of/in article"
+          ],
+          "records": 2691
+        },
+        {
+          "change_date": "2025-03-03",
+          "removed": [
+            "concerns/issues about results"
+          ],
+          "added": [
+            "concerns/issues about results and/or conclusions"
+          ],
+          "records": 1696
+        },
+        {
+          "change_date": "2024-10-01",
+          "removed": [
+            "concerns/issues about authorship"
+          ],
+          "added": [
+            "concerns/issues about authorship/affiliation"
+          ],
+          "records": 1691
+        },
+        {
+          "change_date": "2025-03-03",
+          "removed": [
+            "concerns/issues about results",
+            "lack of irb/iacuc approval",
+            "randomly generated content"
+          ],
+          "added": [
+            "computer-aided content or computer-generated content",
+            "concerns/issues about results and/or conclusions",
+            "lack of irb/iacuc approval and/or compliance"
+          ],
+          "records": 1008
+        }
+      ]
+    }
+  }
+}

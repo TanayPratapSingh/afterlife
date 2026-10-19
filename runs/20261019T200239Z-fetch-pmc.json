@@ -1,0 +1,26 @@
+{
+  "command": "fetch-pmc",
+  "argv": [
+    "fetch",
+    "pmc",
+    "--targets",
+    "data/export/pmc_targets.txt",
+    "--workers",
+    "24"
+  ],
+  "started_at": "2026-10-19T19:53:34.846091+00:00",
+  "finished_at": "2026-10-19T20:02:39.442664+00:00",
+  "seconds": 544.6,
+  "report": {
+    "object_key": "landing/pmc_metadata/snapshot_date=2026-10-19/metadata.jsonl.gz",
+    "records": 43616,
+    "new": true,
+    "notes": {
+      "requested": 43616,
+      "in_open_data": 38172,
+      "not_in_open_data": 5444,
+      "flagged_retracted": 18935,
+      "version_gt_1": 19
+    }
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "command": "gold",
+  "argv": [
+    "gold",
+    "--target",
+    "spark"
+  ],
+  "started_at": "2026-10-19T20:10:57.426802+00:00",
+  "finished_at": "2026-10-19T20:11:22.816417+00:00",
+  "seconds": 25.4,
+  "report": {
+    "target": "spark",
+    "command": "build --target spark",
+    "exit_code": 1,
+    "elapsed_s": 24.0,
+    "status_counts": {
+      "success": 5,
+      "pass": 7,
+      "error": 2,
+      "skipped": 13
+    },
+    "models": 8,
+    "tests": 18,
+    "failures": [
+      {
+        "node": "model.afterlife.flag_exclusions",
+        "status": "error",
+        "message": "Runtime Error in model flag_exclusions (models/marts/flag_exclusions.sql)\n  An error occurred while calling o41.sql.\n  : org.apache.spark.SparkException: Multiple failures in stage materialization.\n  \tat org.apache.spark.sql.errors.QueryExecutionErrors$.multiFailuresInStageMaterializationError(Query"
+      },
+      {
+        "node": "model.afterlife.registry",
+        "status": "error",
+        "message": "Runtime Error in model registry (models/marts/registry.sql)\n  An error occurred while calling o41.sql"
+      },
+      {
+        "node": "test.afterlife.unique_combination_flag_exclusions_source__notice_reason.a270870200",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "test.afterlife.accepted_values_registry_verdict__retracted__disputed__concern__corrected__reinstated__ok.334f0ce736",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "test.afterlife.not_null_registry_n_flagging.969f2c6c1e",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "test.afterlife.not_null_registry_paper_key.92776fda46",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "test.afterlife.not_null_registry_verdict.f9b695ff87",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "test.afterlife.unique_registry_paper_key.2cd956aaa9",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "model.afterlife.afterlife_citations",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "model.afterlife.registry_agreement",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "test.afterlife.not_null_afterlife_citations_citations_after.4c318646cb",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "test.afterlife.not_null_afterlife_citations_paper_key.9abee1a8c7",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "test.afterlife.unique_afterlife_citations_paper_key.c4c32fbccc",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "test.afterlife.not_null_registry_agreement_source.83f382902a",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "test.afterlife.unique_registry_agreement_source.3b41898d09",
+        "status": "skipped",
+        "message": ""
+      }
+    ],
+    "model_seconds": {
+      "reason_trends": 4.26,
+      "record_mutability": 1.34,
+      "retraction_lag": 1.15,
+      "int_paper_identity": 0.32,
+      "flag_exclusions": 10.22,
+      "registry": 0.48,
+      "afterlife_citations": 0,
+      "registry_agreement": 0
+    },
+    "stdout_tail": ".java:79)\n  \tat py4j.ClientServerConnection.waitForCommands(ClientServerConnection.java:182)\n  \tat py4j.ClientServerConnection.run(ClientServerConnection.java:106)\n  \tat java.base/java.lang.Thread.run(Unknown Source)\n  \tSuppressed: org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 172.0 failed 1 times, most recent failure: Lost task 0.0 in stage 172.0 (TID 1933) (mac-16.lan executor driver): java.lang.OutOfMemoryError: Java heap space\n  \n  Driver stacktrace:\n  \t\tat org.apache.spark.scheduler.DAGScheduler.failJobAndIndependentStages(DAGScheduler.scala:2856)\n  \t\tat org.apache.spark.scheduler.DAGScheduler.$anonfun$abortStage$2(DAGScheduler.scala:2792)\n  \t\tat org.apache.spark.scheduler.DAGScheduler.$anonfun$abortStage$2$adapted(DAGScheduler.scala:2791)\n  \t\tat scala.collection.mutable.ResizableArray.foreach(ResizableArray.scala:62)\n  \t\tat scala.collection.mutable.ResizableArray.foreach$(ResizableArray.scala:55)\n  \t\tat scala.collection.mutable.ArrayBuffer.foreach(ArrayBuffer.scala:49)\n  \t\tat org.apache.spark.scheduler.DAGScheduler.abortStage(DAGScheduler.scala:2791)\n  \t\tat org.apache.spark.scheduler.DAGScheduler.$anonfun$handleTaskSetFailed$1(DAGScheduler.scala:1247)\n  \t\tat org.apache.spark.scheduler.DAGScheduler.$anonfun$handleTaskSetFailed$1$adapted(DAGScheduler.scala:1247)\n  \t\tat scala.Option.foreach(Option.scala:407)\n  \t\tat org.apache.spark.scheduler.DAGScheduler.handleTaskSetFailed(DAGScheduler.scala:1247)\n  \t\tat org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.doOnReceive(DAGScheduler.scala:3060)\n  \t\tat org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:2994)\n  \t\tat org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:2983)\n  \t\tat org.apache.spark.util.EventLoop$$anon$1.run(EventLoop.scala:49)\n  \tCaused by: java.lang.OutOfMemoryError: Java heap space\n  \tSuppressed: [CIRCULAR REFERENCE: org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 172.0 failed 1 times, most recent failure: Lost task 0.0 in stage 172.0 (TID 1933) (mac-16.lan executor driver): java.lang.OutOfMemoryError: Java heap space\n  \n  Driver stacktrace:]\n  Caused by: [CIRCULAR REFERENCE: org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 172.0 failed 1 times, most recent failure: Lost task 0.0 in stage 172.0 (TID 1933) (mac-16.lan executor driver): java.lang.OutOfMemoryError: Java heap space\n  \n  Driver stacktrace:]\n  \n\u001b[0m20:11:22  \n\u001b[0m20:11:22    compiled code at target/compiled/afterlife/models/marts/flag_exclusions.sql\n\u001b[0m20:11:22  \n\u001b[0m20:11:22  [\u001b[31mERROR\u001b[0m]: in model registry (models/marts/registry.sql)\n\u001b[0m20:11:22    Runtime Error in model registry (models/marts/registry.sql)\n  An error occurred while calling o41.sql\n\u001b[0m20:11:22  \n\u001b[0m20:11:22    compiled code at target/compiled/afterlife/models/marts/registry.sql\n\u001b[0m20:11:22  \n\u001b[0m20:11:22  Done. PASS=12 WARN=0 ERROR=2 SKIP=13 NO-OP=0 REUSED=0 TOTAL=27\n"
+  }
+}

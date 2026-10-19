@@ -1,0 +1,156 @@
+{
+  "command": "gold",
+  "argv": [
+    "gold",
+    "--target",
+    "duckdb"
+  ],
+  "started_at": "2026-10-19T20:05:11.728035+00:00",
+  "finished_at": "2026-10-19T20:05:13.136182+00:00",
+  "seconds": 1.4,
+  "report": {
+    "target": "duckdb",
+    "command": "build --target duckdb",
+    "exit_code": 2,
+    "elapsed_s": 1.6,
+    "status_counts": {
+      "success": 1,
+      "error": 5,
+      "skipped": 19
+    },
+    "models": 7,
+    "tests": 17,
+    "failures": [
+      {
+        "node": "test.afterlife.source_not_null_silver_rw_paper_status_paper_key.30d2ad2500",
+        "status": "error",
+        "message": "Runtime Error in test source_not_null_silver_rw_paper_status_paper_key (models/sources.yml)\n  Parser Error: syntax error at or near \"AFTERLIFE_LAKE_ABS\"\n  \n  LINE 18: from delta_scan('{ env_var('AFTERLIFE_LAKE_ABS', '../data/lake') }/silver/rw_paper_status...\n                                       ^"
+      },
+      {
+        "node": "model.afterlife.retraction_lag",
+        "status": "error",
+        "message": "Runtime Error in model retraction_lag (models/marts/retraction_lag.sql)\n  Parser Error: syntax error at or near \"AFTERLIFE_LAKE_ABS\"\n  \n  LINE 22: from delta_scan('{ env_var('AFTERLIFE_LAKE_ABS', '../data/lake') }/silver/rw_notices...\n                                       ^"
+      },
+      {
+        "node": "model.afterlife.reason_trends",
+        "status": "error",
+        "message": "Runtime Error in model reason_trends (models/marts/reason_trends.sql)\n  Parser Error: syntax error at or near \"AFTERLIFE_LAKE_ABS\"\n  \n  LINE 14:     from delta_scan('{ env_var('AFTERLIFE_LAKE_ABS', '../data/lake') }/silver/rw_notices')\n                                           ^"
+      },
+      {
+        "node": "model.afterlife.record_mutability",
+        "status": "error",
+        "message": "Runtime Error in model record_mutability (models/marts/record_mutability.sql)\n  Parser Error: syntax error at or near \"AFTERLIFE_LAKE_ABS\"\n  \n  LINE 14:     from delta_scan('{ env_var('AFTERLIFE_LAKE_ABS', '../data/lake') }/silver/rw_changes')\n                                           ^"
+      },
+      {
+        "node": "test.afterlife.not_null_retraction_lag_lag_days.8d00a02137",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "test.afterlife.not_null_retraction_lag_record_id.7d3279637d",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "test.afterlife.unique_retraction_lag_record_id.0bb4272723",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "test.afterlife.unique_combination_reason_trends_retraction_year__reason.cd7169e969",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "test.afterlife.unique_combination_record_mutability_change_date__column_name.bb5b05bc6f",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "test.afterlife.source_unique_silver_rw_paper_status_paper_key.bf9565256d",
+        "status": "error",
+        "message": "Runtime Error in test source_unique_silver_rw_paper_status_paper_key (models/sources.yml)\n  Parser Error: syntax error at or near \"AFTERLIFE_LAKE_ABS\"\n  \n  LINE 19: from delta_scan('{ env_var('AFTERLIFE_LAKE_ABS', '../data/lake') }/silver/rw_paper_status...\n                                       ^"
+      },
+      {
+        "node": "model.afterlife.int_paper_identity",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "model.afterlife.registry",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "test.afterlife.accepted_values_registry_verdict__retracted__disputed__concern__corrected__reinstated__ok.334f0ce736",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "test.afterlife.not_null_registry_n_flagging.969f2c6c1e",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "test.afterlife.not_null_registry_paper_key.92776fda46",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "test.afterlife.not_null_registry_verdict.f9b695ff87",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "test.afterlife.unique_registry_paper_key.2cd956aaa9",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "model.afterlife.afterlife_citations",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "model.afterlife.registry_agreement",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "test.afterlife.not_null_afterlife_citations_citations_after.4c318646cb",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "test.afterlife.not_null_afterlife_citations_paper_key.9abee1a8c7",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "test.afterlife.unique_afterlife_citations_paper_key.c4c32fbccc",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "test.afterlife.not_null_registry_agreement_source.83f382902a",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "test.afterlife.unique_registry_agreement_source.3b41898d09",
+        "status": "skipped",
+        "message": ""
+      }
+    ],
+    "model_seconds": {
+      "retraction_lag": 0.05,
+      "reason_trends": 0.05,
+      "record_mutability": 0.05,
+      "int_paper_identity": 0,
+      "registry": 0,
+      "afterlife_citations": 0,
+      "registry_agreement": 0
+    },
+    "stdout_tail": "\u001b[0m20:05:12  Running with dbt=1.12.6\n\u001b[0m20:05:12  Registered adapter: duckdb=1.11.0\n\u001b[0m20:05:12  Unable to do partial parsing because a project config has changed\n\u001b[0m20:05:12  [\u001b[31mERROR\u001b[0m]: Encountered an error:\nCompilation Error\n  Could not render delta_scan('{{ lake_root() }}/silver/{name}'): 'lake_root' is undefined\n"
+  }
+}

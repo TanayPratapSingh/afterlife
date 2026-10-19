@@ -1,0 +1,13 @@
+{
+  "terraform_version": "1.10.5",
+  "platform": "darwin_arm64",
+{
+  "format_version": "1.0",
+  "valid": true,
+  "error_count": 0,
+  "warning_count": 0,
+  "diagnostics": []
+}
+[0mtests/stack.tftest.hcl... [32mpass[0m[0m
+
+[32mSuccess![0m[0m 5 passed, 0 failed.

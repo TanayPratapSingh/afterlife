@@ -1,0 +1,21 @@
+{
+  "command": "bronze",
+  "argv": [
+    "bronze"
+  ],
+  "started_at": "2026-10-19T20:03:23.852372+00:00",
+  "finished_at": "2026-10-19T20:03:32.635071+00:00",
+  "seconds": 8.8,
+  "report": {
+    "retraction_watch": [],
+    "openalex": [],
+    "pubmed": [],
+    "pmc_ids": [],
+    "pmc_metadata": [
+      {
+        "snapshot_date": "2026-10-19",
+        "rows": 43616
+      }
+    ]
+  }
+}

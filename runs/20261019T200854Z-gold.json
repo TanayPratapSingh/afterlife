@@ -1,0 +1,153 @@
+{
+  "command": "gold",
+  "argv": [
+    "gold",
+    "--target",
+    "spark"
+  ],
+  "started_at": "2026-10-19T20:08:43.678893+00:00",
+  "finished_at": "2026-10-19T20:08:54.414756+00:00",
+  "seconds": 10.7,
+  "report": {
+    "target": "spark",
+    "command": "build --target spark",
+    "exit_code": 1,
+    "elapsed_s": 8.5,
+    "status_counts": {
+      "success": 2,
+      "error": 5,
+      "pass": 2,
+      "skipped": 18
+    },
+    "models": 8,
+    "tests": 18,
+    "failures": [
+      {
+        "node": "model.afterlife.reason_trends",
+        "status": "error",
+        "message": "Runtime Error in model reason_trends (models/marts/reason_trends.sql)\n  Runtime Error\n    Table reason_trends does not support truncate in batch mode.;\n    OverwriteByExpression RelationV2[retraction_year#43, reason#44, notices#45L] spark_catalog.gold.reason_trends reason_trends, true, false\n    +- "
+      },
+      {
+        "node": "model.afterlife.record_mutability",
+        "status": "error",
+        "message": "Runtime Error in model record_mutability (models/marts/record_mutability.sql)\n  Runtime Error\n    Table record_mutability does not support truncate in batch mode.;\n    OverwriteByExpression RelationV2[change_date#55, column_name#56, records#57L] spark_catalog.gold.record_mutability record_mutability"
+      },
+      {
+        "node": "model.afterlife.retraction_lag",
+        "status": "error",
+        "message": "Runtime Error in model retraction_lag (models/marts/retraction_lag.sql)\n  Runtime Error\n    Table retraction_lag does not support truncate in batch mode.;\n    OverwriteByExpression RelationV2[record_id#86L, paper_key#87, original_date#88, notice_date#89, lag_days#90, retraction_year#91, original_yea"
+      },
+      {
+        "node": "test.afterlife.unique_combination_reason_trends_retraction_year__reason.cd7169e969",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "test.afterlife.unique_combination_record_mutability_change_date__column_name.bb5b05bc6f",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "test.afterlife.not_null_retraction_lag_lag_days.8d00a02137",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "test.afterlife.not_null_retraction_lag_record_id.7d3279637d",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "test.afterlife.unique_retraction_lag_record_id.0bb4272723",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "model.afterlife.flag_exclusions",
+        "status": "error",
+        "message": "Runtime Error in model flag_exclusions (models/marts/flag_exclusions.sql)\n  Runtime Error\n    Table flag_exclusions does not support truncate in batch mode.;\n    OverwriteByExpression RelationV2[source#3410, notice_reason#3411, rows_excluded#3412L] spark_catalog.gold.flag_exclusions flag_exclusions,"
+      },
+      {
+        "node": "model.afterlife.registry",
+        "status": "error",
+        "message": "Runtime Error in model registry (models/marts/registry.sql)\n  Runtime Error\n    Table registry does not support truncate in batch mode.;\n    OverwriteByExpression RelationV2[paper_key#7476, doi#7477, pmid#7478, pmcid#7479, openalex_id#7480, title#7481, field#7482, cited_by_count#7483L, rw_status#748"
+      },
+      {
+        "node": "test.afterlife.unique_combination_flag_exclusions_source__notice_reason.a270870200",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "test.afterlife.accepted_values_registry_verdict__retracted__disputed__concern__corrected__reinstated__ok.334f0ce736",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "test.afterlife.not_null_registry_n_flagging.969f2c6c1e",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "test.afterlife.not_null_registry_paper_key.92776fda46",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "test.afterlife.not_null_registry_verdict.f9b695ff87",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "test.afterlife.unique_registry_paper_key.2cd956aaa9",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "model.afterlife.afterlife_citations",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "model.afterlife.registry_agreement",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "test.afterlife.not_null_afterlife_citations_citations_after.4c318646cb",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "test.afterlife.not_null_afterlife_citations_paper_key.9abee1a8c7",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "test.afterlife.unique_afterlife_citations_paper_key.c4c32fbccc",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "test.afterlife.not_null_registry_agreement_source.83f382902a",
+        "status": "skipped",
+        "message": ""
+      },
+      {
+        "node": "test.afterlife.unique_registry_agreement_source.3b41898d09",
+        "status": "skipped",
+        "message": ""
+      }
+    ],
+    "model_seconds": {
+      "reason_trends": 0.18,
+      "record_mutability": 0.04,
+      "retraction_lag": 0.05,
+      "int_paper_identity": 0.36,
+      "flag_exclusions": 0.16,
+      "registry": 0.39,
+      "afterlife_citations": 0,
+      "registry_agreement": 0
+    },
+    "stdout_tail": "                +- Project [paper_key#5408, doi#5409, pmid#5410, pmcid#5411, openalex_id#5412, source#5413, source_key#5414, source_flag#5415, CASE WHEN ((source#5413 = openalex) AND (type#5374 = retraction)) THEN openalex_type_retraction WHEN (isnotnull(doi#5901) AND NOT (source#5413 = retraction_watch)) THEN rw_notice_doi WHEN (isnotnull(pmid#5902) AND NOT (source#5413 = retraction_watch)) THEN rw_notice_pmid END AS notice_reason#3909]\n                            :                          +- Join LeftOuter, ((source#5413 = openalex) AND (openalex_id#5367 = source_key#5414))\n                            :                             :- Join LeftOuter, (pmid#5902 = pmid#5410)\n                            :                             :  :- Join LeftOuter, (doi#5901 = doi#5409)\n                            :                             :  :  :- SubqueryAlias u\n                            :                             :  :  :  +- SubqueryAlias unioned\n                            :                             :  :  :     +- CTERelationRef 69, true, [paper_key#5408, doi#5409, pmid#5410, pmcid#5411, openalex_id#5412, source#5413, source_key#5414, source_flag#5415], false\n                            :                             :  :  +- SubqueryAlias nd\n                            :                             :  :     +- SubqueryAlias notice_dois\n                            :                             :  :        +- CTERelationRef 60, true, [doi#5901], false\n                            :                             :  +- SubqueryAlias np\n                            :                             :     +- SubqueryAlias notice_pmids\n                            :                             :        +- CTERelationRef 61, true, [pmid#5902], false\n                            :                             +- SubqueryAlias oa_type\n                            :                                +- Project [openalex_id#5367, type#5374]\n                            :                                   +- SubqueryAlias spark_catalog.silver.openalex_works\n                            :                                      +- Relation spark_catalog.silver.openalex_works[openalex_id#5367,doi#5368,pmid#5369,pmcid#5370,title#5371,publication_date#5372,publication_year#5373,type#5374,cited_by_count#5375L,is_retracted#5376,field#5377,domain#5378,_snapshot_date#5379] parquet\n                            +- SubqueryAlias o\n                               +- SubqueryAlias spark_catalog.silver.openalex_works\n                                  +- Relation spark_catalog.silver.openalex_works[openalex_id#5886,doi#5887,pmid#5888,pmcid#5889,title#5890,publication_date#5891,publication_year#5892,type#5893,cited_by_count#5894L,is_retracted#5895,field#5896,domain#5897,_snapshot_date#5898] parquet\n    \n\u001b[0m20:08:53  \n\u001b[0m20:08:53    compiled code at target/compiled/afterlife/models/marts/registry.sql\n\u001b[0m20:08:53  \n\u001b[0m20:08:53  Done. PASS=4 WARN=0 ERROR=5 SKIP=18 NO-OP=0 REUSED=0 TOTAL=27\n"
+  }
+}

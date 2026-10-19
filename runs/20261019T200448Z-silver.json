@@ -1,0 +1,34 @@
+{
+  "command": "silver",
+  "argv": [
+    "silver"
+  ],
+  "started_at": "2026-10-19T20:03:33.177243+00:00",
+  "finished_at": "2026-10-19T20:04:48.198374+00:00",
+  "seconds": 75.0,
+  "report": {
+    "replay": [],
+    "rw": {
+      "notices": 73283,
+      "papers": 70195
+    },
+    "openalex": {
+      "works": 136873,
+      "snapshot_date": "2026-10-19"
+    },
+    "pubmed": {
+      "pmids": 35169,
+      "snapshot_date": "2026-10-19"
+    },
+    "pmc_ids": {
+      "pmcids": 12529057,
+      "snapshot_date": "2026-10-19"
+    },
+    "pmc": {
+      "requested": 43616,
+      "in_open_data": 38172,
+      "flagged_retracted": 18935,
+      "snapshot_date": "2026-10-19"
+    }
+  }
+}

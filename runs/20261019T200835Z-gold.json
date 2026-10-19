@@ -1,0 +1,35 @@
+{
+  "command": "gold",
+  "argv": [
+    "gold",
+    "--target",
+    "spark"
+  ],
+  "started_at": "2026-10-19T20:08:34.553994+00:00",
+  "finished_at": "2026-10-19T20:08:35.598380+00:00",
+  "seconds": 1.0,
+  "report": {
+    "target": "spark",
+    "command": "build --target spark",
+    "exit_code": 2,
+    "elapsed_s": 25.0,
+    "status_counts": {
+      "success": 9,
+      "pass": 18
+    },
+    "models": 8,
+    "tests": 18,
+    "failures": [],
+    "model_seconds": {
+      "record_mutability": 0.09,
+      "reason_trends": 0.1,
+      "retraction_lag": 0.12,
+      "int_paper_identity": 0.04,
+      "registry": 24.6,
+      "registry_agreement": 0.03,
+      "afterlife_citations": 0.05,
+      "flag_exclusions": 24.79
+    },
+    "stdout_tail": "\u001b[0m20:08:35  Running with dbt=1.12.6\n\u001b[0m20:08:35  [\u001b[31mERROR\u001b[0m]: Encountered an error:\nCompilation Error\n  Could not render {{ lake_root() ~ '/gold' if target.type == 'spark' else none }}: 'lake_root' is undefined\n"
+  }
+}
