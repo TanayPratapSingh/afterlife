@@ -10,7 +10,8 @@ identity across DOI, PMID, and PMCID, measures how far the registries agree,
 and serves the answer through an API that never says "ok", only "no registry
 here flags this, as of this date".
 
-It is the upstream half of EvidenceOps (`../evidenceops`): its export
+It is the upstream half of EvidenceOps (a separate, unpublished repo; locally
+`../evidenceops`): its export
 `data/export/evidenceops/trust_registry.jsonl` is in EvidenceOps' TrustRecord
 format.
 

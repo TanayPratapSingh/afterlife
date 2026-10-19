@@ -9,8 +9,8 @@ API that never answers "ok", only "no registry here flags this, as of this
 date". Ingest and serving are built for AWS, transformation for Databricks,
 and the gold layer is dbt that runs on four warehouses.
 
-It is the upstream half of [EvidenceOps](../evidenceops), a retrieval system
-that refuses to cite retracted papers. EvidenceOps needs a registry to check
+It is the upstream half of EvidenceOps, a separate retrieval system (not yet
+published) that refuses to cite retracted papers. EvidenceOps needs a registry to check
 against. This project builds one, and found that no single public source is
 good enough to be it.
 
