@@ -67,7 +67,8 @@ def test_document_without_retraction_watch_record():
 
 
 def test_every_verdict_maps_to_an_evidenceops_status():
-    verdicts = {"retracted", "disputed", "concern", "corrected", "reinstated", "ok"}
+    # The serving contract (aws/lambdas/load_registry) accepts exactly these.
+    verdicts = {"retracted", "disputed", "concern", "corrected", "reinstated"}
     assert set(export.EVIDENCEOPS_STATUS) == verdicts
     assert set(export.EVIDENCEOPS_STATUS.values()) <= {"ok", "corrected", "concerned", "retracted"}
     assert export.EVIDENCEOPS_STATUS["disputed"] == "concerned", "disagreement is not citable"
@@ -128,3 +129,22 @@ def test_summarize_dbt_run_results(tmp_path):
     assert s["models"] == 1 and s["tests"] == 2
     assert s["status_counts"] == {"success": 1, "pass": 1, "fail": 1}
     assert s["failures"][0]["node"].endswith("not_null_x")
+
+
+def test_export_verdicts_match_the_loader_contract():
+    """The loader Lambda refuses a whole export if any verdict is unknown. On
+    the first real load it refused 126 documents with verdict 'ok', a value
+    gold produced and the contract did not list. Read the loader's accepted
+    set from its source, without importing boto3, and require agreement."""
+    import ast
+    from pathlib import Path
+
+    src = Path(__file__).resolve().parent.parent / "aws/lambdas/load_registry/handler.py"
+    tree = ast.parse(src.read_text())
+    accepted = next(
+        ast.literal_eval(node.value)
+        for node in ast.walk(tree)
+        if isinstance(node, ast.Assign)
+        and any(getattr(t, "id", None) == "VERDICTS" for t in node.targets)
+    )
+    assert set(export.EVIDENCEOPS_STATUS) == set(accepted)

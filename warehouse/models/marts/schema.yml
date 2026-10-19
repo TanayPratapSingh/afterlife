@@ -11,7 +11,7 @@ models:
           - not_null
           - accepted_values:
               arguments:
-                values: [retracted, disputed, concern, corrected, reinstated, ok]
+                values: [retracted, disputed, concern, corrected, reinstated]
       - name: n_flagging
         tests: [not_null]
 

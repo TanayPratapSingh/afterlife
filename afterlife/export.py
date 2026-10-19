@@ -35,7 +35,6 @@ EVIDENCEOPS_STATUS = {
     "concern": "concerned",
     "corrected": "corrected",
     "reinstated": "ok",
-    "ok": "ok",
 }
 
 

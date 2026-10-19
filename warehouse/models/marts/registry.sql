@@ -13,7 +13,8 @@
     disputed    Retraction Watch has a record that is not a standing
                 retraction (concern, correction, reinstatement) while another
                 registry flags the paper as retracted
-    concern, corrected, reinstated, ok   Retraction Watch's status, uncontested
+    concern, corrected, reinstated   Retraction Watch's status, uncontested; a
+                lone reinstatement record is published as reinstated
 
   When two Retraction Watch keys resolve to one paper (one record carried the
   DOI, another only the PMID), the more severe status wins and rw_keys > 1
@@ -141,6 +142,11 @@ select
         when rw_status = 'retracted' then 'retracted'
         when rw_status is null then 'retracted'
         when flag_openalex or flag_pubmed or coalesce(flag_pmc, false) then 'disputed'
+        -- Status `ok` means the paper's only Retraction Watch record is a
+        -- reinstatement whose original notice the database does not hold (126
+        -- papers on 2026-10-19). The published verdict says what Retraction
+        -- Watch records, and the serving contract never answers "ok".
+        when rw_status = 'ok' then 'reinstated'
         else rw_status
     end as verdict
 from joined
