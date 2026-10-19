@@ -1,0 +1,34 @@
+version: 2
+
+sources:
+  - name: silver
+    description: >
+      Conformed tables written by afterlife/spark/silver.py. Locally the
+      on-run-start hook registers them (macros/spark_sources.sql); on
+      Databricks they live in Unity Catalog.
+    database: "{{ var('silver_database') if target.type in ['databricks', 'snowflake', 'bigquery'] else none }}"
+    schema: silver
+    tables:
+      - name: rw_paper_status
+        description: One row per paper in Retraction Watch, status from core/status.py.
+        columns:
+          - name: paper_key
+            tests: [not_null, unique]
+      - name: rw_notices
+        description: Current version of every Retraction Watch record.
+      - name: rw_changes
+        description: Semantic changes between versions of a record.
+      - name: rw_history
+        description: SCD type 2 history (type 1 on bytes).
+      - name: rw_quarantine
+        description: Snapshots the quality gate refused to merge, with evidence.
+      - name: openalex_works
+        description: Every work OpenAlex marks is_retracted, newest snapshot.
+      - name: openalex_citations
+        description: counts_by_year exploded, one row per work and year.
+      - name: pubmed_flags
+        description: PMIDs carrying the Retracted Publication publication type.
+      - name: pmc_ids
+        description: NCBI's PMC id map (PMCID, PMID, DOI).
+      - name: pmc_metadata
+        description: PMC open data metadata for every PMCID another registry mentions.
