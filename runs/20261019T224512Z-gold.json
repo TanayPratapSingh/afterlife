@@ -1,0 +1,34 @@
+{
+  "command": "gold",
+  "argv": [
+    "gold",
+    "--target",
+    "spark"
+  ],
+  "started_at": "2026-10-19T22:44:27.987023+00:00",
+  "finished_at": "2026-10-19T22:45:12.407358+00:00",
+  "seconds": 44.4,
+  "report": {
+    "target": "spark",
+    "command": "build --target spark",
+    "exit_code": 0,
+    "elapsed_s": 42.0,
+    "status_counts": {
+      "success": 9,
+      "pass": 18
+    },
+    "models": 8,
+    "tests": 18,
+    "failures": [],
+    "model_seconds": {
+      "reason_trends": 4.94,
+      "record_mutability": 1.44,
+      "retraction_lag": 1.36,
+      "int_paper_identity": 0.57,
+      "flag_exclusions": 11.08,
+      "registry": 12.6,
+      "afterlife_citations": 2.16,
+      "registry_agreement": 0.82
+    }
+  }
+}

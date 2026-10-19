@@ -1,0 +1,34 @@
+{
+  "command": "gold",
+  "argv": [
+    "gold",
+    "--target",
+    "duckdb"
+  ],
+  "started_at": "2026-10-19T22:44:02.185165+00:00",
+  "finished_at": "2026-10-19T22:44:27.940944+00:00",
+  "seconds": 25.8,
+  "report": {
+    "target": "duckdb",
+    "command": "build --target duckdb",
+    "exit_code": 0,
+    "elapsed_s": 23.6,
+    "status_counts": {
+      "success": 9,
+      "pass": 18
+    },
+    "models": 8,
+    "tests": 18,
+    "failures": [],
+    "model_seconds": {
+      "record_mutability": 0.09,
+      "reason_trends": 0.09,
+      "retraction_lag": 0.11,
+      "int_paper_identity": 0.04,
+      "flag_exclusions": 20.59,
+      "registry": 23.22,
+      "registry_agreement": 0.02,
+      "afterlife_citations": 0.05
+    }
+  }
+}

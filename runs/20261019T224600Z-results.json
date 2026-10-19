@@ -1,0 +1,16 @@
+{
+  "command": "results",
+  "argv": [
+    "results",
+    "--findings",
+    "runs/20261019T224600Z-findings.json"
+  ],
+  "started_at": "2026-10-19T22:46:00.464003+00:00",
+  "finished_at": "2026-10-19T22:46:00.472153+00:00",
+  "seconds": 0.0,
+  "report": {
+    "findings": "runs/20261019T224600Z-findings.json",
+    "wrote": "RESULTS.md",
+    "lines": 199
+  }
+}
