@@ -14,9 +14,14 @@ encoding, sha256, and record count.
 ## Decision
 
 Bronze reads the landing manifests, skips objects already ingested (by object
-key), reads each new file with the encoding its manifest records, and refuses
-to write if the Spark row count differs from the count Python's `csv` module
-produced at landing time. JSON sources go through the same path even though
+key), and refuses to write if the Spark row count differs from the count
+Python's `csv` module produced at landing time. A file whose manifest records
+an encoding other than UTF-8 is transcoded in Python into a derived UTF-8 copy
+under `staging/`, and Spark reads that copy; Spark never reads anything but
+UTF-8. The first version passed `encoding=windows-1252` to Spark's CSV reader,
+which worked on Spark 3.5 and failed on Spark 4.0 (INVALID_PARAMETER_VALUE.
+CHARSET), the version under Databricks Runtime 17 and serverless. CI caught it
+on its first run. JSON sources go through the same path even though
 Auto Loader would handle them, so the code CI runs is the code production
 runs.
 

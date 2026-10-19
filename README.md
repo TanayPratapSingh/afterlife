@@ -110,6 +110,17 @@ a test. They are why the design looks the way it does.
    Spark's `trim` does not, so the Python and Spark DOI rules disagreed on that
    input. The Spark expression now mirrors Python's whitespace set exactly
    ([ADR 0003](docs/adr/0003-python-reference-spark-fast-path.md)).
+9. **Spark 4 rejects Windows-1252.** Spark 4.0 accepts only a short list of
+   CSV charsets, so reading the cp1252 snapshot failed on the Spark that
+   Databricks Runtime 17 and serverless run. Non UTF-8 files are now
+   transcoded in Python into a derived `staging/` copy; on the real snapshot
+   the new path yields the same 73,253 rows as the old one. Found by CI on its
+   first run.
+10. **A date literal that only works on macOS.** `F.lit(date.min)` goes
+    through `strftime("%Y-%m-%d")`, which glibc renders as `1-01-01` for year
+    1, and `java.sql.Date` rejects it. Tests passed on the Mac and failed on
+    Linux CI, which is what Databricks runs. The sentinel is now built inside
+    Spark. Also found by CI on its first run.
 
 ## The stack
 
