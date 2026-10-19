@@ -3,11 +3,18 @@
 Bronze is driven by the landing manifests rather than by Auto Loader, for one
 concrete reason: the encoding of a Retraction Watch snapshot is a property of
 that one file (see core/text.py), and Auto Loader applies a single reader
-configuration to every file in a stream. A manifest driven batch reads each
-file with the encoding recorded for it. The JSON sources are UTF-8 by
+configuration to every file in a stream. The JSON sources are UTF-8 by
 specification, and on Databricks they could use Auto Loader without that
 problem; they use the same batch path anyway so that the code that runs in CI
 is the code that runs in production.
+
+Spark itself only ever reads UTF-8 here. A snapshot in another encoding is
+transcoded in Python, with the codec its manifest records, into a derived copy
+under `staging/` (the landing zone stays byte for byte), and Spark reads the
+copy. Passing `encoding=windows-1252` to the CSV reader instead worked on Spark
+3.5 and failed on Spark 4.0, which accepts only a short list of charsets
+(INVALID_PARAMETER_VALUE.CHARSET, first seen in CI). Spark 4 is what
+Databricks Runtime 17 and serverless compute run.
 
 Every row carries lineage: which object it came from, that object's sha256,
 the encoding used, and when it was ingested. Re-running bronze is a no op for
@@ -28,11 +35,9 @@ from pyspark.sql import DataFrame, SparkSession
 from pyspark.sql import functions as F
 from pyspark.sql import types as T
 
-from afterlife.core.landing import Manifest, Store, manifests
+from afterlife.core.landing import Manifest, Store, manifests, read_raw
 from afterlife.core.text import decode
 from afterlife.spark.session import Lake, persist, release
-
-JAVA_CHARSET = {"utf-8": "UTF-8", "cp1252": "windows-1252", "latin-1": "ISO-8859-1"}
 
 
 class ContractViolation(RuntimeError):
@@ -69,6 +74,20 @@ def _encoding_for(store: Store, m: Manifest) -> str:
     return decode(gzip.decompress(store.read(m.object_key))).encoding
 
 
+def utf8_object(store: Store, m: Manifest, encoding: str) -> str:
+    """The key Spark should read: the landed object if it is UTF-8, else a
+    derived UTF-8 copy under staging/, written once and reused. The copy is a
+    pure function of the landed bytes, so rebuilding it is always safe."""
+    if encoding == "utf-8":
+        return m.object_key
+    key = m.object_key.replace("landing/", "staging/", 1)
+    key = key.removesuffix(".gz").removesuffix(".csv") + ".utf8.csv.gz"
+    if not store.exists(key):
+        text = read_raw(store, m).decode(encoding)
+        store.write_new(key, gzip.compress(text.encode("utf-8"), mtime=0))
+    return key
+
+
 def read_retraction_watch(
     spark: SparkSession, store: Store, m: Manifest, encoding: str | None = None
 ) -> DataFrame:
@@ -78,10 +97,10 @@ def read_retraction_watch(
         .option("multiLine", True)
         .option("quote", '"')
         .option("escape", '"')
-        .option("encoding", JAVA_CHARSET[encoding])
+        .option("encoding", "UTF-8")
         .option("mode", "FAILFAST")
         .option("inferSchema", False)
-        .csv(store.uri(m.object_key))
+        .csv(store.uri(utf8_object(store, m, encoding)))
     )
     named = [c for c in df.columns if c and not c.startswith("_c")]
     df = df.select(*[F.col(f"`{c}`").alias(snake(c)) for c in named])
