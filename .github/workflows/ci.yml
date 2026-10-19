@@ -57,7 +57,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install "dbt-core>=1.8,<2" "dbt-duckdb>=1.8,<2" "dbt-spark>=1.8,<2" "dbt-databricks>=1.8,<2"
+      # dbt-spark's session profile imports pyspark even to parse.
+      - run: pip install "dbt-core>=1.8,<2" "dbt-duckdb>=1.8,<2" "dbt-spark[session]>=1.8,<2" "dbt-databricks>=1.8,<2" "pyspark==3.5.3"
       - working-directory: warehouse
         env:
           AFTERLIFE_LAKE_ABS: /tmp/lake
