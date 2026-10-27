@@ -25,3 +25,4 @@ aws/terraform/tfplan
 dist/
 /build/
 warehouse/.user.yml
+paper/build/
