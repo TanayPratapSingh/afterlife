@@ -191,11 +191,32 @@ def render(findings_path: Path) -> str:
         f"{_n(lag['negative_lag_excluded'])} notice dated before its paper excluded. "
         "Key `retraction_lag`.",
         "",
+        "One publisher's batch can set a year's median, so each year also shows its "
+        "largest publisher and the median without it (key `by_year_top_publisher`).",
+        "",
         _table(
-            ["Notice year", "Notices", "Median days"],
             [
-                [y["retraction_year"], _n(y["notices"]), _n(y["median_days"])]
-                for y in lag["by_retraction_year"]
+                "Notice year",
+                "Notices",
+                "Median days",
+                "Largest publisher",
+                "Its notices",
+                "Its median",
+                "Median without it",
+            ],
+            [
+                [
+                    y["retraction_year"],
+                    _n(y["notices"]),
+                    _n(y["median_days"]),
+                    t["top_publisher"],
+                    _n(t["top_notices"]),
+                    _n(t["top_median_days"]),
+                    _n(t["median_days_without_top"]),
+                ]
+                for y, t in zip(
+                    lag["by_retraction_year"], lag["by_year_top_publisher"], strict=True
+                )
             ],
         ),
     ]

@@ -32,6 +32,14 @@ FLAGGED_SQL = """(case when rw_status = 'retracted' then 1 else 0 end)
               + (case when flag_pmc then 1 else 0 end)"""
 
 
+# How many registries flag a gold.registry row. Shared with the hand audit's
+# sampling frame so "flagged by exactly one" means the same thing in both.
+FLAGGED_SQL = """(case when rw_status = 'retracted' then 1 else 0 end)
+              + (case when flag_openalex then 1 else 0 end)
+              + (case when pmid is not null and flag_pubmed then 1 else 0 end)
+              + (case when flag_pmc then 1 else 0 end)"""
+
+
 def registries(con) -> dict:
     by_verdict = {
         r["verdict"]: r["n"]
@@ -115,7 +123,27 @@ def lag(con) -> dict:
         from gold.retraction_lag where not negative_lag and retraction_year >= 2005
         group by 1 order by 1""",
     )
-    return {**overall, "by_retraction_year": by_year}
+    # One publisher's batch can set a year's median (IEEE conference
+    # retractions in 2009 to 2011), so each year also reports its largest
+    # publisher and the median without it.
+    by_year_top = _rows(
+        con,
+        """
+        with l as (select * from gold.retraction_lag
+                   where not negative_lag and retraction_year >= 2005),
+        top as (select retraction_year, arg_max(publisher, n) as publisher, max(n) as notices
+                from (select retraction_year, publisher, count(*) as n from l group by all)
+                group by 1)
+        select t.retraction_year, t.publisher as top_publisher, t.notices as top_notices,
+               quantile_cont(l.lag_days, 0.5) filter (where l.publisher = t.publisher)
+                 as top_median_days,
+               quantile_cont(l.lag_days, 0.5)
+                 filter (where l.publisher is distinct from t.publisher)
+                 as median_days_without_top
+        from l join top t using (retraction_year)
+        group by all order by 1""",
+    )
+    return {**overall, "by_retraction_year": by_year, "by_year_top_publisher": by_year_top}
 
 
 def afterlife(con) -> dict:
