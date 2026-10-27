@@ -62,7 +62,19 @@ make test           # everything; real lake checks run when data/lake exists
 make pipeline       # fetch, bronze, silver, pmc, gold, export, findings
 make conformance    # gold on DuckDB and Spark SQL, every row compared
 make aws-build tf-validate
+.venv/bin/afterlife audit score     # hand audit progress; RESULTS.md section 9 once a score run exists
+.venv/bin/python paper/figures.py   # paper figures from the newest findings run
 ```
+
+## Hand audit and paper
+
+`audit/labels.csv` is labelled by Tanay by hand, never by a model (a model
+labelled audit measures nothing). Never open or print the key in
+`runs/*-audit-sample.json` to Tanay before labelling is done, and never redraw
+the sample: `afterlife audit sample` refuses to overwrite the sheet on
+purpose. Codebook changes after labelling starts go in its change log.
+`paper/draft.md` marks each number with its findings key; regenerate numbers,
+never type them.
 
 ## Known limits
 
