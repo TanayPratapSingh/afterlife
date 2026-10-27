@@ -32,14 +32,6 @@ FLAGGED_SQL = """(case when rw_status = 'retracted' then 1 else 0 end)
               + (case when flag_pmc then 1 else 0 end)"""
 
 
-# How many registries flag a gold.registry row. Shared with the hand audit's
-# sampling frame so "flagged by exactly one" means the same thing in both.
-FLAGGED_SQL = """(case when rw_status = 'retracted' then 1 else 0 end)
-              + (case when flag_openalex then 1 else 0 end)
-              + (case when pmid is not null and flag_pubmed then 1 else 0 end)
-              + (case when flag_pmc then 1 else 0 end)"""
-
-
 def registries(con) -> dict:
     by_verdict = {
         r["verdict"]: r["n"]
@@ -296,6 +288,102 @@ def upstream(con, lake: str) -> dict:
     }
 
 
+def as_of(con, lake: str) -> dict:
+    """The same questions asked of every replayed snapshot.
+
+    Each question looks only at retractions dated 2023 or earlier, so any
+    change between snapshots is the database revising the past. The four
+    questions were fixed before any of them was computed, and all four are
+    reported: how many, how many cite "Paper Mill", how many cite "Fake Peer
+    Review", and the median days from publication to retraction.
+    """
+    con.execute(
+        f"""create or replace temp table asof_h as
+        select cast(record_id as int) as id, valid_from, valid_to, publisher,
+               retraction_nature = 'Retraction' as is_retraction, lower(reason) as reason,
+               cast(strptime(split_part(retraction_date, ' ', 1), '%m/%d/%Y') as date) as rd,
+               cast(strptime(split_part(original_paper_date, ' ', 1), '%m/%d/%Y') as date) as od
+        from delta_scan('{lake}/silver/rw_history')"""
+    )
+    snaps = [
+        r["d"]
+        for r in _rows(
+            con,
+            f"""select distinct cast(snapshot_date as date) as d
+                from delta_scan('{lake}/silver/rw_replay_log') order by 1""",
+        )
+    ]
+    first, last = snaps[0], snaps[-1]
+    series = _rows(
+        con,
+        f"""
+        with s as (select unnest({[d.isoformat() for d in snaps]}::date[]) as d)
+        select s.d as snapshot_date,
+               count(*) as retractions_through_2023,
+               count_if(h.reason like '%paper mill%') as paper_mill,
+               count_if(h.reason like '%fake peer review%') as fake_peer_review,
+               median(h.rd - h.od) as median_lag_days
+        from s join asof_h h on h.valid_from <= s.d and (h.valid_to is null or h.valid_to > s.d)
+        where h.is_retraction and year(h.rd) <= 2023
+        group by 1 order by 1""",
+    )
+    con.execute(
+        f"""create or replace temp table asof_first as select * from asof_h
+            where valid_from <= date '{first}'
+              and (valid_to is null or valid_to > date '{first}')"""
+    )
+    con.execute(
+        "create or replace temp table asof_last as select * from asof_h where valid_to is null"
+    )
+    con.execute(
+        """create or replace temp table asof_late as
+           select l.* from asof_last l anti join asof_first f using (id)
+           where l.is_retraction and year(l.rd) <= 2023"""
+    )
+    late = _one(
+        con,
+        """select count(*) as records,
+                  count_if(id > (select max(id) from asof_first)) as id_above_first_snapshot_max,
+                  count_if(reason like '%paper mill%') as paper_mill,
+                  count_if(year(rd) = 2023) as dated_2023,
+                  median(rd - od) as median_lag_days
+           from asof_late""",
+    )
+    late["by_publisher"] = _rows(
+        con,
+        "select publisher, count(*) as records from asof_late group by 1 order by 2 desc limit 5",
+    )
+    late["by_month_first_seen"] = _rows(
+        con,
+        """with seen as (
+             select h.id, strftime(min(h.valid_from), '%Y-%m') as month
+             from asof_h h join asof_late l on h.id = l.id group by h.id)
+           select month, count(*) as records from seen group by 1 order by 1""",
+    )
+    cohort_2023 = _one(
+        con,
+        """select
+             (select count(*) from asof_first where is_retraction and year(rd) = 2023) as first,
+             (select count(*) from asof_last where is_retraction and year(rd) = 2023) as last""",
+    )
+    left = _one(
+        con,
+        """with f as (select * from asof_first where is_retraction and year(rd) <= 2023)
+           select count_if(l.id is null) as deleted,
+                  count_if(l.id is not null and not (l.is_retraction and year(l.rd) <= 2023))
+                    as moved_out_of_cohort
+           from f left join asof_last l using (id)""",
+    )
+    return {
+        "first_snapshot": first,
+        "last_snapshot": last,
+        "series": series,
+        "retractions_dated_2023": cohort_2023,
+        "late_records": late,
+        "left_cohort": left,
+    }
+
+
 def sources() -> dict:
     """What each fetch landed and what it cost, read from the landing
     manifests, so numbers about the fetches trace to this file too."""
@@ -349,6 +437,7 @@ def run() -> dict:
         "afterlife": afterlife(con),
         "reasons": reasons(con),
         "upstream": upstream(con, lake),
+        "as_of": as_of(con, lake),
     }
 
 

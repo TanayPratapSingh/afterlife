@@ -366,12 +366,118 @@ def render(findings_path: Path) -> str:
         ),
     ]
 
+    a = rep["as_of"]
+    late, first, last = a["late_records"], a["series"][0], a["series"][-1]
+    parts += [
+        "",
+        "## 8. The same question on different snapshots",
+        "",
+        "Four questions fixed before any was computed, each about retractions dated 2023 or "
+        "earlier, so a change between snapshots is the database revising the past. "
+        f"Every snapshot from {a['first_snapshot']} to {a['last_snapshot']} is rebuilt from the "
+        "silver history. Key `as_of`.",
+        "",
+        _table(
+            ["Question", f"As of {a['first_snapshot']}", f"As of {a['last_snapshot']}", "Change"],
+            [
+                [
+                    q,
+                    _n(first[k]),
+                    _n(last[k]),
+                    ("+" if last[k] > first[k] else "") + _pct(last[k] - first[k], first[k]),
+                ]
+                for q, k in (
+                    ("Retractions dated 2023 or earlier", "retractions_through_2023"),
+                    ("Of those, citing Paper Mill", "paper_mill"),
+                    ("Of those, citing Fake Peer Review", "fake_peer_review"),
+                    ("Median days, publication to retraction", "median_lag_days"),
+                )
+            ],
+        ),
+        "",
+        f"Retractions dated 2023 alone: {_n(a['retractions_dated_2023']['first'])} then "
+        f"{_n(a['retractions_dated_2023']['last'])}. Records added after the first snapshot "
+        f"with a retraction date in 2023 or earlier: {_n(late['records'])}, of which "
+        f"{_n(late['id_above_first_snapshot_max'])} carry a record id above the first snapshot's "
+        f"highest (new catalog entries, not rows the first file left out), "
+        f"{_n(late['dated_2023'])} are dated 2023, {_n(late['paper_mill'])} cite Paper Mill, and "
+        f"their median lag is {_n(late['median_lag_days'])} days. Left the cohort: "
+        f"{_n(a['left_cohort']['deleted'])} deleted, {_n(a['left_cohort']['moved_out_of_cohort'])} "
+        "moved out by a date or nature edit. Fake Peer Review fell to zero on the 2026-01-02 "
+        "relabel (section 7).",
+        "",
+        _table(
+            ["Publisher of late records", "Records"],
+            [[p["publisher"], _n(p["records"])] for p in late["by_publisher"]],
+        ),
+        "",
+        _table(
+            ["Snapshot", "Through 2023", "Paper Mill", "Fake Peer Review", "Median days"],
+            [
+                [
+                    r["snapshot_date"],
+                    _n(r["retractions_through_2023"]),
+                    _n(r["paper_mill"]),
+                    _n(r["fake_peer_review"]),
+                    _n(r["median_lag_days"]),
+                ]
+                for r in a["series"]
+            ],
+        ),
+    ]
+
+    aud = _latest("*-audit-score.json")
+    if aud:
+        sc = json.loads(aud.read_text())["report"]
+        est = sc["frame_estimate"]
+        parts += [
+            "",
+            "## 9. Hand audit of single registry flags",
+            "",
+            f"From `runs/{aud.name}`, labelled by hand against `docs/audit-codebook.md`, blind "
+            "to which registry flagged each paper. Precision is the share the publisher "
+            "retracted, among rows not labelled cannot_determine. "
+            + ("Labelling is complete." if sc["complete"] else "Labelling is not complete."),
+            "",
+            _table(
+                [
+                    "Flagged only by",
+                    "In frame",
+                    "Labelled",
+                    "Decided",
+                    "Precision (95% CI)",
+                    "Notices",
+                ],
+                [
+                    [
+                        s,
+                        _n(v["population"]),
+                        f"{v['labelled']} of {v['sampled']}",
+                        _n(v["decided"]),
+                        f"{v['precision']:.1%} ({v['precision_ci95'][0]:.1%} to "
+                        f"{v['precision_ci95'][1]:.1%})"
+                        if v["decided"]
+                        else "n/a",
+                        _n(v["counts"]["notice"]),
+                    ]
+                    for s, v in sc["strata"].items()
+                ],
+            ),
+        ]
+        if est:
+            parts += [
+                "",
+                f"Stratified estimate over all {_n(est['frame_size'])} papers flagged by exactly "
+                f"one registry: {est['precision']:.1%} retracted ({est['ci95'][0]:.1%} to "
+                f"{est['ci95'][1]:.1%}).",
+            ]
+
     conf = _latest("*-conformance.json")
     if conf:
         c = json.loads(conf.read_text())["report"]
         parts += [
             "",
-            "## 8. Cross engine conformance",
+            "## 10. Cross engine conformance",
             "",
             f"From `runs/{conf.name}`: the gold models built on DuckDB and on Spark SQL, every "
             "row compared after normalizing decimals to 6 places and dates to ISO strings.",
@@ -393,7 +499,7 @@ def render(findings_path: Path) -> str:
     if by_target:
         parts += [
             "",
-            "## 9. dbt builds",
+            "## 11. dbt builds",
             "",
             _table(
                 ["Target", "Report", "Models and tests", "Seconds"],
