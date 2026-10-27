@@ -23,6 +23,7 @@ from afterlife.core.landing import Manifest, Store, land
 
 SOURCE = "pubmed"
 ESEARCH = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi"
+ESUMMARY = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi"
 TERM = '"retracted publication"[pt]'
 CEILING = 9_999
 
@@ -105,6 +106,26 @@ def completeness(result: dict) -> dict:
         "records_in_more_than_one_slice": slice_sum - unique,
         "complete": unique == result["expected"]
         and all(s["count"] == s["fetched"] for s in result["slices"]),
+    }
+
+
+def summaries(pmids: list[str], get=http.get) -> dict[str, dict]:
+    """Title and publication year per PMID, from esummary (one call, up to 200 ids).
+    The landed PubMed set is ids only; the hand audit sheet needs a title."""
+    if not pmids:
+        return {}
+    params: dict[str, object] = {
+        "db": "pubmed",
+        "id": ",".join(pmids),
+        "retmode": "json",
+        "tool": "afterlife",
+    }
+    if key := os.environ.get("NCBI_API_KEY"):
+        params["api_key"] = key
+    result = get(ESUMMARY, params).json()["result"]
+    return {
+        uid: {"title": result[uid].get("title", ""), "year": result[uid].get("pubdate", "")[:4]}
+        for uid in result.get("uids", [])
     }
 
 

@@ -10,6 +10,7 @@
     afterlife findings
     afterlife conformance
     afterlife results
+    afterlife audit sample|score
 
 The landing zone is `data/` by default, or an S3 bucket when
 AFTERLIFE_LANDING=s3://bucket. The lake is `data/lake` by default, or a Unity
@@ -187,6 +188,14 @@ def cmd_findings(args) -> dict:
     return findings.run()
 
 
+def cmd_audit(args) -> dict:
+    from afterlife import audit
+
+    if args.action == "sample":
+        return audit.sample(n=args.n)
+    return audit.run_score(sample_run=args.sample)
+
+
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(prog="afterlife")
     sub = p.add_subparsers(dest="command", required=True)
@@ -219,10 +228,16 @@ def main(argv: list[str] | None = None) -> int:
     c = sub.add_parser("conformance", help="build gold on DuckDB and Spark, compare every row")
     c.add_argument("--no-build", action="store_true")
     c.set_defaults(func=cmd_conformance)
+    a = sub.add_parser("audit", help="hand audit of papers that exactly one registry flags")
+    a.add_argument("action", choices=["sample", "score"])
+    a.add_argument("--n", type=int, default=200)
+    a.add_argument("--sample", help="a runs/*-audit-sample.json (default: the newest)")
+    a.set_defaults(func=cmd_audit)
 
     args = p.parse_args(argv)
     started = time.time()
-    name = args.command + (f"-{args.source}" if args.command == "fetch" else "")
+    suffix = getattr(args, "source", None) or getattr(args, "action", None)
+    name = f"{args.command}-{suffix}" if suffix else args.command
     report = args.func(args)
     path = write_run(name, report, started)
     print(json.dumps(report, indent=2, default=str)[:4000])

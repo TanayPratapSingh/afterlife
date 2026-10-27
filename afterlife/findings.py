@@ -24,6 +24,14 @@ def _one(con, sql: str) -> dict:
     return _rows(con, sql)[0]
 
 
+# How many registries flag a gold.registry row. Shared with the hand audit's
+# sampling frame so "flagged by exactly one" means the same thing in both.
+FLAGGED_SQL = """(case when rw_status = 'retracted' then 1 else 0 end)
+              + (case when flag_openalex then 1 else 0 end)
+              + (case when pmid is not null and flag_pubmed then 1 else 0 end)
+              + (case when flag_pmc then 1 else 0 end)"""
+
+
 def registries(con) -> dict:
     by_verdict = {
         r["verdict"]: r["n"]
@@ -48,13 +56,10 @@ def registries(con) -> dict:
     )
     unanimity = _one(
         con,
-        """
+        f"""
         with e as (
           select
-            (case when rw_status = 'retracted' then 1 else 0 end)
-              + (case when flag_openalex then 1 else 0 end)
-              + (case when pmid is not null and flag_pubmed then 1 else 0 end)
-              + (case when flag_pmc then 1 else 0 end) as flagged,
+            {FLAGGED_SQL} as flagged,
             2 + (case when pmid is not null then 1 else 0 end)
               + (case when flag_pmc is not null then 1 else 0 end) as eligible
           from gold.registry where verdict in ('retracted', 'disputed'))
