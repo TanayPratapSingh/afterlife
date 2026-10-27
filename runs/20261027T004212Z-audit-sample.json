@@ -1,0 +1,1030 @@
+{
+  "command": "audit-sample",
+  "argv": [
+    "audit",
+    "sample"
+  ],
+  "started_at": "2026-10-27T00:42:11.620691+00:00",
+  "finished_at": "2026-10-27T00:42:12.317005+00:00",
+  "seconds": 0.7,
+  "report": {
+    "seed": "afterlife-audit-2026-10-26",
+    "frame": "gold.registry, verdict retracted or disputed, flagged by exactly one registry",
+    "frame_size": 36401,
+    "stratum_sizes": {
+      "openalex": 16120,
+      "pubmed": 22,
+      "retraction_watch": 20259
+    },
+    "allocation": {
+      "openalex": 89,
+      "pubmed": 22,
+      "retraction_watch": 89
+    },
+    "sheet": "audit/labels.csv",
+    "filled_from_pubmed_esummary": 22,
+    "titles_prefix_stripped": 86,
+    "key": [
+      {
+        "sample_id": "A001",
+        "paper_key": "rw:27424",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A002",
+        "paper_key": "doi:10.1680/jstbu.26.00114",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A003",
+        "paper_key": "doi:10.1007/s10368-014-0288-5",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A004",
+        "paper_key": "rw:31241",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A005",
+        "paper_key": "doi:10.1107/s1600536807040007",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A006",
+        "paper_key": "doi:10.1007/s00500-023-08661-4",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A007",
+        "paper_key": "doi:10.1007/s12115-020-00496-1",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A008",
+        "paper_key": "doi:10.1109/icmss.2009.5305248",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A009",
+        "paper_key": "rw:14124",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A010",
+        "paper_key": "doi:10.1109/macs56771.2022.10022836",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A011",
+        "paper_key": "doi:10.1515/9783486992182.278",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A012",
+        "paper_key": "doi:10.1109/icetcct.2017.8280336",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A013",
+        "paper_key": "doi:10.21203/rs.3.rs-3875587/v1",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A014",
+        "paper_key": "doi:10.1007/s13399-022-02870-x",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A015",
+        "paper_key": "doi:10.15639/teflinjournal.v36i2/228-249",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A016",
+        "paper_key": "doi:10.1016/j.msea.2006.11.080",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A017",
+        "paper_key": "doi:10.1016/j.enpol.2013.07.141",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A018",
+        "paper_key": "doi:10.4236/ojbm.2024.121036",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A019",
+        "paper_key": "doi:10.1515/9783050073835-005",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A020",
+        "paper_key": "doi:10.1109/gsmm.2008.4534635",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A021",
+        "paper_key": "doi:10.1109/iceice.2011.5778373",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A022",
+        "paper_key": "doi:10.1007/s11082-023-05141-9",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A023",
+        "paper_key": "doi:10.1515/9783486820225-007",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A024",
+        "paper_key": "doi:10.1109/icemms.2011.6015824",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A025",
+        "paper_key": "doi:10.7883/yoken.jjid.2015.157",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A026",
+        "paper_key": "doi:10.1109/icise.2009.814",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A027",
+        "paper_key": "doi:10.1210/er.2015-1098.2016.1",
+        "stratum": "pubmed"
+      },
+      {
+        "sample_id": "A028",
+        "paper_key": "pmid:31781752",
+        "stratum": "pubmed"
+      },
+      {
+        "sample_id": "A029",
+        "paper_key": "doi:10.1109/paccs.2011.5990093",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A030",
+        "paper_key": "doi:10.1109/icaeca63854.2025.11012340",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A031",
+        "paper_key": "doi:10.1108/wje-08-2020-0358",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A032",
+        "paper_key": "doi:10.1109/icocwc60930.2024.10470570",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A033",
+        "paper_key": "doi:10.1109/appeec.2010.5449169",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A034",
+        "paper_key": "doi:10.1007/s12346-024-01023-x",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A035",
+        "paper_key": "rw:11347",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A036",
+        "paper_key": "doi:10.1016/j.actpsy.2023.104022",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A037",
+        "paper_key": "doi:10.1016/b978-0-12-404613-9.00026-5",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A038",
+        "paper_key": "doi:10.21203/rs.3.rs-3003609/v1",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A039",
+        "paper_key": "doi:10.1117/1.jei.31.4.041212",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A040",
+        "paper_key": "doi:10.1007/s11276-021-02712-0",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A041",
+        "paper_key": "doi:10.1109/iciecs.2009.5365308",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A042",
+        "paper_key": "doi:10.1515/9783110619768-017",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A043",
+        "paper_key": "pmid:30317902",
+        "stratum": "pubmed"
+      },
+      {
+        "sample_id": "A044",
+        "paper_key": "doi:10.21203/rs.3.rs-37519/v1",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A045",
+        "paper_key": "doi:10.1016/b978-0-444-42860-8.50013-0",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A046",
+        "paper_key": "doi:10.1109/vlsic.2006.1705302",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A047",
+        "paper_key": "doi:10.1109/icais53314.2022.9742947",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A048",
+        "paper_key": "doi:10.21203/rs.3.rs-5734356/v1",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A049",
+        "paper_key": "rw:14187",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A050",
+        "paper_key": "doi:10.1002/srin.202300172",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A051",
+        "paper_key": "doi:10.1109/icscse.2018.00185",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A052",
+        "paper_key": "doi:10.1016/j.epsc.2018.02.014",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A053",
+        "paper_key": "rw:26916",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A054",
+        "paper_key": "doi:10.1109/i-smac.2018.8653736",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A055",
+        "paper_key": "doi:10.4236/jemaa.2014.610033",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A056",
+        "paper_key": "rw:6319",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A057",
+        "paper_key": "doi:10.1007/s00500-023-08151-7",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A058",
+        "paper_key": "rw:13343",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A059",
+        "paper_key": "doi:10.1109/access.2020.3020622",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A060",
+        "paper_key": "doi:10.1016/j.engfailanal.2025.109934",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A061",
+        "paper_key": "rw:29216",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A062",
+        "paper_key": "openalex:W2809046431",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A063",
+        "paper_key": "doi:10.1115/1.859919.paper326",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A064",
+        "paper_key": "doi:10.1051/bioconf/202411607023",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A065",
+        "paper_key": "pmid:29648728",
+        "stratum": "pubmed"
+      },
+      {
+        "sample_id": "A066",
+        "paper_key": "doi:10.1109/i-smac52330.2021.9640832",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A067",
+        "paper_key": "doi:10.1177/0020294018790774",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A068",
+        "paper_key": "doi:10.1109/icbbe.2011.5781130",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A069",
+        "paper_key": "doi:10.1097/md.0000000000042732",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A070",
+        "paper_key": "pmid:31599658",
+        "stratum": "pubmed"
+      },
+      {
+        "sample_id": "A071",
+        "paper_key": "doi:10.1109/peam.2011.6135054",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A072",
+        "paper_key": "doi:10.32604/jpm.2026.077474",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A073",
+        "paper_key": "doi:10.1109/icmss.2009.5301831",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A074",
+        "paper_key": "doi:10.18280/ts.390209",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A075",
+        "paper_key": "doi:10.1145/3368691.3368713",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A076",
+        "paper_key": "doi:10.1109/icbbe.2011.5781095",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A077",
+        "paper_key": "doi:10.1109/icrito56286.2022.9964665",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A078",
+        "paper_key": "rw:30137",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A079",
+        "paper_key": "doi:10.4314/jfas.v10i4s.14",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A080",
+        "paper_key": "pmid:28863745",
+        "stratum": "pubmed"
+      },
+      {
+        "sample_id": "A081",
+        "paper_key": "doi:10.1177/0748233713475499",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A082",
+        "paper_key": "pmid:30366708",
+        "stratum": "pubmed"
+      },
+      {
+        "sample_id": "A083",
+        "paper_key": "rw:14774",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A084",
+        "paper_key": "doi:10.1109/icmss.2009.5301377",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A085",
+        "paper_key": "rw:11721",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A086",
+        "paper_key": "doi:10.1007/s10854-021-07314-2",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A087",
+        "paper_key": "doi:10.1016/j.istruc.2024.106122",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A088",
+        "paper_key": "doi:10.1109/kese.2009.31",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A089",
+        "paper_key": "pmid:27454359",
+        "stratum": "pubmed"
+      },
+      {
+        "sample_id": "A090",
+        "paper_key": "doi:10.1007/s13369-021-05964-2",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A091",
+        "paper_key": "doi:10.1007/s10257-021-00503-w",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A092",
+        "paper_key": "doi:10.1145/3465631.3465708",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A093",
+        "paper_key": "doi:10.1109/iccsit.2010.5563821",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A094",
+        "paper_key": "doi:10.1007/s10854-020-03254-5",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A095",
+        "paper_key": "doi:10.1109/icebeg.2011.5881565",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A096",
+        "paper_key": "doi:10.25005/2074-0581-2017-19-4-471-475",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A097",
+        "paper_key": "doi:10.1111/php.13764",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A098",
+        "paper_key": "rw:26845",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A099",
+        "paper_key": "pmid:28202934",
+        "stratum": "pubmed"
+      },
+      {
+        "sample_id": "A100",
+        "paper_key": "doi:10.1007/s11082-023-06031-w",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A101",
+        "paper_key": "doi:10.1016/j.jstrokecerebrovasdis.2022.106657",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A102",
+        "paper_key": "doi:10.2166/ws.2023.250",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A103",
+        "paper_key": "pmid:27548421",
+        "stratum": "pubmed"
+      },
+      {
+        "sample_id": "A104",
+        "paper_key": "rw:31549",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A105",
+        "paper_key": "doi:10.1007/s10620-015-3905-4",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A106",
+        "paper_key": "doi:10.1049/cmu2.12529",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A107",
+        "paper_key": "doi:10.3390/atmos15030241",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A108",
+        "paper_key": "doi:10.1007/s00500-023-08796-4",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A109",
+        "paper_key": "doi:10.1109/icsess.2011.5982281",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A110",
+        "paper_key": "pmid:42085489",
+        "stratum": "pubmed"
+      },
+      {
+        "sample_id": "A111",
+        "paper_key": "doi:10.1109/fitme.2010.5655793",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A112",
+        "paper_key": "doi:10.1109/icccnt61001.2024.10725854",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A113",
+        "paper_key": "doi:10.1007/s00521-018-3547-5",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A114",
+        "paper_key": "doi:10.1109/nswctc.2010.279",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A115",
+        "paper_key": "rw:31179",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A116",
+        "paper_key": "doi:10.1007/s11082-023-05275-w",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A117",
+        "paper_key": "doi:10.1530/rep-11-0172",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A118",
+        "paper_key": "doi:10.1109/icaccs54159.2022.9785149",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A119",
+        "paper_key": "pmid:42085202",
+        "stratum": "pubmed"
+      },
+      {
+        "sample_id": "A120",
+        "paper_key": "rw:26367",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A121",
+        "paper_key": "doi:10.1109/icbbe.2011.5781423",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A122",
+        "paper_key": "doi:10.1016/j.jamda.2021.06.003",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A123",
+        "paper_key": "doi:10.1109/icces57224.2023.10192840",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A124",
+        "paper_key": "doi:10.1016/j.physleta.2024.129760",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A125",
+        "paper_key": "rw:30090",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A126",
+        "paper_key": "rw:10655",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A127",
+        "paper_key": "pmid:34824027",
+        "stratum": "pubmed"
+      },
+      {
+        "sample_id": "A128",
+        "paper_key": "rw:31358",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A129",
+        "paper_key": "doi:10.1063/5.0182167",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A130",
+        "paper_key": "doi:10.1210/er.2015-1045.2016.1",
+        "stratum": "pubmed"
+      },
+      {
+        "sample_id": "A131",
+        "paper_key": "doi:10.1109/icacite57410.2023.10183114",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A132",
+        "paper_key": "doi:10.1016/j.avb.2021.101626",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A133",
+        "paper_key": "doi:10.1515/9783486817041-002",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A134",
+        "paper_key": "pmid:26025404",
+        "stratum": "pubmed"
+      },
+      {
+        "sample_id": "A135",
+        "paper_key": "pmid:17769842",
+        "stratum": "pubmed"
+      },
+      {
+        "sample_id": "A136",
+        "paper_key": "doi:10.1016/j.psyneuen.2015.07.570",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A137",
+        "paper_key": "doi:10.1016/j.optmat.2024.115765",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A138",
+        "paper_key": "rw:12991",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A139",
+        "paper_key": "doi:10.1097/00000539-199912000-00008",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A140",
+        "paper_key": "doi:10.3389/fenrg.2022.1101887",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A141",
+        "paper_key": "doi:10.1016/j.mejo.2026.107063",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A142",
+        "paper_key": "rw:13338",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A143",
+        "paper_key": "doi:10.1016/j.ctarc.2022.100628",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A144",
+        "paper_key": "doi:10.1002/dac.4759",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A145",
+        "paper_key": "doi:10.1007/s10257-020-00477-1",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A146",
+        "paper_key": "doi:10.1109/icebeg.2011.5882335",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A147",
+        "paper_key": "doi:10.1128/spectrum.02063-23",
+        "stratum": "pubmed"
+      },
+      {
+        "sample_id": "A148",
+        "paper_key": "doi:10.1109/aimsec.2011.6010373",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A149",
+        "paper_key": "doi:10.1145/3465631.3465645",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A150",
+        "paper_key": "doi:10.1016/j.earlhumdev.2020.105260",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A151",
+        "paper_key": "doi:10.21203/rs.3.rs-6507372/v1",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A152",
+        "paper_key": "doi:10.1088/1742-6596/790/1/012006",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A153",
+        "paper_key": "doi:10.1016/j.sbspro.2010.03.112",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A154",
+        "paper_key": "doi:10.1016/j.hlc.2020.09.538",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A155",
+        "paper_key": "doi:10.1117/1.jei.32.6.062602",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A156",
+        "paper_key": "doi:10.1115/1.4067412",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A157",
+        "paper_key": "pmid:28768442",
+        "stratum": "pubmed"
+      },
+      {
+        "sample_id": "A158",
+        "paper_key": "doi:10.1016/s0370-2693(01)00865-6",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A159",
+        "paper_key": "rw:13619",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A160",
+        "paper_key": "doi:10.1109/iccsit.2010.5563743",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A161",
+        "paper_key": "doi:10.1515/9783486817089-004",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A162",
+        "paper_key": "doi:10.1109/appeec.2010.5448604",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A163",
+        "paper_key": "doi:10.1515/9783486818642-005",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A164",
+        "paper_key": "pmid:22557282",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A165",
+        "paper_key": "doi:10.1063/5.0182218",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A166",
+        "paper_key": "doi:10.1016/j.esr.2023.101172",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A167",
+        "paper_key": "doi:10.1016/j.solener.2022.11.045",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A168",
+        "paper_key": "doi:10.3103/s0361521924700423",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A169",
+        "paper_key": "doi:10.1109/qr2mse.2013.6625645",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A170",
+        "paper_key": "doi:10.4018/979-8-3693-9919-4.ch012",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A171",
+        "paper_key": "pmid:28363466",
+        "stratum": "pubmed"
+      },
+      {
+        "sample_id": "A172",
+        "paper_key": "doi:10.1109/icimia48430.2020.9074945",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A173",
+        "paper_key": "doi:10.1109/aimsec.2011.6009661",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A174",
+        "paper_key": "rw:15359",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A175",
+        "paper_key": "doi:10.1016/j.envres.2022.114669",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A176",
+        "paper_key": "doi:10.1134/s1064229324600143",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A177",
+        "paper_key": "doi:10.1038/s41929-018-0063-z",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A178",
+        "paper_key": "doi:10.17977/um063v4i8p2",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A179",
+        "paper_key": "rw:8494",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A180",
+        "paper_key": "doi:10.21203/rs.3.rs-4394239/v1",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A181",
+        "paper_key": "pmid:29216742",
+        "stratum": "pubmed"
+      },
+      {
+        "sample_id": "A182",
+        "paper_key": "doi:10.1109/icait61638.2024.10690541",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A183",
+        "paper_key": "doi:10.1007/s00500-024-09696-x",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A184",
+        "paper_key": "doi:10.1007/s11135-025-02098-7",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A185",
+        "paper_key": "pmid:11129915",
+        "stratum": "pubmed"
+      },
+      {
+        "sample_id": "A186",
+        "paper_key": "doi:10.1109/icccnt61001.2024.10726031",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A187",
+        "paper_key": "pmid:42497690",
+        "stratum": "pubmed"
+      },
+      {
+        "sample_id": "A188",
+        "paper_key": "rw:30223",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A189",
+        "paper_key": "doi:10.1109/iccr56254.2022.9996074",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A190",
+        "paper_key": "doi:10.1109/icaccs54159.2022.9785054",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A191",
+        "paper_key": "doi:10.1152/ajpgi.00054.2022",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A192",
+        "paper_key": "rw:6007",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A193",
+        "paper_key": "doi:10.1007/s00500-023-08460-x",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A194",
+        "paper_key": "doi:10.1109/bipol.2007.4351825",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A195",
+        "paper_key": "doi:10.1109/cctae.2010.5543633",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A196",
+        "paper_key": "doi:10.1016/j.apcatb.2003.08.001",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A197",
+        "paper_key": "doi:10.1016/j.biortech.2017.01.035",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A198",
+        "paper_key": "doi:10.7603/s40790-015-0015-x",
+        "stratum": "openalex"
+      },
+      {
+        "sample_id": "A199",
+        "paper_key": "doi:10.1109/icbbe.2011.5779990",
+        "stratum": "retraction_watch"
+      },
+      {
+        "sample_id": "A200",
+        "paper_key": "doi:10.36923/jicc.v25i4.1374",
+        "stratum": "openalex"
+      }
+    ]
+  }
+}
