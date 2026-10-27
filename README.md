@@ -70,6 +70,19 @@ Review" became "Compromised Peer Review" on 10,426 records on 2026-01-02).
 whose DOI changed and 54 whose retraction date changed. A pipeline that only
 appends new rows sees none of it.
 
+**Ask the same question twice, get two answers.** Four questions about
+retractions dated 2023 or earlier, fixed before any was computed, asked of
+every snapshot (key `as_of` in `runs/20261027T004647Z-findings.json`). From
+2024-09-02 to 2026-10-16 the count grew 9.1% (48,789 to 53,227), the count
+citing "Paper Mill" grew 80.6% (4,868 to 8,790), the median lag rose from 379
+to 420 days, and "Fake Peer Review" fell from 4,654 to zero on a relabel.
+Nearly all of it is late cataloguing: 4,482 records dated 2023 or earlier were
+added after the first snapshot, 3,921 of them Hindawi. A study of 2023 run in
+September 2024 would have seen 9,030 retractions; the database now holds
+13,337. A paper on this, and a blind hand audit of the papers only one
+registry flags, are in progress in [paper/](paper/) and
+[docs/audit-codebook.md](docs/audit-codebook.md).
+
 ## Incidents the pipeline caught
 
 Each was found on real data, broke something, and is now handled in code with
