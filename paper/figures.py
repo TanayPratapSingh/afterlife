@@ -54,8 +54,9 @@ def _findings() -> tuple[str, dict]:
 
 def _save(fig, name: str) -> None:
     OUT.mkdir(parents=True, exist_ok=True)
-    for ext in ("pdf", "png"):
-        fig.savefig(OUT / f"{name}.{ext}", dpi=300, bbox_inches="tight")
+    # No creation date in the PDF, so the same findings give the same bytes.
+    fig.savefig(OUT / f"{name}.pdf", bbox_inches="tight", metadata={"CreationDate": None})
+    fig.savefig(OUT / f"{name}.png", dpi=300, bbox_inches="tight")
     plt.close(fig)
 
 
