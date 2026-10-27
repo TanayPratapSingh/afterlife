@@ -218,7 +218,8 @@ never from the four registries under test. The sheet withholds the flagging
 registry and strips leading "RETRACTED:" and "WITHDRAWN:" markers from titles
 (86 of 200), which would reveal both the source and the answer. Blinding is
 partial: 27 papers have no DOI, PMID, or PMCID, and nearly all of those are
-Retraction Watch records, which a labeller could infer.
+Retraction Watch records; and 19 of the 22 PubMed only papers have a PMID
+but no DOI. A labeller could infer the source from which links exist.
 
 Precision per stratum is the share labelled `retracted` among papers not
 labelled `cannot_determine`, with Wilson 95% intervals. The frame estimate
