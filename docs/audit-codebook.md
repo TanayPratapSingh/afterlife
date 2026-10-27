@@ -92,3 +92,9 @@ correction. It runs on a partial sheet too, to check progress.
   the row's own item is marked withdrawn, including "withdrawn as duplicate",
   it is `retracted` with `duplicate` in Notes. This spells out the existing
   rule; no label already entered depends on it.
+- 2026-10-26, while labelling (before A050): an IEEE "Notice of Violation of
+  IEEE Publication Principles" on a paper whose notice does not retract it is
+  `concern` with `ieee_violation` in Notes: a formal publisher warning stands
+  and the paper is not retracted. If the notice text retracts the paper, it is
+  `retracted`. IEEE "Notice of Retraction" pages remain `retracted`. Applies
+  to every such row; no label already entered depends on it.
