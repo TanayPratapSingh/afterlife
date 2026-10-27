@@ -457,7 +457,7 @@ def render(findings_path: Path) -> str:
                 ],
                 [
                     [
-                        s,
+                        NAMES.get(s, s),
                         _n(v["population"]),
                         f"{v['labelled']} of {v['sampled']}",
                         _n(v["decided"]),

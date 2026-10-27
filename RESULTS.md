@@ -244,6 +244,18 @@ Retractions dated 2023 alone: 9,030 then 13,337. Records added after the first s
 | 2026-10-15 | 53,188 | 8,790 | 0 | 420 |
 | 2026-10-16 | 53,227 | 8,790 | 0 | 420 |
 
+## 9. Hand audit of single registry flags
+
+From `runs/20261027T221642Z-audit-score.json`, labelled by hand against `docs/audit-codebook.md`, blind to which registry flagged each paper. Precision is the share the publisher retracted, among rows not labelled cannot_determine. Labelling is complete.
+
+| Flagged only by | In frame | Labelled | Decided | Precision (95% CI) | Notices |
+| --- | --- | --- | --- | --- | --- |
+| OpenAlex | 16,120 | 89 of 89 | 86 | 98.8% (93.7% to 99.8%) | 1 |
+| PubMed | 22 | 22 of 22 | 22 | 86.4% (66.7% to 95.2%) | 1 |
+| Retraction Watch | 20,259 | 89 of 89 | 75 | 92.0% (83.6% to 96.3%) | 4 |
+
+Stratified estimate over all 36,401 papers flagged by exactly one registry: 95.0% retracted (91.5% to 98.6%).
+
 ## 10. Cross engine conformance
 
 From `runs/20261019T224522Z-conformance.json`: the gold models built on DuckDB and on Spark SQL, every row compared after normalizing decimals to 6 places and dates to ISO strings.

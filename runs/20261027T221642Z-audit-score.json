@@ -1,0 +1,85 @@
+{
+  "command": "audit-score",
+  "argv": [
+    "audit",
+    "score"
+  ],
+  "started_at": "2026-10-27T22:16:42.602644+00:00",
+  "finished_at": "2026-10-27T22:16:42.709448+00:00",
+  "seconds": 0.1,
+  "report": {
+    "sample_run": "20261027T004212Z-audit-sample.json",
+    "labels_from": "labels.xlsx",
+    "complete": true,
+    "strata": {
+      "openalex": {
+        "population": 16120,
+        "sampled": 89,
+        "labelled": 89,
+        "counts": {
+          "retracted": 85,
+          "notice": 1,
+          "concern": 0,
+          "corrected": 0,
+          "not_retracted": 0,
+          "cannot_determine": 3
+        },
+        "decided": 86,
+        "precision": 0.9884,
+        "precision_ci95": [
+          0.937,
+          0.9979
+        ],
+        "notice_share": 0.0116
+      },
+      "pubmed": {
+        "population": 22,
+        "sampled": 22,
+        "labelled": 22,
+        "counts": {
+          "retracted": 19,
+          "notice": 1,
+          "concern": 0,
+          "corrected": 0,
+          "not_retracted": 2,
+          "cannot_determine": 0
+        },
+        "decided": 22,
+        "precision": 0.8636,
+        "precision_ci95": [
+          0.6666,
+          0.9525
+        ],
+        "notice_share": 0.0455
+      },
+      "retraction_watch": {
+        "population": 20259,
+        "sampled": 89,
+        "labelled": 89,
+        "counts": {
+          "retracted": 69,
+          "notice": 4,
+          "concern": 1,
+          "corrected": 0,
+          "not_retracted": 1,
+          "cannot_determine": 14
+        },
+        "decided": 75,
+        "precision": 0.92,
+        "precision_ci95": [
+          0.8363,
+          0.9628
+        ],
+        "notice_share": 0.0533
+      }
+    },
+    "frame_estimate": {
+      "precision": 0.9503,
+      "ci95": [
+        0.9147,
+        0.9858
+      ],
+      "frame_size": 36401
+    }
+  }
+}
