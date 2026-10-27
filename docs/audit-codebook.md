@@ -98,3 +98,8 @@ correction. It runs on a partial sheet too, to check progress.
   and the paper is not retracted. If the notice text retracts the paper, it is
   `retracted`. IEEE "Notice of Retraction" pages remain `retracted`. Applies
   to every such row; no label already entered depends on it.
+- 2026-10-27, while labelling: two database records (for example two PMIDs)
+  that point to one published article are the same item. Label the article
+  from the publisher; a retraction linked to only one of the records applies
+  to both. Note the split in Notes. Distinct versions with their own publisher
+  pages (the earlier rule) are still labelled separately.
