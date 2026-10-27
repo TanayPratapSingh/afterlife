@@ -2,6 +2,7 @@
 
 Tanay Pratap Singh
 School of Information Studies, Syracuse University
+tanayyps@gmail.com
 
 Draft of 2026-10-26. Every number traces to a run report in the afterlife
 repository; the key is given in an HTML comment beside the number. Items
