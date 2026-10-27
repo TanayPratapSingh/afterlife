@@ -62,6 +62,7 @@ make test           # everything; real lake checks run when data/lake exists
 make pipeline       # fetch, bronze, silver, pmc, gold, export, findings
 make conformance    # gold on DuckDB and Spark SQL, every row compared
 make aws-build tf-validate
+.venv/bin/afterlife audit sheet     # labels.xlsx from labels.csv (needs the audit extra)
 .venv/bin/afterlife audit score     # hand audit progress; RESULTS.md section 9 once a score run exists
 .venv/bin/python paper/figures.py   # paper figures from the newest findings run
 ```

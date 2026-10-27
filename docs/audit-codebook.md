@@ -17,7 +17,10 @@ PubMed only paper (there are 22), then the rest split evenly between Retraction
 Watch only and OpenAlex only. No paper is flagged by PMC alone. The seed is
 fixed in `afterlife/audit.py`, so the draw is reproducible.
 
-The sheet is `audit/labels.csv`. It shows a title, a year, and links, and
+Label in `audit/labels.xlsx`, built from the committed blank sheet
+`audit/labels.csv` by `afterlife audit sheet`: same rows, same order, a
+dropdown limited to the six labels, and one Open link per row. Scoring reads
+the workbook when it exists. Both show a title, a year, and links, and
 nothing else. A leading "RETRACTED:" or "WITHDRAWN:" is stripped from titles
 because it reveals both the answer and the source.
 
@@ -79,4 +82,6 @@ correction. It runs on a partial sheet too, to check progress.
 
 ## Change log
 
-None yet.
+- 2026-10-26, before any label was entered: added `audit/labels.xlsx` (above)
+  and, on its Guide tab, the rule that a PubMed or PMC page is used only to
+  find the publisher's full text. No label definition or sample changed.

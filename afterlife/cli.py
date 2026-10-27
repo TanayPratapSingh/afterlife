@@ -10,7 +10,7 @@
     afterlife findings
     afterlife conformance
     afterlife results
-    afterlife audit sample|score
+    afterlife audit sample|sheet|score
 
 The landing zone is `data/` by default, or an S3 bucket when
 AFTERLIFE_LANDING=s3://bucket. The lake is `data/lake` by default, or a Unity
@@ -193,6 +193,8 @@ def cmd_audit(args) -> dict:
 
     if args.action == "sample":
         return audit.sample(n=args.n)
+    if args.action == "sheet":
+        return audit.make_sheet()
     return audit.run_score(sample_run=args.sample)
 
 
@@ -229,7 +231,7 @@ def main(argv: list[str] | None = None) -> int:
     c.add_argument("--no-build", action="store_true")
     c.set_defaults(func=cmd_conformance)
     a = sub.add_parser("audit", help="hand audit of papers that exactly one registry flags")
-    a.add_argument("action", choices=["sample", "score"])
+    a.add_argument("action", choices=["sample", "sheet", "score"])
     a.add_argument("--n", type=int, default=200)
     a.add_argument("--sample", help="a runs/*-audit-sample.json (default: the newest)")
     a.set_defaults(func=cmd_audit)

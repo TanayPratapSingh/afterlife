@@ -1,0 +1,14 @@
+{
+  "command": "audit-sheet",
+  "argv": [
+    "audit",
+    "sheet"
+  ],
+  "started_at": "2026-10-27T01:25:01.192280+00:00",
+  "finished_at": "2026-10-27T01:25:01.284401+00:00",
+  "seconds": 0.1,
+  "report": {
+    "workbook": "audit/labels.xlsx",
+    "rows": 200
+  }
+}

@@ -229,11 +229,231 @@ def score(labels: list[dict], sample_report: dict) -> dict:
     return {"complete": complete, "strata": strata, "frame_estimate": est}
 
 
-def run_score(sample_run: str | None = None, sheet: Path = SHEET) -> dict:
+WORKBOOK = ROOT / "audit" / "labels.xlsx"
+_HEADER = [
+    "ID",
+    "Title",
+    "Year",
+    "Open",
+    "Label",
+    "Evidence link",
+    "Notes",
+    "DOI",
+    "PubMed",
+    "PMC",
+    "Search",
+]
+_FIRST = 6  # first data row; rows 1 to 4 are the legend, row 5 the header
+_GUIDE = [
+    ("How to label one row", None),
+    ("1. Click Open. It goes to the publisher's page when there is one.", None),
+    ("2. Decide from the publisher's page or the publisher's own notice.", None),
+    ("3. Pick a label from the dropdown in the Label column.", None),
+    ("4. Paste the page you used into Evidence link.", None),
+    ("5. Add a note if something is odd. The row turns green when it has a label.", None),
+    ("", None),
+    ("The six labels", None),
+    ("retracted", "The publisher retracted, withdrew, or removed it."),
+    ("notice", "The item is itself the retraction notice, not the paper."),
+    ("concern", "An expression of concern, and it is not retracted."),
+    ("corrected", "A correction or erratum, and it is not retracted."),
+    (
+        "not_retracted",
+        "You reached the publisher's page, it shows no retraction, and you found no notice.",
+    ),
+    ("cannot_determine", "You could not reach the publisher's page, or the evidence conflicts."),
+    ("", None),
+    ("Rules", None),
+    (
+        "Do not use Retraction Watch, OpenAlex, or the retraction banners on PubMed or PMC "
+        "as evidence. They are what is being tested.",
+        None,
+    ),
+    (
+        "If Open goes to PubMed or PMC, use that page only to find the publisher's full text "
+        "link, and decide from the publisher's page.",
+        None,
+    ),
+    ("Do not open runs/*-audit-sample.json until every row is labelled.", None),
+    ("About five minutes a row. After ten, choose cannot_determine and say what you tried.", None),
+    ("", None),
+    ("Notes tags (start Notes with any that apply)", None),
+    (
+        "front_matter  book_chapter  conference  retract_and_replace  partial  paywalled  "
+        "non_english  dead_link  wrong_paper",
+        None,
+    ),
+    ("", None),
+    ("Example of a filled row (format only, not a real paper)", None),
+    (
+        "Label: notice    Evidence link: https://doi.org/10.xxxx/example    Notes: front_matter",
+        None,
+    ),
+    ("", None),
+    ("Full rules: docs/audit-codebook.md", None),
+]
+
+
+_GUIDE_HEADINGS = {
+    "How to label one row",
+    "The six labels",
+    "Rules",
+    "Notes tags (start Notes with any that apply)",
+    "Example of a filled row (format only, not a real paper)",
+}
+
+
+def write_workbook(rows: list[dict], path: Path = WORKBOOK) -> dict:
+    """The labelling sheet as an Excel workbook: one Open link per row, a
+    dropdown limited to the six labels, and the rules on a Guide tab."""
+    if path.exists():
+        raise SystemExit(f"{path} exists. It may hold labels; move it aside first.")
+    from openpyxl import Workbook
+    from openpyxl.formatting.rule import FormulaRule
+    from openpyxl.styles import Alignment, Font, PatternFill
+    from openpyxl.worksheet.datavalidation import DataValidation
+
+    base, bold = Font(name="Arial", size=10), Font(name="Arial", size=10, bold=True)
+    link = Font(name="Arial", size=10, color="1F5FBF", underline="single")
+    fill_in = PatternFill("solid", fgColor="FFF4C2")
+    last = _FIRST + len(rows) - 1
+
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Label"
+    ws["A1"] = "Hand audit: has the publisher really retracted each paper?"
+    ws["A1"].font = Font(name="Arial", size=14, bold=True)
+    ws["A2"] = (
+        "Fill in the yellow columns. Pick the label from the dropdown. "
+        "The rules are on the Guide tab."
+    )
+    # A plain count beside a label: every spreadsheet app evaluates it the same way.
+    ws["A3"] = f"=COUNTA(E{_FIRST}:E{last})"
+    ws["B3"] = f"papers labelled so far, out of {len(rows)}"
+    for c in ("A2", "A3", "B3"):
+        ws[c].font = base
+    ws["A3"].font = bold
+    ws["A3"].alignment = Alignment(horizontal="left")
+    for col, name in enumerate(_HEADER, 1):
+        cell = ws.cell(row=_FIRST - 1, column=col, value=name)
+        cell.font = bold
+        if name in ("Label", "Evidence link", "Notes"):
+            cell.fill = fill_in
+
+    for i, r in enumerate(rows, _FIRST):
+        best = next(
+            (
+                (u, t)
+                for u, t in (
+                    (r["doi_url"], "Open paper"),
+                    (r["pubmed_url"], "Open in PubMed"),
+                    (r["pmc_url"], "Open in PMC"),
+                    (r["search_url"], "Search"),
+                )
+                if u
+            ),
+            ("", ""),
+        )
+        year = int(r["year"]) if str(r["year"]).isdigit() else r["year"]
+        values = [
+            r["sample_id"],
+            r["title"],
+            year,
+            best[1],
+            r.get("label", ""),
+            r.get("evidence_url", ""),
+            r.get("notes", ""),
+            "",
+            "",
+            "",
+            "",
+        ]
+        for col, v in enumerate(values, 1):
+            cell = ws.cell(row=i, column=col, value=v or None)
+            cell.font = base
+            cell.alignment = Alignment(vertical="top", wrap_text=col in (2, 7))
+        for col, url in (
+            (4, best[0]),
+            (8, r["doi_url"]),
+            (9, r["pubmed_url"]),
+            (10, r["pmc_url"]),
+            (11, r["search_url"]),
+        ):
+            if url:
+                cell = ws.cell(row=i, column=col)
+                cell.value = cell.value or _HEADER[col - 1]
+                cell.hyperlink, cell.font = url, link
+        for col in (5, 6, 7):
+            ws.cell(row=i, column=col).fill = fill_in
+
+    dv = DataValidation(
+        type="list",
+        formula1='"' + ",".join(LABELS) + '"',
+        allow_blank=True,
+        showErrorMessage=True,
+        errorTitle="Not a label",
+        error="Pick one of the six labels from the list.",
+    )
+    ws.add_data_validation(dv)
+    dv.add(f"E{_FIRST}:E{last}")
+    ws.conditional_formatting.add(
+        f"A{_FIRST}:K{last}",
+        FormulaRule(formula=[f"LEN($E{_FIRST})>0"], fill=PatternFill("solid", fgColor="DDF0DD")),
+    )
+    for col, width in zip("ABCDEFGHIJK", (7, 60, 6, 15, 18, 36, 28, 7, 9, 7, 9), strict=True):
+        ws.column_dimensions[col].width = width
+    ws.freeze_panes = f"B{_FIRST}"
+
+    guide = wb.create_sheet("Guide")
+    guide.column_dimensions["A"].width = 22
+    guide.column_dimensions["B"].width = 80
+    for i, (a, b) in enumerate(_GUIDE, 1):
+        guide.cell(row=i, column=1, value=a or None)
+        guide.cell(row=i, column=2, value=b)
+        guide.cell(row=i, column=1).font = bold if a in _GUIDE_HEADINGS or b else base
+        guide.cell(row=i, column=2).font = base
+    path.parent.mkdir(parents=True, exist_ok=True)
+    wb.save(path)
+    shown = path.relative_to(ROOT) if path.is_relative_to(ROOT) else path
+    return {"workbook": str(shown), "rows": len(rows)}
+
+
+def read_workbook(path: Path = WORKBOOK) -> list[dict]:
+    from openpyxl import load_workbook
+
+    ws = load_workbook(path, read_only=True, data_only=True)["Label"]
+    out = []
+    for row in ws.iter_rows(min_row=_FIRST, values_only=True):
+        if row[0]:
+            out.append(
+                {
+                    "sample_id": str(row[0]).strip(),
+                    "label": str(row[4] or "").strip(),
+                    "evidence_url": str(row[5] or "").strip(),
+                    "notes": str(row[6] or "").strip(),
+                }
+            )
+    return out
+
+
+def make_sheet(sheet: Path = SHEET, path: Path = WORKBOOK) -> dict:
+    with sheet.open(newline="") as fh:
+        return write_workbook(list(csv.DictReader(fh)), path)
+
+
+def run_score(
+    sample_run: str | None = None, sheet: Path = SHEET, workbook: Path = WORKBOOK
+) -> dict:
     path = (
         Path(sample_run) if sample_run else sorted((ROOT / "runs").glob("*-audit-sample.json"))[-1]
     )
     report = json.loads(path.read_text())["report"]
     with sheet.open(newline="") as fh:
         labels = list(csv.DictReader(fh))
-    return {"sample_run": path.name, **score(labels, report)}
+    source = sheet
+    if workbook.exists():
+        # The workbook is where labelling happens; labels in both would be ambiguous.
+        if any(r["label"].strip() for r in labels):
+            raise SystemExit(f"labels found in both {sheet.name} and {workbook.name}; keep one")
+        labels, source = read_workbook(workbook), workbook
+    return {"sample_run": path.name, "labels_from": source.name, **score(labels, report)}

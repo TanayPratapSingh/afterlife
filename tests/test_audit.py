@@ -86,6 +86,53 @@ def test_pubmed_summaries_parses_esummary():
     assert pubmed.summaries([]) == {}
 
 
+def test_workbook_round_trip(tmp_path):
+    openpyxl = pytest.importorskip("openpyxl")
+    blank = {"label": "", "evidence_url": "", "notes": ""}
+    rows = [
+        {
+            "sample_id": "A001",
+            "title": "T1",
+            "year": "2019",
+            "doi_url": "https://doi.org/10.1/x",
+            "pubmed_url": "",
+            "pmc_url": "",
+            "search_url": "https://scholar.google.com/q",
+            **blank,
+        },
+        {
+            "sample_id": "A002",
+            "title": "T2",
+            "year": "",
+            "doi_url": "",
+            "pubmed_url": "",
+            "pmc_url": "",
+            "search_url": "https://scholar.google.com/r",
+            **blank,
+        },
+    ]
+    path = tmp_path / "labels.xlsx"
+    audit.write_workbook(rows, path)
+    with pytest.raises(SystemExit, match="exists"):
+        audit.write_workbook(rows, path)
+
+    wb = openpyxl.load_workbook(path)
+    ws = wb["Label"]
+    assert ws["D6"].hyperlink.target == "https://doi.org/10.1/x"
+    assert ws["D7"].value == "Search"  # no DOI, PMID, or PMCID: the search link
+    assert "notice" in ws.data_validations.dataValidation[0].formula1
+    ws["E6"], ws["F6"] = "notice", "https://doi.org/10.1/x"
+    wb.save(path)
+
+    got = audit.read_workbook(path)
+    assert [g["sample_id"] for g in got] == ["A001", "A002"]
+    assert (got[0]["label"], got[0]["evidence_url"], got[1]["label"]) == (
+        "notice",
+        "https://doi.org/10.1/x",
+        "",
+    )
+
+
 def test_score_rejects_labels_outside_the_codebook():
     with pytest.raises(SystemExit, match="A001"):
         audit.score(_labels("maybe", "", "", "", ""), _report())
