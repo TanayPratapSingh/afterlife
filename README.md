@@ -79,9 +79,14 @@ to 420 days, and "Fake Peer Review" fell from 4,654 to zero on a relabel.
 Nearly all of it is late cataloguing: 4,482 records dated 2023 or earlier were
 added after the first snapshot, 3,921 of them Hindawi. A study of 2023 run in
 September 2024 would have seen 9,030 retractions; the database now holds
-13,337. A paper on this, and a blind hand audit of the papers only one
-registry flags, are in progress in [paper/](paper/) and
-[docs/audit-codebook.md](docs/audit-codebook.md).
+13,337. A draft paper on this is in [paper/](paper/).
+
+**Most single registry flags are real.** A blind hand audit of 200 of the
+36,401 papers only one registry flags, labelled from publishers' pages against
+a codebook committed before any label ([docs/audit-codebook.md](docs/audit-codebook.md)),
+estimates that 95.0% (91.5% to 98.6%) were in fact retracted
+(`runs/20261027T221642Z-audit-score.json`). The registries disagree mostly by
+omission, not by error; notices counted as papers were 6 of the 200.
 
 ## Incidents the pipeline caught
 

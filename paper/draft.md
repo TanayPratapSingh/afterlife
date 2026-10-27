@@ -4,8 +4,8 @@ Tanay Pratap Singh
 School of Information Studies, Syracuse University
 
 Draft of 2026-10-26. Every number traces to a run report in the afterlife
-repository; the key is given in an HTML comment beside the number. Bracketed
-items marked AUDIT are waiting on the hand labels. Items marked VERIFY are
+repository; the key is given in an HTML comment beside the number. Items
+marked VERIFY are
 prior work numbers taken from an assistant's reading; Si et al. (2026), the
 Tesseract Semantics report, and the Retraction Watch changelog were checked
 against the source, the rest must be checked before submission.
@@ -29,8 +29,10 @@ growth is late cataloguing: 4,482 records added after the first snapshot,
 OpenAlex, PubMed, and PubMed Central. Of 89,681 papers that at least one
 registry flags, all eligible registries agree on 51.5%, and 49.3% of the works
 OpenAlex marks as retracted are retraction notices rather than retracted
-papers. A blind hand audit of 200 papers flagged by a single registry
-estimates that [AUDIT] of them were actually retracted. We recommend that
+papers. A blind, preregistered hand audit of 200 of the 36,401 papers that
+only one registry flags estimates that 95.0% (91.5% to 98.6%) were in fact
+retracted: the registries disagree mostly by omission, not by error. We
+recommend that
 studies cite and archive the snapshot they used, and we release the pipeline
 that rebuilds any snapshot on demand.
 
@@ -330,8 +332,40 @@ ten notices.
 
 ### 4.4 What the single registry flags really are
 
-[AUDIT: per stratum precision with intervals, notice shares, and the frame
-estimate, from `afterlife audit score`. Rendered into RESULTS.md section 9.]
+Of the 200 sampled papers, 183 could be decided from the publisher's page.
+The other 17 could not: 14 of them are papers only Retraction Watch flags,
+and 12 of those 14 have no DOI, PMID, or PMCID to follow. Across all 200, the labels were
+`retracted` 173 times, `notice` 6, `not_retracted` 3, and `concern` once.
+<!-- runs/20261027T221642Z-audit-score.json -->
+
+**Table 3.** Precision of a flag that no other registry shares: the share the
+publisher actually retracted, among papers that could be decided.
+
+| Flagged only by | Papers in frame | Sampled | Decided | Precision (95% CI) | Notices |
+| --- | ---: | ---: | ---: | --- | ---: |
+| OpenAlex | 16,120 | 89 | 86 | 98.8% (93.7% to 99.8%) | 1 |
+| PubMed | 22 | 22 | 22 | 86.4% (66.7% to 95.2%) | 1 |
+| Retraction Watch | 20,259 | 89 | 75 | 92.0% (83.6% to 96.3%) | 4 |
+
+<!-- audit score strata -->
+
+Weighted by stratum size, with a finite population correction for the PubMed
+census, 95.0% (91.5% to 98.6%) of the 36,401 single registry flags are real
+retractions. <!-- audit score frame_estimate --> The registries therefore
+disagree mostly because one holds a retraction the others miss, not because
+one flags papers that were never retracted. Treated as a measure of coverage,
+the union in Table 2 is close to right.
+
+Three cautions. The OpenAlex figure is precision after the notice filter of
+Section 3.4, not of the raw `is_retracted` flag, which Section 4.3 shows is
+half notices. Papers flagged only by OpenAlex may still be in Retraction Watch
+under a record with no DOI or PMID, which one hop identity resolution cannot
+match. And the Retraction Watch stratum rests on 75 decided papers: counting
+all 14 undecided ones as not retracted, the worst case, it would be 69 of 89.
+
+The errors that do exist are instructive. Notices counted as papers make up 6
+of the 200, the same failure as Section 4.3 at a smaller scale and found in
+all three strata.
 
 ### 4.5 Two secondary observations
 
@@ -402,18 +436,19 @@ Six practices would make retraction studies reproducible.
 - PMC coverage is targeted at the 43,616 articles other registries mention,
   not every PMC article.
 - Citation counts are per year and start in 2012.
-- The hand audit has one labeller, and its blinding is partial (Section 3.5).
-  [AUDIT: add a second labeller on a subset if time allows, and report
-  agreement.]
+- The hand audit has one labeller, so agreement between labellers is not
+  measured, and its blinding is partial (Section 3.5). Three clarifications
+  of the codebook were made during labelling; each is logged with its date.
 
 ## 7. Data and code availability
 
 Code, run reports, the audit codebook, and the labelled sheet:
 https://github.com/TanayPratapSingh/afterlife. Findings in this draft come
 from `runs/20261027T005839Z-findings.json`; the audit sample from
-`runs/20261027T004212Z-audit-sample.json`. `afterlife findings` rebuilds every
-number from the landed snapshots. [PENDING: Zenodo DOI for the landed
-snapshots and the run reports.]
+`runs/20261027T004212Z-audit-sample.json`; the audit scores from
+`runs/20261027T221642Z-audit-score.json`. `afterlife findings` rebuilds every
+number from the landed snapshots. [PENDING: OSF DOI for the landed snapshots
+and the run reports.]
 
 ## References
 
