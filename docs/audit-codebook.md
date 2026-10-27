@@ -85,3 +85,10 @@ correction. It runs on a partial sheet too, to check progress.
 - 2026-10-26, before any label was entered: added `audit/labels.xlsx` (above)
   and, on its Guide tab, the rule that a PubMed or PMC page is used only to
   find the publisher's full text. No label definition or sample changed.
+- 2026-10-26, while labelling the first rows (before A030): label the item at
+  the row's own DOI or PMID. If a different record of the same work (an early
+  online version, a duplicate copy) is the one marked withdrawn, label the
+  row's item on its own status and name the other record's DOI in Notes. When
+  the row's own item is marked withdrawn, including "withdrawn as duplicate",
+  it is `retracted` with `duplicate` in Notes. This spells out the existing
+  rule; no label already entered depends on it.
