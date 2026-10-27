@@ -85,8 +85,33 @@ def registries(con) -> dict:
            from gold.int_paper_identity
            where source = 'pmc' and notice_reason is not null""",
     )
+    # From the notice's side: of Retraction Watch's retraction notice DOIs, how
+    # many does OpenAlex flag as retracted? A notice DOI that is also some
+    # paper's DOI (common for IEEE) cannot be told apart, so it is left out.
+    lake = _lake()
+    con.execute(
+        f"""create or replace temp table notice_dois as
+        select distinct n.notice_doi as d from delta_scan('{lake}/silver/rw_notices') n
+        where n.nature = 'Retraction' and n.notice_doi is not null"""
+    )
+    con.execute(
+        f"""create or replace temp table paper_dois as select distinct doi as d
+            from delta_scan('{lake}/silver/rw_notices') where doi is not null"""
+    )
+    con.execute(
+        f"""create or replace temp table oa_flagged_dois as select distinct doi as d
+            from delta_scan('{lake}/silver/openalex_works') where is_retracted"""
+    )
+    notice_side = _one(
+        con,
+        """with nd as (select * from notice_dois anti join paper_dois using (d))
+           select (select count(*) from nd) as notice_dois,
+                  (select count(*) from nd join oa_flagged_dois using (d))
+                    as flagged_by_openalex""",
+    )
     return {
         "pmc_notice_articles": pmc_notices,
+        "rw_notice_dois_flagged_by_openalex": notice_side,
         "by_verdict": by_verdict,
         "agreement": agreement,
         "combinations": combos,

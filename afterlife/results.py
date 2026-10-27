@@ -160,6 +160,7 @@ def render(findings_path: Path) -> str:
     excluded = g["excluded_as_notices"]
     oa_notices = sum(e["rows_excluded"] for e in excluded if e["source"] == "openalex")
     pn = g["pmc_notice_articles"]
+    ns = g["rw_notice_dois_flagged_by_openalex"]
     parts += [
         "",
         "## 3. Notices excluded from the registry",
@@ -168,6 +169,12 @@ def render(findings_path: Path) -> str:
         f"({_pct(oa_notices, oa['records'])}). PMC holds {_n(pn['notice_articles'])} notice "
         f"articles, of which {_n(pn['flagged_is_retracted'])} carry is_retracted. "
         "Key `registries.excluded_as_notices`.",
+        "",
+        "From the notice's side: OpenAlex flags "
+        f"{_n(ns['flagged_by_openalex'])} of the {_n(ns['notice_dois'])} Retraction Watch "
+        "retraction notice DOIs that are not also a paper's DOI "
+        f"({_pct(ns['flagged_by_openalex'], ns['notice_dois'])}). "
+        "Key `registries.rw_notice_dois_flagged_by_openalex`.",
         "",
         _table(
             ["Source", "Reason", "Rows excluded"],
