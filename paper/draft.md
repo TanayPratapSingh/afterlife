@@ -449,8 +449,9 @@ https://github.com/TanayPratapSingh/afterlife. Findings in this draft come
 from `runs/20261027T005839Z-findings.json`; the audit sample from
 `runs/20261027T004212Z-audit-sample.json`; the audit scores from
 `runs/20261027T221642Z-audit-score.json`. `afterlife findings` rebuilds every
-number from the landed snapshots. [PENDING: OSF DOI for the landed snapshots
-and the run reports.]
+number from the landed snapshots. The 39 Retraction Watch snapshots and every
+other source file, exactly as fetched, with checksums, are archived at
+https://doi.org/10.17605/OSF.IO/D7GSF.
 
 ## References
 

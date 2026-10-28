@@ -275,5 +275,7 @@ Live endpoint, while the stack is up:
   site. NLM is the source of these data. This project is not endorsed by NLM,
   and its outputs may not reflect the most current data NLM holds.
 
-No raw data is redistributed here; `make pipeline` fetches it. Code under the
-MIT license.
+No raw data is stored in this repository; `make pipeline` fetches it. The exact
+files the numbers above came from, all 39 Retraction Watch snapshots included,
+are archived with checksums at https://doi.org/10.17605/OSF.IO/D7GSF. Code
+under the MIT license.
