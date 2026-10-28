@@ -5,13 +5,6 @@ School of Information Studies, Syracuse University
 tanayyps@gmail.com
 ORCID https://orcid.org/0009-0004-8617-0218
 
-Draft of 2026-10-26. Every number traces to a run report in the afterlife
-repository; the key is given in an HTML comment beside the number. Items
-marked VERIFY are
-prior work numbers taken from an assistant's reading; Si et al. (2026), the
-Tesseract Semantics report, and the Retraction Watch changelog were checked
-against the source, the rest must be checked before submission.
-
 ## Abstract
 
 Retraction data are increasingly treated as infrastructure: metascience
@@ -31,7 +24,8 @@ growth is late cataloguing: 4,482 records added after the first snapshot,
 OpenAlex, PubMed, and PubMed Central. Of 89,681 papers that at least one
 registry flags, all eligible registries agree on 51.5%, and 49.3% of the works
 OpenAlex marks as retracted are retraction notices rather than retracted
-papers. A blind, preregistered hand audit of 200 of the 36,401 papers that
+papers. A blind hand audit, its rules committed publicly before any label, of
+200 of the 36,401 papers that
 only one registry flags estimates that 95.0% (91.5% to 98.6%) were in fact
 retracted: the registries disagree mostly by omission, not by error. We
 recommend that
@@ -73,7 +67,8 @@ We make four contributions.
    studies found across other indexes, and independently measures how often
    OpenAlex's retraction flag marks the notice rather than the paper
    (Sections 4.2 and 4.3).
-4. A blind, preregistered hand audit of the papers that only one registry
+4. A blind hand audit, with its codebook committed before labelling, of the
+   papers that only one registry
    flags, so that coverage is measured against publishers rather than against
    the union of the registries (Section 4.4).
 
@@ -86,18 +81,19 @@ of Science and found only 3% of 49,924 DOIs flagged by all four. Salami et al.
 least one disagreement on 92.64% of 83,317 items. Ortega and Delgado-Quirós
 (2024) compared coverage across seven databases including OpenAlex and
 PubMed, and Sebo and Sebo (2025) compared Retraction Watch, PubMed, and Web of
-Science on 878 retracted papers in top medical journals. [VERIFY all four sets
-of numbers.] We do not claim disagreement as a finding. Section 4.2 replicates
+Science on 878 retracted publications in 131 high impact medical journals. We
+do not claim disagreement as a finding. Section 4.2 replicates
 it with OpenAlex and PMC, which the 11 source study did not include.
 
 **Notices indexed as retracted papers.** Hand checks by the same group found
 that a retraction index often holds the notice rather than the paper: 59 of 201
-sampled items in Schneider et al. (2023) [VERIFY], and 661 of 925 sampled
+DOIs sampled from those on which the four sources disagreed in Schneider et
+al. (2023), and 661 of 925 sampled
 Crossref DOIs (71.46%) in Si et al. (2026). For OpenAlex, Hauschke and
 Nazarovets (2025) reported a different failure: between 2023-12-22 and
-2024-03-19, any update relation (a correction, an expression of concern) set
-`is_retracted`, and about 2,300 records were fixed when it was reported
-[VERIFY]. A company report (Tesseract Semantics, 2026), not peer reviewed,
+2024-03-19 OpenAlex set `is_retracted` for any work carrying an update
+relation, such as a correction or an expression of concern, and OpenAlex
+reported fixing about 2,300 works. A company report (Tesseract Semantics, 2026), not peer reviewed,
 states that OpenAlex "flags 94.5 per cent of Retraction Watch notice DOIs as
 retracted". Section 4.3 measures the same thing independently.
 
@@ -106,10 +102,10 @@ April 2023 and July 2024 Crossref removed the retracted flag from 208 DOIs, none
 of which was in fact retracted, and concluded that "retraction metadata are
 dynamic rather than static". Their study covers Crossref only, and they name
 longitudinal assessment of data quality as future work. Salami et al. (2024b)
-compared union lists built in April 2023 and July 2024 [VERIFY]. Their own 11
-source dataset was later corrected because it had included Retraction Watch
-records whose nature is not a retraction (expressions of concern,
-corrections, reinstatements) [VERIFY], which shows how easily the database's
+compared union lists built in April 2023 and July 2024. Their own 11 source
+dataset was later corrected because it had included Retraction Watch records
+whose nature is not a retraction (expressions of concern, corrections,
+reinstatements) (Salami and McCumber, 2026), which shows how easily the database's
 structure is misread even by specialists. Retraction Watch documents its
 taxonomy changes in a dated changelog (Retraction Watch, n.d.). We found no
 study that compares Retraction Watch releases record by record, or that
@@ -117,8 +113,9 @@ measures what those changes do to the answers a study gets.
 
 **Citation after retraction.** Retracted papers keep being cited, mostly
 without acknowledgement of the retraction (Bar-Ilan and Halevi, 2017;
-Schneider et al., 2020); Hsiao and Schneider (2021) found that 5.4% of post
-retraction citation contexts in PubMed acknowledge the retraction [VERIFY].
+Schneider et al., 2020); Hsiao and Schneider (2021) found that only 722 of
+13,252 (5.4%) post retraction citation contexts in the PubMed Central Open
+Access Subset acknowledged the retraction.
 Our citation counts (Section 4.5) measure volume at year granularity and do
 not classify contexts.
 
@@ -306,8 +303,9 @@ Section 4.4 measures it.
 These are not directly comparable with Salami et al. (2024a), who measure
 agreement over the union of 11 sources without conditioning on whether a
 source could have held a paper. The one registry both studies include
-behaves alike: PubMed agrees with 87.69% of their union [VERIFY] and covers
-88.8% of the eligible union here. Retraction Watch sits lowest here (75.5%)
+behaves alike: in Salami et al. (2024a) PubMed had the highest agreement
+score, indexing as retracted 22,766 (87.69%) of the 25,962 union list items it
+covers, and here it covers 88.8% of the eligible union. Retraction Watch sits lowest here (75.5%)
 because the union includes OpenAlex, whose flag reaches many papers no other
 registry marks; Section 4.4 asks how many of those are real.
 
@@ -455,42 +453,48 @@ https://doi.org/10.17605/OSF.IO/D7GSF.
 
 ## References
 
-[VERIFY every entry against the source before submission; DOIs marked with a
-question mark disagreed between two searches.]
-
 - Bar-Ilan, J., and Halevi, G. (2017). Post retraction citations in context:
   a case study. *Scientometrics*, 113(1), 547 to 565.
   https://doi.org/10.1007/s11192-017-2242-0
 - Hauschke, C., and Nazarovets, S. (2025). (Non-)retracted academic papers in
-  OpenAlex. *Journal of Information Science*, 52(4). arXiv:2403.13339.
-  DOI 10.1177/01655515251322478 (?)
+  OpenAlex. *Journal of Information Science*, 52(4), 993 to 997. First
+  published online 2025. https://doi.org/10.1177/01655515251322478
+  (preprint arXiv:2403.13339)
 - Hsiao, T.-K., and Schneider, J. (2021). Continued use of retracted papers:
   temporal trends in citations and (lack of) awareness of retractions shown
   in citation contexts in biomedicine. *Quantitative Science Studies*, 2(4),
   1144 to 1169. https://doi.org/10.1162/qss_a_00155
 - Ortega, J. L., and Delgado-Quirós, L. (2024). The indexation of retracted
-  literature in seven principal scholarly databases. *Scientometrics*,
+  literature in seven principal scholarly databases: a coverage comparison
+  of dimensions, OpenAlex, PubMed, Scilit, Scopus, The Lens and Web of
+  Science. *Scientometrics*,
   129(7), 3769 to 3785. https://doi.org/10.1007/s11192-024-05034-y
 - Retraction Watch (n.d.). Retraction Watch Database User Guide, Appendix D:
   Changes. Accessed 2026-10-26.
   https://retractionwatch.com/retraction-watch-database-user-guide/retraction-watch-database-user-guide-appendix-d-changes/
+- Salami, M. O., and McCumber, C. (2026). Redacted dataset for Analyzing the
+  Consistency of Retraction Indexing (version 2, corrected 2026-07-10).
+  University of Illinois Urbana-Champaign Databank.
+  https://doi.org/10.13012/B2IDB-8114408_V2
 - Salami, M. O., McCumber, C., and Schneider, J. (2024a). Analyzing the
-  consistency of retraction indexing. MetaArXiv, version 4 of 2026-08-05.
+  Consistency of Retraction Indexing. MetaArXiv, version 4 of 2026-08-05.
   https://doi.org/10.31222/osf.io/gvfk5_v4
-- Salami, M. O., McCumber, C., and Schneider, J. (2024b). Reassessment [full
-  title not yet checked]. ASIS&T MET-STI workshop. Corrected
-  2026-07-31. https://doi.org/10.5281/zenodo.21657305
+- Salami, M. O., McCumber, C., and Schneider, J. (2024b). Reassessment of
+  the agreement in retraction indexing across 4 multidisciplinary sources:
+  Crossref, Retraction Watch, Scopus, and Web of Science. ASIS&T MET-STI 2024
+  workshop. Corrected 2026-07-31. https://doi.org/10.5281/zenodo.21657305
 - Schneider, J., Lee, J., Zheng, H., and Salami, M. O. (2023). Assessing the
   agreement in retraction indexing across 4 multidisciplinary sources:
-  Crossref, Retraction Watch, Scopus, and Web of Science. STI 2023.
-  https://doi.org/10.55835/6441e5cae04dbe5586d06a5f
+  Crossref, Retraction Watch, Scopus, and Web of Science. 27th
+  International Conference on Science, Technology and Innovation Indicators
+  (STI 2023), Leiden. https://doi.org/10.55835/6441e5cae04dbe5586d06a5f
 - Schneider, J., Ye, D., Hill, A. M., and Whitehorn, A. S. (2020). Continued
-  post retraction citation of a fraudulent clinical trial report, 11 years
+  post-retraction citation of a fraudulent clinical trial report, 11 years
   after it was retracted for falsifying data. *Scientometrics*, 125(3),
   2877 to 2913. https://doi.org/10.1007/s11192-020-03631-1
 - Sebo, P., and Sebo, M. (2025). Comparing the performance of Retraction
   Watch Database, PubMed, and Web of Science in identifying retracted
-  publications in medicine. *Accountability in Research*.
+  publications in medicine. *Accountability in Research*, 33(2), 2484555.
   https://doi.org/10.1080/08989621.2025.2484555
 - Si, L., Salami, M. O., and Schneider, J. (2026). Tracking the data quality
   landscape of retracted papers: flag usage in titles and changes in DOI
