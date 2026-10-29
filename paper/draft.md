@@ -218,6 +218,11 @@ partial: 27 papers have no DOI, PMID, or PMCID, and nearly all of those are
 Retraction Watch records; and 19 of the 22 PubMed only papers have a PMID
 but no DOI. A labeller could infer the source from which links exist.
 
+After the first labelling was complete and scored, a second labeller labelled
+40 of the 200 rows, drawn with a fixed seed from the blank sheet. The second
+labeller worked alone from the same codebook and never saw the first labels,
+the flagging registry, or the scores (codebook change log, 2026-10-28).
+
 Precision per stratum is the share labelled `retracted` among papers not
 labelled `cannot_determine`, with Wilson 95% intervals. The frame estimate
 weights strata by population with a finite population correction, so the
@@ -369,6 +374,15 @@ all 14 undecided ones as not retracted, the worst case, it would be 69 of 89.
 Notices counted as papers make up 6 of the 200, the same failure as Section
 4.3 at a smaller scale, and they turn up in all three strata.
 
+The two labellers agree on 37 of the 40 rows they share (92.5%, Cohen's kappa
+0.80 over all labels) and on every row's split between `retracted` and the
+rest (kappa 1.0). No disagreement involves `retracted`. Twice the first
+labeller found `not_retracted` where the second could not determine the
+status, and once the first read a `concern` where the second read a `notice`.
+Under the second labels those two rows would leave the denominator and
+precision would rise slightly, so the first labels, which Table 3 reports,
+are the more conservative. <!-- runs/20261029T040003Z-audit-agree.json -->
+
 ### 4.5 Two secondary observations
 
 **Publisher batches set yearly medians.** Across 67,845 dated notices the
@@ -439,8 +453,9 @@ Six practices would make retraction studies easier to repeat.
 - PMC coverage is targeted at the 43,616 articles other registries mention,
   not every PMC article.
 - Citation counts are per year and start in 2012.
-- The hand audit has one labeller, so agreement between labellers is not
-  measured, and its blinding is partial (Section 3.5). Three clarifications
+- The second labeller covers 40 of the 200 audit rows, so agreement between
+  labellers rests on a fifth of the sample, and blinding is partial
+  (Section 3.5). Three clarifications
   of the codebook were made during labelling; each is logged with its date.
 
 ## Use of AI tools
@@ -471,7 +486,8 @@ Code, run reports, the audit codebook, and the labelled sheet:
 https://github.com/TanayPratapSingh/afterlife. Findings in this paper come
 from `runs/20261027T005839Z-findings.json`; the audit sample from
 `runs/20261027T004212Z-audit-sample.json`; the audit scores from
-`runs/20261027T221642Z-audit-score.json`. `afterlife findings` rebuilds every
+`runs/20261027T221642Z-audit-score.json`; agreement between labellers from
+`runs/20261029T040003Z-audit-agree.json`. `afterlife findings` rebuilds every
 number from the landed snapshots. The 39 Retraction Watch snapshots and every
 other source file, exactly as fetched, with checksums, are archived at
 https://doi.org/10.17605/OSF.IO/D7GSF (Singh, 2026).

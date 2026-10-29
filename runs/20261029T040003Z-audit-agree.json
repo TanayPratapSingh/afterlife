@@ -1,0 +1,33 @@
+{
+  "command": "audit-agree",
+  "argv": [
+    "audit",
+    "agree"
+  ],
+  "started_at": "2026-10-29T04:00:03.021550+00:00",
+  "finished_at": "2026-10-29T04:00:03.089963+00:00",
+  "seconds": 0.1,
+  "report": {
+    "labelled_by_both": 40,
+    "percent_agreement": 0.925,
+    "kappa": 0.8007,
+    "kappa_retracted_or_not": 1.0,
+    "disagreements": [
+      {
+        "sample_id": "A027",
+        "first": "not_retracted",
+        "second": "cannot_determine"
+      },
+      {
+        "sample_id": "A046",
+        "first": "concern",
+        "second": "notice"
+      },
+      {
+        "sample_id": "A130",
+        "first": "not_retracted",
+        "second": "cannot_determine"
+      }
+    ]
+  }
+}

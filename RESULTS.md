@@ -256,6 +256,8 @@ From `runs/20261027T221642Z-audit-score.json`, labelled by hand against `docs/au
 
 Stratified estimate over all 36,401 papers flagged by exactly one registry: 95.0% retracted (91.5% to 98.6%).
 
+Second labeller, from `runs/20261029T040003Z-audit-agree.json`, blind to the first labels: 92.5% agreement on 40 rows, Cohen's kappa 0.8007 on all labels and 1.0 on retracted against everything else. Disagreements (first, second): A027 not_retracted, cannot_determine; A046 concern, notice; A130 not_retracted, cannot_determine. The first labels stay the primary estimate.
+
 ## 10. Cross engine conformance
 
 From `runs/20261019T224522Z-conformance.json`: the gold models built on DuckDB and on Spark SQL, every row compared after normalizing decimals to 6 places and dates to ISO strings.

@@ -478,6 +478,23 @@ def render(findings_path: Path) -> str:
                 f"one registry: {est['precision']:.1%} retracted ({est['ci95'][0]:.1%} to "
                 f"{est['ci95'][1]:.1%}).",
             ]
+        agree = _latest("*-audit-agree.json")
+        if agree:
+            g = json.loads(agree.read_text())["report"]
+            parts += [
+                "",
+                f"Second labeller, from `runs/{agree.name}`, blind to the first labels: "
+                f"{g['percent_agreement']:.1%} agreement on {g['labelled_by_both']} rows, "
+                f"Cohen's kappa {g['kappa']} on all labels and {g['kappa_retracted_or_not']} "
+                "on retracted against everything else. Disagreements (first, second): "
+                + (
+                    "; ".join(
+                        f"{d['sample_id']} {d['first']}, {d['second']}" for d in g["disagreements"]
+                    )
+                    or "none"
+                )
+                + ". The first labels stay the primary estimate.",
+            ]
 
     conf = _latest("*-conformance.json")
     if conf:

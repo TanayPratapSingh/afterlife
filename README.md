@@ -86,7 +86,10 @@ September 2024 would have seen 9,030 retractions; the database now holds
 a codebook committed before any label ([docs/audit-codebook.md](docs/audit-codebook.md)),
 estimates that 95.0% (91.5% to 98.6%) were in fact retracted
 (`runs/20261027T221642Z-audit-score.json`). The registries disagree mostly by
-omission, not by error; notices counted as papers were 6 of the 200.
+omission, not by error; notices counted as papers were 6 of the 200. A second
+labeller, blind to the first, agreed on 37 of 40 shared rows (Cohen's kappa
+0.80) and on every retracted or not call
+(`runs/20261029T040003Z-audit-agree.json`).
 
 ## Incidents the pipeline caught
 
