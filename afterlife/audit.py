@@ -457,3 +457,61 @@ def run_score(
             raise SystemExit(f"labels found in both {sheet.name} and {workbook.name}; keep one")
         labels, source = read_workbook(workbook), workbook
     return {"sample_run": path.name, "labels_from": source.name, **score(labels, report)}
+
+
+SECOND = ROOT / "audit" / "labels_second.xlsx"
+
+
+def second_sheet(n: int = 40, sheet: Path = SHEET, path: Path = SECOND) -> dict:
+    """A blank workbook of n rows for a second labeller, drawn with a fixed seed
+    from the committed blank sheet, so the first labels can never leak into it."""
+    import hashlib
+
+    with sheet.open(newline="") as fh:
+        rows = list(csv.DictReader(fh))
+    seed = SEED + "-second"
+    pick = sorted(rows, key=lambda r: hashlib.md5((seed + r["sample_id"]).encode()).hexdigest())
+    pick = sorted(pick[:n], key=lambda r: r["sample_id"])
+    for r in pick:
+        r.update(label="", evidence_url="", notes="")
+    return {
+        **write_workbook(pick, path),
+        "seed": seed,
+        "sample_ids": [r["sample_id"] for r in pick],
+    }
+
+
+def kappa(pairs: list[tuple[str, str]]) -> float | None:
+    """Cohen's kappa for two raters; None when chance agreement is total."""
+    if not pairs:
+        return None
+    n = len(pairs)
+    po = sum(a == b for a, b in pairs) / n
+    cats = {c for p in pairs for c in p}
+    pe = sum(
+        (sum(a == c for a, _ in pairs) / n) * (sum(b == c for _, b in pairs) / n) for c in cats
+    )
+    return None if pe == 1 else round((po - pe) / (1 - pe), 4)
+
+
+def agreement(first: Path = WORKBOOK, second: Path = SECOND) -> dict:
+    """Agreement between the first labeller and the second on the rows both labelled.
+    The first labeller's labels stay the primary estimate; this only measures them."""
+    a = {r["sample_id"]: r["label"].lower() for r in read_workbook(first)}
+    b = {r["sample_id"]: r["label"].lower() for r in read_workbook(second) if r["label"]}
+    bad = [f"{s}: {lab!r}" for s, lab in b.items() if lab not in LABELS or s not in a]
+    if bad:
+        raise SystemExit("second labels not in the codebook or unknown ids: " + ", ".join(bad))
+    pairs = [(a[s], b[s]) for s in sorted(b)]
+    binary = [(str(x == "retracted"), str(y == "retracted")) for x, y in pairs]
+    return {
+        "labelled_by_both": len(pairs),
+        "percent_agreement": round(sum(x == y for x, y in pairs) / len(pairs), 4)
+        if pairs
+        else None,
+        "kappa": kappa(pairs),
+        "kappa_retracted_or_not": kappa(binary),
+        "disagreements": [
+            {"sample_id": s, "first": a[s], "second": b[s]} for s in sorted(b) if a[s] != b[s]
+        ],
+    }

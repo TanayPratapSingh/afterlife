@@ -103,3 +103,11 @@ correction. It runs on a partial sheet too, to check progress.
   from the publisher; a retraction linked to only one of the records applies
   to both. Note the split in Notes. Distinct versions with their own publisher
   pages (the earlier rule) are still labelled separately.
+- 2026-10-28, after the first labelling was complete and scored: a second
+  labeller labels 40 rows in `audit/labels_second.xlsx`, drawn with the fixed
+  seed in `afterlife audit second` from the blank sheet. The second labeller
+  uses this codebook (including every entry above), never sees the first
+  labels, the key, or the scores, and works alone. `afterlife audit agree`
+  reports percent agreement and Cohen's kappa, on all six labels and on
+  retracted against everything else. Disagreements are reported as they are;
+  the first labels stay the primary estimate and are not changed.

@@ -133,6 +133,32 @@ def test_workbook_round_trip(tmp_path):
     )
 
 
+def test_kappa():
+    # po 0.75, chance 0.5, so kappa 0.5
+    assert audit.kappa([("a", "a"), ("a", "b"), ("b", "b"), ("b", "b")]) == 0.5
+    assert audit.kappa([("a", "a"), ("a", "a")]) is None  # all one category: undefined
+    assert audit.kappa([]) is None
+
+
+def test_second_sheet_is_blank_and_seeded(tmp_path):
+    pytest.importorskip("openpyxl")
+    blank = tmp_path / "blank.csv"
+    rows = [
+        {**dict.fromkeys(audit.COLUMNS, ""), "sample_id": f"A{i:03d}", "title": f"T{i}"}
+        for i in range(1, 11)
+    ]
+    import csv
+
+    with blank.open("w", newline="") as fh:
+        w = csv.DictWriter(fh, fieldnames=audit.COLUMNS)
+        w.writeheader()
+        w.writerows(rows)
+    one = audit.second_sheet(4, sheet=blank, path=tmp_path / "s1.xlsx")
+    two = audit.second_sheet(4, sheet=blank, path=tmp_path / "s2.xlsx")
+    assert one["sample_ids"] == two["sample_ids"] and len(one["sample_ids"]) == 4
+    assert all(not r["label"] for r in audit.read_workbook(tmp_path / "s1.xlsx"))
+
+
 def test_score_rejects_labels_outside_the_codebook():
     with pytest.raises(SystemExit, match="A001"):
         audit.score(_labels("maybe", "", "", "", ""), _report())
