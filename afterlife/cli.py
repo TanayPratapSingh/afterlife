@@ -11,6 +11,7 @@
     afterlife conformance
     afterlife results
     afterlife audit sample|sheet|score|second|agree
+    afterlife fetch pubmed-notices; afterlife fetch pmc-notices; afterlife notices
 
 The landing zone is `data/` by default, or an S3 bucket when
 AFTERLIFE_LANDING=s3://bucket. The lake is `data/lake` by default, or a Unity
@@ -77,7 +78,12 @@ def _landed_today(store: Store, source: str) -> str | None:
 
 def cmd_fetch(args) -> dict:
     store = store_from_env()
-    source_dir = {"openalex": "openalex", "pubmed": "pubmed"}.get(args.source)
+    source_dir = {
+        "openalex": "openalex",
+        "pubmed": "pubmed",
+        "pubmed-notices": "pubmed_notices",
+        "pmc-notices": "pmc_notices",
+    }.get(args.source)
     if source_dir and not args.force and (key := _landed_today(store, source_dir)):
         return {"skipped": "already landed today", "manifest": key}
     if args.source == "retraction-watch":
@@ -112,6 +118,17 @@ def cmd_fetch(args) -> dict:
 
         m, new = pubmed.land_flagged(store)
         return {"object_key": m.object_key, "records": m.records, "new": new, "notes": m.notes}
+    if args.source == "pubmed-notices":
+        from afterlife.sources import pubmed
+
+        landed = pubmed.land_notices(store)
+        return {
+            m.object_key: {"new": new, "records": m.records, "notes": m.notes} for m, new in landed
+        }
+    if args.source == "pmc-notices":
+        from afterlife import notices
+
+        return notices.fetch(store, workers=args.workers)
     if args.source == "pmc-ids":
         from afterlife.sources import pmc
 
@@ -188,6 +205,12 @@ def cmd_findings(args) -> dict:
     return findings.run()
 
 
+def cmd_notices(args) -> dict:
+    from afterlife import notices
+
+    return notices.run(store_from_env())
+
+
 def cmd_audit(args) -> dict:
     from afterlife import audit
 
@@ -207,7 +230,18 @@ def main(argv: list[str] | None = None) -> int:
     sub = p.add_subparsers(dest="command", required=True)
 
     f = sub.add_parser("fetch", help="land a source snapshot")
-    f.add_argument("source", choices=["retraction-watch", "openalex", "pubmed", "pmc-ids", "pmc"])
+    f.add_argument(
+        "source",
+        choices=[
+            "retraction-watch",
+            "openalex",
+            "pubmed",
+            "pmc-ids",
+            "pmc",
+            "pubmed-notices",
+            "pmc-notices",
+        ],
+    )
     f.add_argument("--targets", help="file of PMCIDs, one per line (default: from silver)")
     f.add_argument("--monthly", action="store_true")
     f.add_argument("--last-days", type=int, default=0)
@@ -228,6 +262,9 @@ def main(argv: list[str] | None = None) -> int:
     e.add_argument("--out", default="data/export")
     e.set_defaults(func=cmd_export)
     sub.add_parser("findings").set_defaults(func=cmd_findings)
+    sub.add_parser(
+        "notices", help="how often PMC retraction notices link to what they retract"
+    ).set_defaults(func=cmd_notices)
     r = sub.add_parser("results", help="render RESULTS.md from run reports")
     r.add_argument("--findings", help="a runs/*-findings.json (default: the newest)")
     r.set_defaults(func=cmd_results)

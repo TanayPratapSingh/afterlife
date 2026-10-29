@@ -1,0 +1,44 @@
+{
+  "command": "fetch-pmc-notices",
+  "argv": [
+    "fetch",
+    "pmc-notices",
+    "--workers",
+    "24"
+  ],
+  "started_at": "2026-10-29T04:58:18.356231+00:00",
+  "finished_at": "2026-10-29T05:26:34.510642+00:00",
+  "seconds": 1696.2,
+  "report": {
+    "notices": {
+      "object_key": "landing/pmc_notices/snapshot_date=2026-10-29/notices.jsonl.gz",
+      "new": true,
+      "notes": {
+        "pubmed_notice_pmids": 34110,
+        "pubmed_complete": true,
+        "rw_snapshot": "2026-10-16",
+        "rw_notice_pmids": 28593,
+        "rw_notice_dois": 58063,
+        "pmcids": 22098,
+        "by_source": {
+          "pubmed+retraction_watch": 18238,
+          "pubmed": 3164,
+          "retraction_watch": 696
+        },
+        "in_open_data": 18574,
+        "with_xml": 18574
+      }
+    },
+    "targets": {
+      "object_key": "landing/pmc_notice_targets/snapshot_date=2026-10-29/targets.jsonl.gz",
+      "new": true,
+      "notes": {
+        "identifiers": 36387,
+        "in_pmc_ids": 35504,
+        "targets": 17786,
+        "in_open_data": 17479,
+        "flagged_retracted": 17466
+      }
+    }
+  }
+}

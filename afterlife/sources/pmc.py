@@ -24,14 +24,17 @@ docs/ARCHITECTURE.md and has not been run.
 
 from __future__ import annotations
 
+import csv
+import gzip
+import io
 import json
 import re
 from collections.abc import Iterable
 from concurrent.futures import ThreadPoolExecutor
 from datetime import date
 
-from afterlife.core import http
-from afterlife.core.landing import Manifest, Store, land
+from afterlife.core import http, ids
+from afterlife.core.landing import Manifest, Store, land, manifests, read_raw
 
 IDS_URL = "https://ftp.ncbi.nlm.nih.gov/pub/pmc/PMC-ids.csv.gz"
 BUCKET = "https://pmc-oa-opendata.s3.amazonaws.com"
@@ -128,3 +131,42 @@ def land_metadata(
             "version_gt_1": sum(1 for r in found if not r["metadata_key"].endswith(".1.json")),
         },
     )
+
+
+def fetch_document(pmcid: str, get=http.get) -> dict:
+    """`fetch_one` plus the article's JATS XML, which sits next to its metadata.
+    `xml` is None when the bucket holds metadata but no XML file."""
+    row = fetch_one(pmcid, get=get)
+    if row["in_open_data"]:
+        stem = row["metadata_key"].removeprefix("metadata/").removesuffix(".json")
+        try:
+            row["xml"] = get(f"{BUCKET}/{stem}/{stem}.xml", attempts=4).body.decode()
+        except http.HttpError as exc:
+            if exc.status not in (403, 404):
+                raise
+            row["xml"] = None
+    return row
+
+
+def lookup(
+    store: Store, pmids: Iterable[str] = (), dois: Iterable[str] = (), pmcids: Iterable[str] = ()
+) -> dict[tuple[str, str], dict]:
+    """Rows of the newest landed PMC-ids.csv for the identifiers asked for, keyed
+    by ("pmid", v), ("doi", v) or ("pmcid", v). Streams the file; holding all of
+    it would take gigabytes."""
+    want = {("pmid", p) for p in pmids} | {("doi", d) for d in dois}
+    want |= {("pmcid", p) for p in pmcids}
+    newest = max(manifests(store, "pmc_ids"), key=lambda m: m.snapshot_date)
+    out: dict[tuple[str, str], dict] = {}
+    with gzip.open(io.BytesIO(read_raw(store, newest)), "rt", newline="") as fh:
+        for r in csv.DictReader(fh):
+            row = {
+                "pmcid": ids.pmcid(r["PMCID"]),
+                "pmid": ids.pmid(r["PMID"]),
+                "doi": ids.doi(r["DOI"]),
+                "year": r["Year"],
+            }
+            for key in (("pmcid", row["pmcid"]), ("pmid", row["pmid"]), ("doi", row["doi"])):
+                if key in want:
+                    out[key] = row
+    return out

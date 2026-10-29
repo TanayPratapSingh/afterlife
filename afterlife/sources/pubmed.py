@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import time
 from datetime import date, timedelta
 
@@ -24,8 +25,18 @@ from afterlife.core.landing import Manifest, Store, land
 SOURCE = "pubmed"
 ESEARCH = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi"
 ESUMMARY = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi"
+EFETCH = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi"
 TERM = '"retracted publication"[pt]'
+# The notices themselves. NLM renamed the type: "retraction of publication"[pt]
+# returned 0 records on 2026-10-29, this term 34,110.
+NOTICE_TERM = '"retraction notice"[pt]'
 CEILING = 9_999
+
+_RECORD = re.compile(r"<PubmedArticle>(.*?)</PubmedArticle>", re.S)
+_FIRST_PMID = re.compile(r"<PMID[^>]*>(\d+)</PMID>")
+_RETRACTION_OF = re.compile(
+    r'<CommentsCorrections\s+RefType="RetractionOf"\s*>(.*?)</CommentsCorrections>', re.S
+)
 
 
 def _search(term: str, lo: date | None, hi: date | None, retmax: int, get, pause) -> dict:
@@ -54,14 +65,14 @@ def _search(term: str, lo: date | None, hi: date | None, retmax: int, get, pause
     return body
 
 
+def _default_pause():
+    interval = 0.11 if os.environ.get("NCBI_API_KEY") else 0.35
+    return lambda: time.sleep(interval)
+
+
 def fetch_flagged(term: str = TERM, *, today: date | None = None, get=http.get, pause=None) -> dict:
     """All PMIDs matching the term, with a record of how they were sliced."""
-    if pause is None:
-        interval = 0.11 if os.environ.get("NCBI_API_KEY") else 0.35
-
-        def pause() -> None:
-            time.sleep(interval)
-
+    pause = pause or _default_pause()
     today = today or date.today()
     total = int(_search(term, None, None, 0, get, pause)["count"])
     ranges = [(date(1800, 1, 1), date(1989, 12, 31))]
@@ -147,3 +158,84 @@ def land_flagged(
         cost_usd=0.0,
         notes=notes,
     )
+
+
+def retraction_of(xml: str) -> dict[str, dict]:
+    """Per record in an efetch response: the PMIDs its "Retraction of" links
+    name, and how many such links carry no PMID at all."""
+    out = {}
+    for block in _RECORD.findall(xml):
+        own = _FIRST_PMID.search(block)
+        if not own:
+            continue
+        refs = _RETRACTION_OF.findall(block)
+        pmids = sorted({m for r in refs for m in _FIRST_PMID.findall(r)}, key=int)
+        out[own.group(1)] = {
+            "pmids": pmids,
+            "refs_without_pmid": sum(1 for r in refs if not _FIRST_PMID.search(r)),
+        }
+    return out
+
+
+def fetch_records(pmids: list[str], *, get=http.get, pause=None, batch: int = 200) -> list[dict]:
+    """Full PubMed XML for the PMIDs, one efetch call per batch, kept as fetched."""
+    pause = pause or _default_pause()
+    out = []
+    for i in range(0, len(pmids), batch):
+        chunk = pmids[i : i + batch]
+        params: dict[str, object] = {
+            "db": "pubmed",
+            "id": ",".join(chunk),
+            "retmode": "xml",
+            "tool": "afterlife",
+        }
+        if key := os.environ.get("NCBI_API_KEY"):
+            params["api_key"] = key
+        pause()
+        out.append({"pmids": chunk, "xml": get(EFETCH, params, timeout=180).body.decode()})
+    return out
+
+
+def land_notices(
+    store: Store, snapshot_date: date | None = None, get=http.get, pause=None
+) -> list[tuple[Manifest, bool]]:
+    """Every PubMed retraction notice and its full record, for the link study."""
+    day = snapshot_date or date.today()
+    found = fetch_flagged(NOTICE_TERM, get=get, pause=pause)
+    ids_landed = land(
+        store,
+        source="pubmed_notices",
+        snapshot_date=day,
+        name="retraction_notice_pmids.json",
+        raw=json.dumps(found, sort_keys=True).encode(),
+        origin_url=f"{ESEARCH}?db=pubmed&term={NOTICE_TERM}",
+        origin_version="esearch",
+        records=len(found["pmids"]),
+        cost_usd=0.0,
+        notes={"term": NOTICE_TERM, **completeness(found)},
+    )
+    batches = fetch_records(found["pmids"], get=get, pause=pause)
+    links: dict[str, dict] = {}
+    for b in batches:
+        links.update(retraction_of(b["xml"]))
+    records_landed = land(
+        store,
+        source="pubmed_notices",
+        snapshot_date=day,
+        name="efetch.jsonl",
+        raw="".join(json.dumps(b, sort_keys=True) + "\n" for b in batches).encode(),
+        origin_url=EFETCH,
+        origin_version="efetch",
+        records=len(links),
+        cost_usd=0.0,
+        notes={
+            "requested": len(found["pmids"]),
+            "returned": len(links),
+            "with_retraction_of_pmid": sum(1 for v in links.values() if v["pmids"]),
+            "with_retraction_of_without_pmid": sum(
+                1 for v in links.values() if v["refs_without_pmid"]
+            ),
+        },
+        manifest_name="_manifest_efetch.json",
+    )
+    return [ids_landed, records_landed]

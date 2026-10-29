@@ -1,0 +1,402 @@
+{
+  "command": "notices",
+  "argv": [
+    "notices"
+  ],
+  "started_at": "2026-10-29T05:27:38.011161+00:00",
+  "finished_at": "2026-10-29T05:27:43.152684+00:00",
+  "seconds": 5.1,
+  "report": {
+    "frame": {
+      "candidates": 22098,
+      "in_open_data": 18574,
+      "with_xml": 18574,
+      "article_types": {
+        "retraction": 18296,
+        "research-article": 121,
+        "other": 97,
+        "correction": 21,
+        "editorial": 9,
+        "review-article": 7,
+        "case-report": 6,
+        "letter": 6,
+        "article-commentary": 5,
+        "brief-report": 2,
+        "expression-of-concern": 1,
+        "discussion": 1,
+        "chapter-article": 1,
+        "abstract": 1
+      },
+      "notices": 18296,
+      "notices_by_source": {
+        "pubmed+retraction_watch": 15399,
+        "retraction_watch": 85,
+        "pubmed": 2812
+      },
+      "notices_flagged_retracted_themselves": 1,
+      "not_notices_by_source": {
+        "retraction_watch": 200,
+        "pubmed+retraction_watch": 58,
+        "pubmed": 20
+      },
+      "not_in_open_data_by_source": {
+        "pubmed+retraction_watch": 2781,
+        "retraction_watch": 411,
+        "pubmed": 332
+      }
+    },
+    "link_classes": {
+      "linked": {
+        "n": 18296,
+        "k": 18267,
+        "share": 0.9984
+      },
+      "linked_without_identifier": {
+        "n": 18296,
+        "k": 19,
+        "share": 0.001
+      },
+      "other_related_type": {
+        "n": 18296,
+        "k": 4,
+        "share": 0.0002
+      },
+      "identifier_in_text": {
+        "n": 18296,
+        "k": 3,
+        "share": 0.0002
+      },
+      "no_identifier": {
+        "n": 18296,
+        "k": 3,
+        "share": 0.0002
+      }
+    },
+    "linked_id_types": {
+      "pmc": 18902,
+      "pubmed": 917,
+      "doi": 334,
+      "uri": 2
+    },
+    "related_article_types": {
+      "retracted-article": 20192,
+      "retraction-forward": 12353,
+      "expression-of-concern": 205,
+      "correction-forward": 31,
+      "companion": 22,
+      "statement-of-misconduct": 15,
+      "article-reference": 10,
+      "repub-note-target": 5,
+      "commentary": 4,
+      "alt-language": 2,
+      "letter": 2,
+      "retracted-republished-article": 2,
+      "addendum": 1
+    },
+    "linked_target_in_pmc": {
+      "n": 18265,
+      "k": 17570,
+      "share": 0.9619
+    },
+    "pubmed_agreement": {
+      "agree": 17742,
+      "pmc_target_has_no_pmid": 306,
+      "pmc_only": 138,
+      "notice_not_in_pubmed_set": 83,
+      "neither_links": 19,
+      "disagree": 4,
+      "pubmed_only": 4
+    },
+    "target_flagged_retracted": {
+      "both": {
+        "n": 17398,
+        "k": 17398,
+        "share": 1.0
+      },
+      "pubmed_only": {
+        "n": 9,
+        "k": 7,
+        "share": 0.7778
+      },
+      "xml_only": {
+        "n": 71,
+        "k": 68,
+        "share": 0.9577
+      }
+    },
+    "linked_by_year": {
+      "1966": {
+        "n": 1,
+        "k": 1,
+        "share": 1.0
+      },
+      "1987": {
+        "n": 1,
+        "k": 1,
+        "share": 1.0
+      },
+      "1990": {
+        "n": 1,
+        "k": 1,
+        "share": 1.0
+      },
+      "1997": {
+        "n": 1,
+        "k": 1,
+        "share": 1.0
+      },
+      "2003": {
+        "n": 4,
+        "k": 4,
+        "share": 1.0
+      },
+      "2004": {
+        "n": 3,
+        "k": 3,
+        "share": 1.0
+      },
+      "2005": {
+        "n": 3,
+        "k": 3,
+        "share": 1.0
+      },
+      "2006": {
+        "n": 7,
+        "k": 7,
+        "share": 1.0
+      },
+      "2007": {
+        "n": 9,
+        "k": 9,
+        "share": 1.0
+      },
+      "2008": {
+        "n": 11,
+        "k": 11,
+        "share": 1.0
+      },
+      "2009": {
+        "n": 22,
+        "k": 22,
+        "share": 1.0
+      },
+      "2010": {
+        "n": 25,
+        "k": 25,
+        "share": 1.0
+      },
+      "2011": {
+        "n": 43,
+        "k": 40,
+        "share": 0.9302
+      },
+      "2012": {
+        "n": 87,
+        "k": 84,
+        "share": 0.9655
+      },
+      "2013": {
+        "n": 87,
+        "k": 87,
+        "share": 1.0
+      },
+      "2014": {
+        "n": 110,
+        "k": 106,
+        "share": 0.9636
+      },
+      "2015": {
+        "n": 163,
+        "k": 162,
+        "share": 0.9939
+      },
+      "2016": {
+        "n": 244,
+        "k": 243,
+        "share": 0.9959
+      },
+      "2017": {
+        "n": 172,
+        "k": 169,
+        "share": 0.9826
+      },
+      "2018": {
+        "n": 242,
+        "k": 242,
+        "share": 1.0
+      },
+      "2019": {
+        "n": 332,
+        "k": 329,
+        "share": 0.991
+      },
+      "2020": {
+        "n": 508,
+        "k": 506,
+        "share": 0.9961
+      },
+      "2021": {
+        "n": 926,
+        "k": 925,
+        "share": 0.9989
+      },
+      "2022": {
+        "n": 1305,
+        "k": 1302,
+        "share": 0.9977
+      },
+      "2023": {
+        "n": 6912,
+        "k": 6909,
+        "share": 0.9996
+      },
+      "2024": {
+        "n": 2447,
+        "k": 2447,
+        "share": 1.0
+      },
+      "2025": {
+        "n": 2518,
+        "k": 2516,
+        "share": 0.9992
+      },
+      "2026": {
+        "n": 2112,
+        "k": 2112,
+        "share": 1.0
+      }
+    },
+    "linked_by_publisher": {
+      "Wiley": {
+        "n": 8248,
+        "k": 8246,
+        "share": 0.9998
+      },
+      "PLOS": {
+        "n": 1508,
+        "k": 1508,
+        "share": 1.0
+      },
+      "Spandidos Publications": {
+        "n": 1056,
+        "k": 1056,
+        "share": 1.0
+      },
+      "BMC": {
+        "n": 1048,
+        "k": 1047,
+        "share": 0.999
+      },
+      "Nature Publishing Group": {
+        "n": 730,
+        "k": 730,
+        "share": 1.0
+      },
+      "Dove Press": {
+        "n": 726,
+        "k": 726,
+        "share": 1.0
+      },
+      "Frontiers Media SA": {
+        "n": 725,
+        "k": 724,
+        "share": 0.9986
+      },
+      "Multidisciplinary Digital Publishing Institute (MDPI)": {
+        "n": 505,
+        "k": 504,
+        "share": 0.998
+      },
+      "unknown": {
+        "n": 417,
+        "k": 413,
+        "share": 0.9904
+      },
+      "Taylor & Francis": {
+        "n": 315,
+        "k": 315,
+        "share": 1.0
+      },
+      "Royal Society of Chemistry": {
+        "n": 275,
+        "k": 275,
+        "share": 1.0
+      },
+      "Cureus Inc.": {
+        "n": 249,
+        "k": 249,
+        "share": 1.0
+      },
+      "Portland Press Ltd": {
+        "n": 243,
+        "k": 243,
+        "share": 1.0
+      },
+      "Impact Journals, LLC": {
+        "n": 198,
+        "k": 198,
+        "share": 1.0
+      },
+      "SAGE Publications": {
+        "n": 178,
+        "k": 178,
+        "share": 1.0
+      }
+    },
+    "examples": {
+      "disagree": [
+        "PMC10091267",
+        "PMC4041000",
+        "PMC7969310",
+        "PMC7982155"
+      ],
+      "identifier_in_text": [
+        "PMC10113278",
+        "PMC10243602",
+        "PMC4419608"
+      ],
+      "no_identifier": [
+        "PMC10214346",
+        "PMC3526309",
+        "PMC7397951"
+      ],
+      "linked_without_identifier": [
+        "PMC10700943",
+        "PMC10774703",
+        "PMC12742508",
+        "PMC3145993",
+        "PMC3190014",
+        "PMC3531647",
+        "PMC4062333",
+        "PMC4175609",
+        "PMC4234363",
+        "PMC4776342",
+        "PMC4867346",
+        "PMC5628974",
+        "PMC5628975",
+        "PMC5628976",
+        "PMC6755656",
+        "PMC7206393",
+        "PMC7749466",
+        "PMC9469313",
+        "PMC9537666"
+      ],
+      "other_related_type": [
+        "PMC12443368",
+        "PMC4958267",
+        "PMC5037529",
+        "PMC6538722"
+      ],
+      "pubmed_only": [
+        "PMC12742508",
+        "PMC4776342",
+        "PMC5037529",
+        "PMC6538722"
+      ],
+      "unflagged_pubmed_only_target": [
+        "PMC13195230->PMC10378524",
+        "PMC13195232->PMC10378524"
+      ]
+    }
+  }
+}

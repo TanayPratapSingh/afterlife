@@ -1,0 +1,34 @@
+{
+  "command": "fetch-pubmed-notices",
+  "argv": [
+    "fetch",
+    "pubmed-notices"
+  ],
+  "started_at": "2026-10-29T04:27:51.502781+00:00",
+  "finished_at": "2026-10-29T04:58:04.852353+00:00",
+  "seconds": 1813.3,
+  "report": {
+    "landing/pubmed_notices/snapshot_date=2026-10-29/retraction_notice_pmids.json.gz": {
+      "new": true,
+      "records": 34110,
+      "notes": {
+        "term": "\"retraction notice\"[pt]",
+        "expected": 34110,
+        "unique_pmids": 34110,
+        "slice_count_sum": 35450,
+        "records_in_more_than_one_slice": 1340,
+        "complete": true
+      }
+    },
+    "landing/pubmed_notices/snapshot_date=2026-10-29/efetch.jsonl.gz": {
+      "new": true,
+      "records": 34110,
+      "notes": {
+        "requested": 34110,
+        "returned": 34110,
+        "with_retraction_of_pmid": 32892,
+        "with_retraction_of_without_pmid": 664
+      }
+    }
+  }
+}
