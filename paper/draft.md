@@ -7,31 +7,26 @@ ORCID https://orcid.org/0009-0004-8617-0218
 
 ## Abstract
 
-Retraction data are increasingly treated as infrastructure: metascience
-studies count retractions by year and reason, reference managers warn
-authors who cite retracted work, and retrieval systems filter retracted
-papers out. Since Crossref opened the Retraction Watch database in 2023, it
-has been republished daily, and studies cite it as if it were one fixed
-dataset. We
-replayed 39 snapshots spanning its entire public history (2024-09-02 to
-2026-10-16) and asked the same four questions of each, all about retractions
-dated 2023 or earlier, so that any change is the database revising the past.
-Over two years the number of such retractions grew 9.1%, the number citing
-"Paper Mill" grew 80.6%, the median time from publication to retraction rose
-from 379 to 420 days, and the count citing "Fake Peer Review", 4,654 in the
-first snapshot, fell to zero when the label was renamed. Almost all of the
+Since Crossref opened the Retraction Watch database in 2023, it has been
+republished daily, and studies cite it as if it were one fixed dataset. We
+replayed 39 snapshots spanning its public history (2024-09-02 to 2026-10-16)
+and asked each the same four questions about retractions dated 2023 or
+earlier, so that any change is the database revising the past. Over two years
+such retractions grew 9.1%, those citing "Paper Mill" grew 80.6%, the median
+time to retraction rose from 379 to 420 days, and records citing "Fake Peer
+Review" fell from 4,654 to zero when the label was renamed. Nearly all the
 growth is late cataloguing: 4,482 records added after the first snapshot,
-3,921 of them Hindawi retractions. We also join Retraction Watch with
-OpenAlex, PubMed, and PubMed Central. Of 89,681 papers that at least one
-registry flags, all eligible registries agree on 51.5%, and 49.3% of the works
-OpenAlex marks as retracted are retraction notices rather than retracted
-papers. We then checked by hand, blind to the source and with the rules
-committed publicly before any label, 200 of the 36,401 papers that only one
-registry flags. An estimated 95.0% (91.5% to 98.6%) were in fact retracted, so
-most disagreement comes from a registry missing a retraction, and few single
-flags point at papers that were never retracted. We recommend that studies
-cite and archive the snapshot they used, and we release the pipeline that
-rebuilds any snapshot on demand.
+3,921 of them Hindawi retractions. Joining Retraction Watch with OpenAlex,
+PubMed, and PubMed Central, all eligible registries agree on 51.5% of 89,681
+flagged papers, and 49.3% of the works OpenAlex marks as retracted are
+retraction notices, which its ingest rule flags along with the papers they
+retract. A blind hand audit of 200 papers that only one registry flags
+estimates that 95.0% (91.5% to 98.6%) were retracted, so most
+disagreement is a registry missing a retraction. We recommend citing and
+archiving the snapshot a study uses.
+
+**Keywords:** retraction; Retraction Watch; OpenAlex; research integrity;
+reproducibility; metascience
 
 <!-- as_of.series[0], as_of.series[-1], as_of.late_records, registries.papers,
 registries.all_eligible_agree, registries.excluded_as_notices -->
@@ -122,7 +117,9 @@ not classify contexts.
 
 ### 3.1 Sources
 
-All four sources were fetched on 2026-10-19 from public endpoints.
+All four sources were fetched on 2026-10-19 from public endpoints: the
+Retraction Watch Database (2026), OpenAlex (Priem et al., 2022), PubMed, and
+the PMC Article Datasets (National Library of Medicine, 2026).
 
 | Source | What we fetched |
 | --- | --- |
@@ -325,6 +322,12 @@ points, the 94.5% in the Tesseract Semantics (2026) report, on data fetched
 two months later. <!-- registries.rw_notice_dois_flagged_by_openalex,
 runs/20261027T005839Z-findings.json -->
 
+OpenAlex's public ingest code shows why. It sets `is_retracted` when either a
+work's Crossref `update-to` relation or its `updated-by` relation carries a
+retraction label (OpenAlex, 2026). A retraction notice is the record that
+carries `update-to`, pointing at the paper it retracts, so the rule flags the
+notice along with the paper.
+
 This differs from the failure Hauschke and Nazarovets (2025) reported, which
 flagged corrected papers and ran for three months in early 2024. This one
 flags the notice that announces a retraction, is current, and affects nine in
@@ -440,7 +443,29 @@ Six practices would make retraction studies easier to repeat.
   measured, and its blinding is partial (Section 3.5). Three clarifications
   of the codebook were made during labelling; each is logged with its date.
 
-## 7. Data and code availability
+## Use of AI tools
+
+Generative AI (Anthropic's Claude) assisted with writing code, drafting and
+editing text, and checking cited sources against their originals. The author
+designed the study, labelled every audit row by hand from publishers' pages,
+traced every reported number to a run report, and takes full responsibility
+for the content.
+
+## Author contributions
+
+Tanay Pratap Singh: Conceptualization, Data curation, Formal analysis,
+Investigation, Methodology, Software, Validation, Visualization, Writing
+(original draft), Writing (review and editing).
+
+## Competing interests
+
+The author has no competing interests.
+
+## Funding information
+
+This work received no specific funding.
+
+## Data availability
 
 Code, run reports, the audit codebook, and the labelled sheet:
 https://github.com/TanayPratapSingh/afterlife. Findings in this paper come
@@ -449,7 +474,7 @@ from `runs/20261027T005839Z-findings.json`; the audit sample from
 `runs/20261027T221642Z-audit-score.json`. `afterlife findings` rebuilds every
 number from the landed snapshots. The 39 Retraction Watch snapshots and every
 other source file, exactly as fetched, with checksums, are archived at
-https://doi.org/10.17605/OSF.IO/D7GSF.
+https://doi.org/10.17605/OSF.IO/D7GSF (Singh, 2026).
 
 ## References
 
@@ -464,11 +489,24 @@ https://doi.org/10.17605/OSF.IO/D7GSF.
   temporal trends in citations and (lack of) awareness of retractions shown
   in citation contexts in biomedicine. *Quantitative Science Studies*, 2(4),
   1144 to 1169. https://doi.org/10.1162/qss_a_00155
+- National Library of Medicine (2026). PMC Article Datasets and PMC-ids.csv,
+  NIH NLM NCBI PubMed Central. Accessed 2026-10-19.
+  https://registry.opendata.aws/ncbi-pmc
+- OpenAlex (2026). openalex-walden, notebooks/ingest/Crossref.py, lines 507
+  to 510, commit 888f557. GitHub.
+  https://github.com/ourresearch/openalex-walden/blob/888f557e3eb5b6ca155bb71f29b9b1d202768e02/notebooks/ingest/Crossref.py#L507-L510
 - Ortega, J. L., and Delgado-Quirós, L. (2024). The indexation of retracted
   literature in seven principal scholarly databases: a coverage comparison
   of dimensions, OpenAlex, PubMed, Scilit, Scopus, The Lens and Web of
   Science. *Scientometrics*,
   129(7), 3769 to 3785. https://doi.org/10.1007/s11192-024-05034-y
+- Priem, J., Piwowar, H., and Orr, R. (2022). OpenAlex: A fully-open index
+  of scholarly works, authors, venues, institutions, and concepts.
+  arXiv:2205.01833. https://arxiv.org/abs/2205.01833
+- Retraction Watch Database (2026). The Center for Scientific Integrity,
+  distributed by Crossref. Snapshots 2024-09-02 to 2026-10-16.
+  https://doi.org/10.13003/c23rw1d9 and
+  https://gitlab.com/crossref/retraction-watch-data
 - Retraction Watch (n.d.). Retraction Watch Database User Guide, Appendix D:
   Changes. Accessed 2026-10-26.
   https://retractionwatch.com/retraction-watch-database-user-guide/retraction-watch-database-user-guide-appendix-d-changes/
@@ -496,6 +534,8 @@ https://doi.org/10.17605/OSF.IO/D7GSF.
   Watch Database, PubMed, and Web of Science in identifying retracted
   publications in medicine. *Accountability in Research*, 33(2), 2484555.
   https://doi.org/10.1080/08989621.2025.2484555
+- Singh, T. P. (2026). afterlife: Retraction Watch snapshots and four
+  registry data [Data set]. OSF. https://doi.org/10.17605/OSF.IO/D7GSF
 - Si, L., Salami, M. O., and Schneider, J. (2026). Tracking the data quality
   landscape of retracted papers: flag usage in titles and changes in DOI
   retraction status. https://jodischneider.com/pubs/stiend2026.pdf

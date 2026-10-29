@@ -37,7 +37,6 @@ PREAMBLE = r"""\documentclass[11pt]{article}
 \setlength{\parindent}{0pt}
 \renewcommand{\arraystretch}{1.15}
 \newcommand{\todo}[1]{\textcolor{red!75!black}{#1}}
-\begin{document}
 """
 
 _SPECIAL = {
@@ -119,7 +118,7 @@ def _list(lines: list[str]) -> str:
     return f"\\begin{{{env}}}\n{body}\n\\end{{{env}}}"
 
 
-def convert(md: str) -> str:
+def convert(md: str, lines: bool = False) -> str:
     md = re.sub(r"<!--.*?-->", "", md, flags=re.S)
     blocks = [b.strip("\n") for b in re.split(r"\n\s*\n", md) if b.strip()]
     title_block = blocks.pop(0).splitlines()
@@ -127,7 +126,10 @@ def convert(md: str) -> str:
     if not authors and not blocks[0].startswith("#"):
         authors = blocks.pop(0).splitlines()
     out = [
-        PREAMBLE,
+        # QSS suggests line numbers on submitted manuscripts.
+        PREAMBLE
+        + ("\\usepackage{lineno}\n\\linenumbers\n" if lines else "")
+        + "\\begin{document}\n",
         rf"\title{{{inline(title)}}}",
         r"\author{" + r" \\ ".join(inline(a) for a in authors) + "}",
         r"\date{}",
@@ -185,10 +187,14 @@ def _selfcheck() -> None:
 
 
 if __name__ == "__main__":
+    import sys
+
     _selfcheck()
+    qss = "--qss" in sys.argv  # line numbered copy for journal submission
+    name = "paper-qss" if qss else "paper"
     BUILD.mkdir(exist_ok=True)
-    tex = BUILD / "paper.tex"
-    tex.write_text(convert((HERE / "draft.md").read_text()))
+    tex = BUILD / f"{name}.tex"
+    tex.write_text(convert((HERE / "draft.md").read_text(), lines=qss))
     subprocess.run(["tectonic", "--keep-logs", str(tex)], check=True, cwd=BUILD)
-    shutil.copy(BUILD / "paper.pdf", HERE / "paper.pdf")
-    print(f"wrote {(HERE / 'paper.pdf').relative_to(HERE.parent)}")
+    shutil.copy(BUILD / f"{name}.pdf", HERE / f"{name}.pdf")
+    print(f"wrote {(HERE / f'{name}.pdf').relative_to(HERE.parent)}")
