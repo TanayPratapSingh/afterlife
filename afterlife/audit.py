@@ -456,7 +456,30 @@ def run_score(
         if any(r["label"].strip() for r in labels):
             raise SystemExit(f"labels found in both {sheet.name} and {workbook.name}; keep one")
         labels, source = read_workbook(workbook), workbook
-    return {"sample_run": path.name, "labels_from": source.name, **score(labels, report)}
+    # The frame can shrink when gold is corrected (the 2026-10-29 notice fix moved
+    # thousands of papers from one registry to two). Sampled papers still in the
+    # frame, in the same stratum, remain a random sample of what is left there, so
+    # score those against the current stratum sizes and keep the as drawn score.
+    from afterlife.export import _connect
+
+    current = {r["paper_key"]: r["stratum"] for r in _frame(_connect())}
+    sizes: dict[str, int] = {}
+    for s in current.values():
+        sizes[s] = sizes.get(s, 0) + 1
+    kept = [k for k in report["key"] if current.get(k["paper_key"]) == k["stratum"]]
+    ids = {k["sample_id"] for k in kept}
+    now = {
+        "key": kept,
+        "stratum_sizes": {s: sizes.get(s, 0) for s in report["stratum_sizes"]},
+        "allocation": {s: sum(k["stratum"] == s for k in kept) for s in report["stratum_sizes"]},
+    }
+    return {
+        "sample_run": path.name,
+        "labels_from": source.name,
+        "dropped_from_frame": len(report["key"]) - len(kept),
+        **score([r for r in labels if r["sample_id"] in ids], now),
+        "as_drawn": score(labels, report),
+    }
 
 
 SECOND = ROOT / "audit" / "labels_second.xlsx"

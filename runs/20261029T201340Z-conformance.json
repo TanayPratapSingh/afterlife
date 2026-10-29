@@ -1,0 +1,113 @@
+{
+  "command": "conformance",
+  "argv": [
+    "conformance"
+  ],
+  "started_at": "2026-10-29T20:12:08.024207+00:00",
+  "finished_at": "2026-10-29T20:13:40.784251+00:00",
+  "seconds": 92.8,
+  "report": {
+    "summary": {
+      "marts": 7,
+      "identical": 7,
+      "rows_compared": 224009
+    },
+    "builds": {
+      "duckdb": {
+        "exit_code": 0,
+        "elapsed_s": 26.6,
+        "status_counts": {
+          "success": 9,
+          "pass": 18
+        }
+      },
+      "spark": {
+        "exit_code": 0,
+        "elapsed_s": 48.8,
+        "status_counts": {
+          "success": 9,
+          "pass": 18
+        }
+      }
+    },
+    "marts": {
+      "registry": {
+        "rows_duckdb": 92097,
+        "rows_spark": 92097,
+        "columns_only_in_duckdb": [],
+        "columns_only_in_spark": [],
+        "rows_only_in_duckdb": 0,
+        "rows_only_in_spark": 0,
+        "identical": true,
+        "sample_only_in_duckdb": [],
+        "sample_only_in_spark": []
+      },
+      "registry_agreement": {
+        "rows_duckdb": 4,
+        "rows_spark": 4,
+        "columns_only_in_duckdb": [],
+        "columns_only_in_spark": [],
+        "rows_only_in_duckdb": 0,
+        "rows_only_in_spark": 0,
+        "identical": true,
+        "sample_only_in_duckdb": [],
+        "sample_only_in_spark": []
+      },
+      "flag_exclusions": {
+        "rows_duckdb": 7,
+        "rows_spark": 7,
+        "columns_only_in_duckdb": [],
+        "columns_only_in_spark": [],
+        "rows_only_in_duckdb": 0,
+        "rows_only_in_spark": 0,
+        "identical": true,
+        "sample_only_in_duckdb": [],
+        "sample_only_in_spark": []
+      },
+      "retraction_lag": {
+        "rows_duckdb": 67845,
+        "rows_spark": 67845,
+        "columns_only_in_duckdb": [],
+        "columns_only_in_spark": [],
+        "rows_only_in_duckdb": 0,
+        "rows_only_in_spark": 0,
+        "identical": true,
+        "sample_only_in_duckdb": [],
+        "sample_only_in_spark": []
+      },
+      "afterlife_citations": {
+        "rows_duckdb": 61205,
+        "rows_spark": 61205,
+        "columns_only_in_duckdb": [],
+        "columns_only_in_spark": [],
+        "rows_only_in_duckdb": 0,
+        "rows_only_in_spark": 0,
+        "identical": true,
+        "sample_only_in_duckdb": [],
+        "sample_only_in_spark": []
+      },
+      "reason_trends": {
+        "rows_duckdb": 2527,
+        "rows_spark": 2527,
+        "columns_only_in_duckdb": [],
+        "columns_only_in_spark": [],
+        "rows_only_in_duckdb": 0,
+        "rows_only_in_spark": 0,
+        "identical": true,
+        "sample_only_in_duckdb": [],
+        "sample_only_in_spark": []
+      },
+      "record_mutability": {
+        "rows_duckdb": 324,
+        "rows_spark": 324,
+        "columns_only_in_duckdb": [],
+        "columns_only_in_spark": [],
+        "rows_only_in_duckdb": 0,
+        "rows_only_in_spark": 0,
+        "identical": true,
+        "sample_only_in_duckdb": [],
+        "sample_only_in_spark": []
+      }
+    }
+  }
+}

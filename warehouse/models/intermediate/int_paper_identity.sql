@@ -126,14 +126,27 @@ unioned as (
 
 select
     u.*,
+    -- An identifier Retraction Watch also records as the retracted paper's own
+    -- is the paper, never a notice: IEEE and some others stamp the notice onto
+    -- the paper's page, so notice and paper share one DOI. Treating those as
+    -- notices discarded 11,852 OpenAlex flags on real papers (fixed 2026-10-29).
     case
-        when u.source = 'openalex' and oa_type.type = 'retraction' then 'openalex_type_retraction'
-        when nd.doi is not null and u.source <> 'retraction_watch' then 'rw_notice_doi'
-        when np.pmid is not null and u.source <> 'retraction_watch' then 'rw_notice_pmid'
+        when u.source = 'openalex' and oa_type.type = 'retraction' and pd.doi is null
+            then 'openalex_type_retraction'
+        when nd.doi is not null and pd.doi is null and u.source <> 'retraction_watch'
+            then 'rw_notice_doi'
+        when np.pmid is not null and pp.pmid is null and u.source <> 'retraction_watch'
+            then 'rw_notice_pmid'
     end as notice_reason
 from unioned u
 left join notice_dois nd on nd.doi = u.doi
 left join notice_pmids np on np.pmid = u.pmid
+left join (
+    select distinct doi from {{ source('silver', 'rw_notices') }} where doi is not null
+) pd on pd.doi = u.doi
+left join (
+    select distinct pmid from {{ source('silver', 'rw_notices') }} where pmid is not null
+) pp on pp.pmid = u.pmid
 left join (
     select openalex_id, type from {{ source('silver', 'openalex_works') }}
 ) oa_type on u.source = 'openalex' and oa_type.openalex_id = u.source_key

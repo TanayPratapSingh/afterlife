@@ -109,8 +109,28 @@ def registries(con) -> dict:
                   (select count(*) from nd join oa_flagged_dois using (d))
                     as flagged_by_openalex""",
     )
+    # By DOI prefix, which names the registrant the same way in every registry.
+    by_prefix = _rows(
+        con,
+        f"""
+        with e as (
+          select split_part(doi, '/', 1) as prefix, {FLAGGED_SQL} as flagged,
+                 2 + (case when pmid is not null then 1 else 0 end)
+                   + (case when flag_pmc is not null then 1 else 0 end) as eligible
+          from gold.registry where verdict in ('retracted', 'disputed') and doi is not null),
+        names as (
+          select split_part(doi, '/', 1) as prefix, mode(publisher) as publisher
+          from delta_scan('{lake}/silver/rw_notices') where doi is not null group by 1)
+        select e.prefix, max(n.publisher) as publisher, count(*) as papers,
+               round(avg(case when flagged = eligible then 1 else 0 end), 4)
+                 as all_eligible_agree,
+               round(avg(case when flagged = 1 then 1 else 0 end), 4) as flagged_by_exactly_one
+        from e left join names n using (prefix)
+        group by 1 order by papers desc limit 10""",
+    )
     return {
         "pmc_notice_articles": pmc_notices,
+        "by_doi_prefix": by_prefix,
         "rw_notice_dois_flagged_by_openalex": notice_side,
         "by_verdict": by_verdict,
         "agreement": agreement,

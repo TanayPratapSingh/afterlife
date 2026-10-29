@@ -1,0 +1,1633 @@
+{
+  "command": "findings",
+  "argv": [
+    "findings"
+  ],
+  "started_at": "2026-10-29T20:15:09.315445+00:00",
+  "finished_at": "2026-10-29T20:15:14.636946+00:00",
+  "seconds": 5.3,
+  "report": {
+    "sources": {
+      "retraction_watch": {
+        "snapshots": 39,
+        "first": "2024-09-02",
+        "last": "2026-10-16",
+        "records_first": 55804,
+        "records_last": 73283,
+        "raw_bytes_last": 67562752,
+        "non_utf8_snapshots": [
+          {
+            "snapshot_date": "2026-10-15",
+            "encoding": "cp1252",
+            "invalid_utf8_bytes": 35954
+          }
+        ]
+      },
+      "openalex": {
+        "snapshot_date": "2026-10-19",
+        "records": 136873,
+        "raw_bytes": 82972205,
+        "cost_usd": 0.0709,
+        "calls": 709,
+        "complete": true,
+        "counts_by_year_min_year": 2012,
+        "expected": 136970,
+        "fetched": 136873,
+        "filter": "is_retracted:true",
+        "limit_usd": 0.09,
+        "mode": "basic",
+        "slice_count_sum": 136873,
+        "spent_usd": 0.0709,
+        "uncovered_by_date_slices": 97,
+        "unique": 136873
+      },
+      "pubmed": {
+        "snapshot_date": "2026-10-19",
+        "records": 35169,
+        "raw_bytes": 424225,
+        "cost_usd": 0.0,
+        "complete": true,
+        "expected": 35169,
+        "records_in_more_than_one_slice": 3859,
+        "slice_count_sum": 39028,
+        "term": "\"retracted publication\"[pt]",
+        "unique_pmids": 35169
+      },
+      "pmc_ids": {
+        "snapshot_date": "2026-10-19",
+        "records": null,
+        "raw_bytes": 256493845,
+        "cost_usd": null,
+        "last_modified": "Mon, 19 Oct 2026 08:54:57 GMT"
+      },
+      "pmc_metadata": {
+        "snapshot_date": "2026-10-19",
+        "records": 43616,
+        "raw_bytes": 19753766,
+        "cost_usd": 0.0,
+        "flagged_retracted": 18935,
+        "in_open_data": 38172,
+        "not_in_open_data": 5444,
+        "requested": 43616,
+        "version_gt_1": 19
+      }
+    },
+    "caveat": "Measured on landed public snapshots; see coverage notes in the export.",
+    "registries": {
+      "pmc_notice_articles": {
+        "notice_articles": 17533,
+        "flagged_is_retracted": 55
+      },
+      "by_doi_prefix": [
+        {
+          "prefix": "10.1155",
+          "publisher": "Hindawi",
+          "papers": 12468,
+          "all_eligible_agree": 0.944,
+          "flagged_by_exactly_one": 0.0217
+        },
+        {
+          "prefix": "10.1016",
+          "publisher": "Elsevier",
+          "papers": 11821,
+          "all_eligible_agree": 0.6024,
+          "flagged_by_exactly_one": 0.2381
+        },
+        {
+          "prefix": "10.1109",
+          "publisher": "IEEE: Institute of Electrical and Electronics Engineers",
+          "papers": 11439,
+          "all_eligible_agree": 0.6786,
+          "flagged_by_exactly_one": 0.3207
+        },
+        {
+          "prefix": "10.1007",
+          "publisher": "Springer",
+          "papers": 9389,
+          "all_eligible_agree": 0.6673,
+          "flagged_by_exactly_one": 0.26
+        },
+        {
+          "prefix": "10.1002",
+          "publisher": "Wiley",
+          "papers": 2820,
+          "all_eligible_agree": 0.6415,
+          "flagged_by_exactly_one": 0.0851
+        },
+        {
+          "prefix": "10.1080",
+          "publisher": "Taylor and Francis",
+          "papers": 2380,
+          "all_eligible_agree": 0.6034,
+          "flagged_by_exactly_one": 0.2403
+        },
+        {
+          "prefix": "10.1111",
+          "publisher": "Wiley",
+          "papers": 1923,
+          "all_eligible_agree": 0.6256,
+          "flagged_by_exactly_one": 0.1264
+        },
+        {
+          "prefix": "10.3233",
+          "publisher": "IOS Press (bought by Sage November 2023)",
+          "papers": 1892,
+          "all_eligible_agree": 0.907,
+          "flagged_by_exactly_one": 0.0682
+        },
+        {
+          "prefix": "10.1177",
+          "publisher": "SAGE Publications",
+          "papers": 1608,
+          "all_eligible_agree": 0.7282,
+          "flagged_by_exactly_one": 0.1374
+        },
+        {
+          "prefix": "10.1051",
+          "publisher": "EDP Sciences",
+          "papers": 1571,
+          "all_eligible_agree": 0.4908,
+          "flagged_by_exactly_one": 0.5092
+        }
+      ],
+      "rw_notice_dois_flagged_by_openalex": {
+        "notice_dois": 44651,
+        "flagged_by_openalex": 41460
+      },
+      "by_verdict": {
+        "retracted": 89576,
+        "concern": 1634,
+        "corrected": 634,
+        "disputed": 130,
+        "reinstated": 123
+      },
+      "agreement": [
+        {
+          "source": "openalex",
+          "eligible": 84187,
+          "flagged": 82866,
+          "recall_vs_union": 0.9843
+        },
+        {
+          "source": "pmc",
+          "eligible": 19867,
+          "flagged": 18880,
+          "recall_vs_union": 0.9503
+        },
+        {
+          "source": "pubmed",
+          "eligible": 37528,
+          "flagged": 34561,
+          "recall_vs_union": 0.9209
+        },
+        {
+          "source": "retraction_watch",
+          "eligible": 89706,
+          "flagged": 67672,
+          "recall_vs_union": 0.7544
+        }
+      ],
+      "combinations": [
+        {
+          "rw": true,
+          "openalex": true,
+          "pubmed": false,
+          "pmc": null,
+          "papers": 32155
+        },
+        {
+          "rw": true,
+          "openalex": true,
+          "pubmed": true,
+          "pmc": true,
+          "papers": 15872
+        },
+        {
+          "rw": null,
+          "openalex": true,
+          "pubmed": false,
+          "pmc": null,
+          "papers": 15669
+        },
+        {
+          "rw": true,
+          "openalex": true,
+          "pubmed": true,
+          "pmc": null,
+          "papers": 12613
+        },
+        {
+          "rw": true,
+          "openalex": false,
+          "pubmed": false,
+          "pmc": null,
+          "papers": 6335
+        },
+        {
+          "rw": null,
+          "openalex": true,
+          "pubmed": true,
+          "pmc": true,
+          "papers": 2887
+        },
+        {
+          "rw": null,
+          "openalex": true,
+          "pubmed": true,
+          "pmc": null,
+          "papers": 2842
+        },
+        {
+          "rw": true,
+          "openalex": true,
+          "pubmed": false,
+          "pmc": false,
+          "papers": 418
+        },
+        {
+          "rw": null,
+          "openalex": true,
+          "pubmed": false,
+          "pmc": false,
+          "papers": 405
+        },
+        {
+          "rw": true,
+          "openalex": false,
+          "pubmed": true,
+          "pmc": null,
+          "papers": 110
+        },
+        {
+          "rw": true,
+          "openalex": true,
+          "pubmed": true,
+          "pmc": false,
+          "papers": 89
+        },
+        {
+          "rw": true,
+          "openalex": true,
+          "pubmed": false,
+          "pmc": true,
+          "papers": 58
+        }
+      ],
+      "excluded_as_notices": [
+        {
+          "source": "openalex",
+          "notice_reason": "openalex_type_retraction",
+          "rows_excluded": 35976
+        },
+        {
+          "source": "pmc",
+          "notice_reason": "rw_notice_doi",
+          "rows_excluded": 17512
+        },
+        {
+          "source": "openalex",
+          "notice_reason": "rw_notice_doi",
+          "rows_excluded": 17376
+        },
+        {
+          "source": "pubmed",
+          "notice_reason": "rw_notice_doi",
+          "rows_excluded": 550
+        },
+        {
+          "source": "openalex",
+          "notice_reason": "rw_notice_pmid",
+          "rows_excluded": 266
+        },
+        {
+          "source": "pubmed",
+          "notice_reason": "rw_notice_pmid",
+          "rows_excluded": 56
+        },
+        {
+          "source": "pmc",
+          "notice_reason": "rw_notice_pmid",
+          "rows_excluded": 21
+        }
+      ],
+      "openalex_retracted_by_type": [
+        {
+          "type": "article",
+          "works": 78822
+        },
+        {
+          "type": "retraction",
+          "works": 38161
+        },
+        {
+          "type": "conference-paper",
+          "works": 14720
+        },
+        {
+          "type": "book-chapter",
+          "works": 1409
+        },
+        {
+          "type": "review",
+          "works": 961
+        },
+        {
+          "type": "preprint",
+          "works": 908
+        }
+      ],
+      "papers": 89706,
+      "all_eligible_agree": 59272,
+      "flagged_by_exactly_one": 22510
+    },
+    "retraction_lag": {
+      "notices": 67845,
+      "negative_lag_excluded": 1,
+      "median_days": 493.0,
+      "p25_days": 156.0,
+      "p75_days": 1074.0,
+      "by_retraction_year": [
+        {
+          "retraction_year": 2005,
+          "notices": 140,
+          "median_days": 255.5
+        },
+        {
+          "retraction_year": 2006,
+          "notices": 215,
+          "median_days": 364.0
+        },
+        {
+          "retraction_year": 2007,
+          "notices": 334,
+          "median_days": 167.5
+        },
+        {
+          "retraction_year": 2008,
+          "notices": 450,
+          "median_days": 203.0
+        },
+        {
+          "retraction_year": 2009,
+          "notices": 1186,
+          "median_days": 63.0
+        },
+        {
+          "retraction_year": 2010,
+          "notices": 5011,
+          "median_days": 54.0
+        },
+        {
+          "retraction_year": 2011,
+          "notices": 4937,
+          "median_days": 41.0
+        },
+        {
+          "retraction_year": 2012,
+          "notices": 1161,
+          "median_days": 306.0
+        },
+        {
+          "retraction_year": 2013,
+          "notices": 1450,
+          "median_days": 360.0
+        },
+        {
+          "retraction_year": 2014,
+          "notices": 1115,
+          "median_days": 476.0
+        },
+        {
+          "retraction_year": 2015,
+          "notices": 1545,
+          "median_days": 464.0
+        },
+        {
+          "retraction_year": 2016,
+          "notices": 1683,
+          "median_days": 547.0
+        },
+        {
+          "retraction_year": 2017,
+          "notices": 1712,
+          "median_days": 599.0
+        },
+        {
+          "retraction_year": 2018,
+          "notices": 2534,
+          "median_days": 344.0
+        },
+        {
+          "retraction_year": 2019,
+          "notices": 2907,
+          "median_days": 1217.0
+        },
+        {
+          "retraction_year": 2020,
+          "notices": 3080,
+          "median_days": 537.5
+        },
+        {
+          "retraction_year": 2021,
+          "notices": 3913,
+          "median_days": 601.0
+        },
+        {
+          "retraction_year": 2022,
+          "notices": 5591,
+          "median_days": 642.0
+        },
+        {
+          "retraction_year": 2023,
+          "notices": 13336,
+          "median_days": 513.0
+        },
+        {
+          "retraction_year": 2024,
+          "notices": 6501,
+          "median_days": 848.0
+        },
+        {
+          "retraction_year": 2025,
+          "notices": 5998,
+          "median_days": 672.0
+        },
+        {
+          "retraction_year": 2026,
+          "notices": 2119,
+          "median_days": 1001.0
+        }
+      ],
+      "by_year_top_publisher": [
+        {
+          "retraction_year": 2005,
+          "top_publisher": "Elsevier",
+          "top_notices": 30,
+          "top_median_days": 272.5,
+          "median_days_without_top": 245.0
+        },
+        {
+          "retraction_year": 2006,
+          "top_publisher": "Elsevier",
+          "top_notices": 33,
+          "top_median_days": 337.0,
+          "median_days_without_top": 365.0
+        },
+        {
+          "retraction_year": 2007,
+          "top_publisher": "IEEE: Institute of Electrical and Electronics Engineers",
+          "top_notices": 84,
+          "top_median_days": 17.0,
+          "median_days_without_top": 309.0
+        },
+        {
+          "retraction_year": 2008,
+          "top_publisher": "Elsevier",
+          "top_notices": 105,
+          "top_median_days": 467.0,
+          "median_days_without_top": 126.0
+        },
+        {
+          "retraction_year": 2009,
+          "top_publisher": "IEEE: Institute of Electrical and Electronics Engineers",
+          "top_notices": 627,
+          "top_median_days": 40.0,
+          "median_days_without_top": 512.0
+        },
+        {
+          "retraction_year": 2010,
+          "top_publisher": "IEEE: Institute of Electrical and Electronics Engineers",
+          "top_notices": 4410,
+          "top_median_days": 54.0,
+          "median_days_without_top": 548.0
+        },
+        {
+          "retraction_year": 2011,
+          "top_publisher": "IEEE: Institute of Electrical and Electronics Engineers",
+          "top_notices": 4091,
+          "top_median_days": 34.0,
+          "median_days_without_top": 553.0
+        },
+        {
+          "retraction_year": 2012,
+          "top_publisher": "Elsevier",
+          "top_notices": 177,
+          "top_median_days": 274.0,
+          "median_days_without_top": 333.5
+        },
+        {
+          "retraction_year": 2013,
+          "top_publisher": "IEEE: Institute of Electrical and Electronics Engineers",
+          "top_notices": 278,
+          "top_median_days": 87.0,
+          "median_days_without_top": 562.0
+        },
+        {
+          "retraction_year": 2014,
+          "top_publisher": "Elsevier",
+          "top_notices": 194,
+          "top_median_days": 235.5,
+          "median_days_without_top": 508.0
+        },
+        {
+          "retraction_year": 2015,
+          "top_publisher": "Elsevier",
+          "top_notices": 315,
+          "top_median_days": 183.0,
+          "median_days_without_top": 539.0
+        },
+        {
+          "retraction_year": 2016,
+          "top_publisher": "Elsevier",
+          "top_notices": 268,
+          "top_median_days": 242.5,
+          "median_days_without_top": 620.0
+        },
+        {
+          "retraction_year": 2017,
+          "top_publisher": "Springer",
+          "top_notices": 238,
+          "top_median_days": 730.5,
+          "median_days_without_top": 546.5
+        },
+        {
+          "retraction_year": 2018,
+          "top_publisher": "University of El Qued",
+          "top_notices": 430,
+          "top_median_days": 269.0,
+          "median_days_without_top": 546.0
+        },
+        {
+          "retraction_year": 2019,
+          "top_publisher": "Elsevier",
+          "top_notices": 292,
+          "top_median_days": 279.5,
+          "median_days_without_top": 1299.0
+        },
+        {
+          "retraction_year": 2020,
+          "top_publisher": "Elsevier",
+          "top_notices": 516,
+          "top_median_days": 256.0,
+          "median_days_without_top": 616.0
+        },
+        {
+          "retraction_year": 2021,
+          "top_publisher": "Springer",
+          "top_notices": 608,
+          "top_median_days": 170.5,
+          "median_days_without_top": 716.0
+        },
+        {
+          "retraction_year": 2022,
+          "top_publisher": "Springer",
+          "top_notices": 932,
+          "top_median_days": 802.0,
+          "median_days_without_top": 583.0
+        },
+        {
+          "retraction_year": 2023,
+          "top_publisher": "Hindawi",
+          "top_notices": 9673,
+          "top_median_days": 467.0,
+          "median_days_without_top": 954.0
+        },
+        {
+          "retraction_year": 2024,
+          "top_publisher": "Hindawi",
+          "top_notices": 1116,
+          "top_median_days": 606.5,
+          "median_days_without_top": 965.0
+        },
+        {
+          "retraction_year": 2025,
+          "top_publisher": "IOS Press (bought by Sage November 2023)",
+          "top_notices": 1110,
+          "top_median_days": 720.0,
+          "median_days_without_top": 672.0
+        },
+        {
+          "retraction_year": 2026,
+          "top_publisher": "Springer - Nature Publishing Group",
+          "top_notices": 604,
+          "top_median_days": 978.5,
+          "median_days_without_top": 1001.0
+        }
+      ]
+    },
+    "afterlife": {
+      "papers": 61205,
+      "window_complete": 55285,
+      "headline_excluding_retract_and_replace": {
+        "papers": 54737,
+        "with_any_after": 32848,
+        "citations_after": 241815,
+        "citations_through_retraction_year": 641609,
+        "median_after": 1.0,
+        "p90_after": 10.0
+      },
+      "retract_and_replace_only": {
+        "papers": 548,
+        "with_any_after": 459,
+        "citations_after": 15839,
+        "citations_through_retraction_year": 18752,
+        "median_after": 6.5,
+        "p90_after": 64.30000000000001
+      },
+      "top_by_citations_after": [
+        {
+          "paper_key": "doi:10.7554/elife.12248",
+          "title": "A mathematical model explains saturating axon guidance responses to molecular gradients",
+          "retraction_year": 2018,
+          "citations_after": 1031,
+          "citations_through_retraction_year": 191
+        },
+        {
+          "paper_key": "doi:10.1021/nn900887m",
+          "title": "Carbon Nanotubes Are Able To Penetrate Plant Seed Coat and Dramatically Affect Seed Germination and Plant Growth",
+          "retraction_year": 2012,
+          "citations_after": 1013,
+          "citations_through_retraction_year": 39
+        },
+        {
+          "paper_key": "doi:10.4103/0974-1208.82352",
+          "title": "An overview of randomization techniques: An unbiased assessment of outcome in clinical research",
+          "retraction_year": 2017,
+          "citations_after": 859,
+          "citations_through_retraction_year": 207
+        },
+        {
+          "paper_key": "doi:10.1056/nejmoa2007621",
+          "title": "Cardiovascular Disease, Drug Therapy, and Mortality in Covid-19",
+          "retraction_year": 2020,
+          "citations_after": 783,
+          "citations_through_retraction_year": 645
+        },
+        {
+          "paper_key": "doi:10.1155/2014/943162",
+          "title": "A Comprehensive Review on Metabolic Syndrome",
+          "retraction_year": 2019,
+          "citations_after": 699,
+          "citations_through_retraction_year": 1188
+        },
+        {
+          "paper_key": "doi:10.5465/amj.2009.43670902",
+          "title": "Absorptive Capacity, Environmental Turbulence, and the Complementarity of Organizational Learning Processes",
+          "retraction_year": 2013,
+          "citations_after": 684,
+          "citations_through_retraction_year": 171
+        },
+        {
+          "paper_key": "doi:10.1046/j.1365-313x.2003.01676.x",
+          "title": "An enhanced transient expression system in plants based on suppression of gene silencing by the p19 protein of tomato bushy stunt virus",
+          "retraction_year": 2015,
+          "citations_after": 628,
+          "citations_through_retraction_year": 563
+        },
+        {
+          "paper_key": "doi:10.1001/jamainternmed.2018.3713",
+          "title": "Association Between Physician Burnout and Patient Safety, Professionalism, and Patient Satisfaction: A Systematic Review and Meta-analysis",
+          "retraction_year": 2020,
+          "citations_after": 611,
+          "citations_through_retraction_year": 373
+        },
+        {
+          "paper_key": "doi:10.1016/s0140-6736(20)31180-6",
+          "title": "Hydroxychloroquine or chloroquine with or without a macrolide for treatment of COVID-19: a multinational registry analysis",
+          "retraction_year": 2020,
+          "citations_after": 569,
+          "citations_through_retraction_year": 632
+        },
+        {
+          "paper_key": "doi:10.1155/2014/150845",
+          "title": "Apoptosis and Molecular Targeting Therapy in Cancer",
+          "retraction_year": 2020,
+          "citations_after": 438,
+          "citations_through_retraction_year": 682
+        }
+      ]
+    },
+    "reasons": {
+      "last_complete_year": 2025,
+      "top_last_complete_year": [
+        {
+          "reason": "Investigation by Journal/Publisher",
+          "notices": 5080
+        },
+        {
+          "reason": "Unreliable Results and/or Conclusions",
+          "notices": 3278
+        },
+        {
+          "reason": "Concerns/Issues about Referencing/Attributions",
+          "notices": 2874
+        },
+        {
+          "reason": "Compromised Peer Review",
+          "notices": 2012
+        },
+        {
+          "reason": "Investigation by Third Party",
+          "notices": 1821
+        },
+        {
+          "reason": "Computer-Aided Content or Computer-Generated Content",
+          "notices": 1275
+        },
+        {
+          "reason": "Concerns/Issues about Third Party Involvement",
+          "notices": 1215
+        },
+        {
+          "reason": "Objections by Author(s)",
+          "notices": 1201
+        },
+        {
+          "reason": "Paper Mill",
+          "notices": 1115
+        },
+        {
+          "reason": "Concerns/Issues about Article",
+          "notices": 974
+        }
+      ],
+      "series": [
+        {
+          "retraction_year": 2015,
+          "reason": "Compromised Peer Review",
+          "notices": 178
+        },
+        {
+          "retraction_year": 2016,
+          "reason": "Compromised Peer Review",
+          "notices": 189
+        },
+        {
+          "retraction_year": 2017,
+          "reason": "Compromised Peer Review",
+          "notices": 168
+        },
+        {
+          "retraction_year": 2018,
+          "reason": "Compromised Peer Review",
+          "notices": 110
+        },
+        {
+          "retraction_year": 2019,
+          "reason": "Compromised Peer Review",
+          "notices": 88
+        },
+        {
+          "retraction_year": 2020,
+          "reason": "Compromised Peer Review",
+          "notices": 76
+        },
+        {
+          "retraction_year": 2021,
+          "reason": "Compromised Peer Review",
+          "notices": 590
+        },
+        {
+          "retraction_year": 2022,
+          "reason": "Compromised Peer Review",
+          "notices": 2461
+        },
+        {
+          "retraction_year": 2023,
+          "reason": "Compromised Peer Review",
+          "notices": 2768
+        },
+        {
+          "retraction_year": 2024,
+          "reason": "Compromised Peer Review",
+          "notices": 2075
+        },
+        {
+          "retraction_year": 2025,
+          "reason": "Compromised Peer Review",
+          "notices": 2012
+        },
+        {
+          "retraction_year": 2026,
+          "reason": "Compromised Peer Review",
+          "notices": 632
+        },
+        {
+          "retraction_year": 2015,
+          "reason": "Computer-Aided Content or Computer-Generated Content",
+          "notices": 9
+        },
+        {
+          "retraction_year": 2019,
+          "reason": "Computer-Aided Content or Computer-Generated Content",
+          "notices": 1
+        },
+        {
+          "retraction_year": 2020,
+          "reason": "Computer-Aided Content or Computer-Generated Content",
+          "notices": 39
+        },
+        {
+          "retraction_year": 2021,
+          "reason": "Computer-Aided Content or Computer-Generated Content",
+          "notices": 481
+        },
+        {
+          "retraction_year": 2022,
+          "reason": "Computer-Aided Content or Computer-Generated Content",
+          "notices": 383
+        },
+        {
+          "retraction_year": 2023,
+          "reason": "Computer-Aided Content or Computer-Generated Content",
+          "notices": 5588
+        },
+        {
+          "retraction_year": 2024,
+          "reason": "Computer-Aided Content or Computer-Generated Content",
+          "notices": 1453
+        },
+        {
+          "retraction_year": 2025,
+          "reason": "Computer-Aided Content or Computer-Generated Content",
+          "notices": 1275
+        },
+        {
+          "retraction_year": 2026,
+          "reason": "Computer-Aided Content or Computer-Generated Content",
+          "notices": 195
+        },
+        {
+          "retraction_year": 2015,
+          "reason": "Concerns/Issues about Peer Review",
+          "notices": 1
+        },
+        {
+          "retraction_year": 2016,
+          "reason": "Concerns/Issues about Peer Review",
+          "notices": 5
+        },
+        {
+          "retraction_year": 2017,
+          "reason": "Concerns/Issues about Peer Review",
+          "notices": 2
+        },
+        {
+          "retraction_year": 2018,
+          "reason": "Concerns/Issues about Peer Review",
+          "notices": 1
+        },
+        {
+          "retraction_year": 2020,
+          "reason": "Concerns/Issues about Peer Review",
+          "notices": 1
+        },
+        {
+          "retraction_year": 2021,
+          "reason": "Concerns/Issues about Peer Review",
+          "notices": 2
+        },
+        {
+          "retraction_year": 2022,
+          "reason": "Concerns/Issues about Peer Review",
+          "notices": 357
+        },
+        {
+          "retraction_year": 2023,
+          "reason": "Concerns/Issues about Peer Review",
+          "notices": 7870
+        },
+        {
+          "retraction_year": 2024,
+          "reason": "Concerns/Issues about Peer Review",
+          "notices": 2092
+        },
+        {
+          "retraction_year": 2025,
+          "reason": "Concerns/Issues about Peer Review",
+          "notices": 918
+        },
+        {
+          "retraction_year": 2026,
+          "reason": "Concerns/Issues about Peer Review",
+          "notices": 201
+        },
+        {
+          "retraction_year": 2016,
+          "reason": "Paper Mill",
+          "notices": 2
+        },
+        {
+          "retraction_year": 2017,
+          "reason": "Paper Mill",
+          "notices": 3
+        },
+        {
+          "retraction_year": 2018,
+          "reason": "Paper Mill",
+          "notices": 4
+        },
+        {
+          "retraction_year": 2019,
+          "reason": "Paper Mill",
+          "notices": 4
+        },
+        {
+          "retraction_year": 2020,
+          "reason": "Paper Mill",
+          "notices": 246
+        },
+        {
+          "retraction_year": 2021,
+          "reason": "Paper Mill",
+          "notices": 815
+        },
+        {
+          "retraction_year": 2022,
+          "reason": "Paper Mill",
+          "notices": 934
+        },
+        {
+          "retraction_year": 2023,
+          "reason": "Paper Mill",
+          "notices": 6782
+        },
+        {
+          "retraction_year": 2024,
+          "reason": "Paper Mill",
+          "notices": 1805
+        },
+        {
+          "retraction_year": 2025,
+          "reason": "Paper Mill",
+          "notices": 1115
+        },
+        {
+          "retraction_year": 2026,
+          "reason": "Paper Mill",
+          "notices": 3
+        },
+        {
+          "retraction_year": 2015,
+          "reason": "Taken via Peer Review",
+          "notices": 1
+        },
+        {
+          "retraction_year": 2016,
+          "reason": "Taken via Peer Review",
+          "notices": 1
+        },
+        {
+          "retraction_year": 2017,
+          "reason": "Taken via Peer Review",
+          "notices": 3
+        },
+        {
+          "retraction_year": 2018,
+          "reason": "Taken via Peer Review",
+          "notices": 2
+        },
+        {
+          "retraction_year": 2019,
+          "reason": "Taken via Peer Review",
+          "notices": 3
+        },
+        {
+          "retraction_year": 2020,
+          "reason": "Taken via Peer Review",
+          "notices": 2
+        },
+        {
+          "retraction_year": 2021,
+          "reason": "Taken via Peer Review",
+          "notices": 5
+        },
+        {
+          "retraction_year": 2022,
+          "reason": "Taken via Peer Review",
+          "notices": 1
+        },
+        {
+          "retraction_year": 2025,
+          "reason": "Taken via Peer Review",
+          "notices": 1
+        },
+        {
+          "retraction_year": 2026,
+          "reason": "Taken via Peer Review",
+          "notices": 2
+        }
+      ]
+    },
+    "upstream": {
+      "records_edited_after_first_appearance": {
+        "records_ever_seen": 73334,
+        "records_ever_updated": 50518,
+        "records_updated_beyond_reason": 3840,
+        "records_doi_changed": 96,
+        "records_retraction_date_changed": 54,
+        "records_nature_changed": 27
+      },
+      "papers_with_conflicting_pmids": 3,
+      "replay_report": "20261019T202854Z-silver.json",
+      "snapshots": 39,
+      "quarantined": [
+        {
+          "snapshot_date": "2026-10-15",
+          "lossy_records": 5520,
+          "lossy_by_column": {
+            "title": 2298,
+            "institution": 366,
+            "journal": 2453,
+            "publisher": 2515,
+            "author": 2922,
+            "notes": 5
+          }
+        }
+      ],
+      "blank_rows_dropped": 1054,
+      "format_only_total": 143447,
+      "semantic_updates_total": 78999,
+      "deleted_total": 54,
+      "reappeared_total": 3,
+      "largest_days": [
+        {
+          "snapshot_date": "2026-10-15",
+          "update": 0,
+          "format_only": 67640
+        },
+        {
+          "snapshot_date": "2025-09-02",
+          "update": 48,
+          "format_only": 65898
+        },
+        {
+          "snapshot_date": "2025-03-03",
+          "update": 28223,
+          "format_only": 0
+        },
+        {
+          "snapshot_date": "2025-12-01",
+          "update": 12037,
+          "format_only": 9795
+        },
+        {
+          "snapshot_date": "2025-04-01",
+          "update": 16539,
+          "format_only": 0
+        },
+        {
+          "snapshot_date": "2026-01-02",
+          "update": 10467,
+          "format_only": 0
+        }
+      ],
+      "top_reason_relabels": [
+        {
+          "change_date": "2025-04-01",
+          "removed": [
+            "unreliable results"
+          ],
+          "added": [
+            "unreliable results and/or conclusions"
+          ],
+          "records": 16379
+        },
+        {
+          "change_date": "2025-12-01",
+          "removed": [
+            "concerns/issues with peer review"
+          ],
+          "added": [
+            "concerns/issues about peer review"
+          ],
+          "records": 10557
+        },
+        {
+          "change_date": "2026-01-02",
+          "removed": [
+            "fake peer review"
+          ],
+          "added": [
+            "compromised peer review"
+          ],
+          "records": 10426
+        },
+        {
+          "change_date": "2025-03-03",
+          "removed": [
+            "date of retraction/other unknown"
+          ],
+          "added": [
+            "date of article and/or notice unknown"
+          ],
+          "records": 5646
+        },
+        {
+          "change_date": "2025-03-03",
+          "removed": [
+            "concerns/issues about results",
+            "randomly generated content"
+          ],
+          "added": [
+            "computer-aided content or computer-generated content",
+            "concerns/issues about results and/or conclusions"
+          ],
+          "records": 4496
+        },
+        {
+          "change_date": "2024-10-01",
+          "removed": [
+            "withdrawal"
+          ],
+          "added": [
+            "removed"
+          ],
+          "records": 3798
+        },
+        {
+          "change_date": "2025-03-03",
+          "removed": [
+            "duplication of article"
+          ],
+          "added": [
+            "duplication of/in article"
+          ],
+          "records": 3106
+        },
+        {
+          "change_date": "2025-03-03",
+          "removed": [
+            "duplication of image"
+          ],
+          "added": [
+            "duplication of/in image"
+          ],
+          "records": 3019
+        },
+        {
+          "change_date": "2025-11-04",
+          "removed": [
+            "plagiarism of article"
+          ],
+          "added": [
+            "plagiarism of/in article"
+          ],
+          "records": 2691
+        },
+        {
+          "change_date": "2025-03-03",
+          "removed": [
+            "concerns/issues about results"
+          ],
+          "added": [
+            "concerns/issues about results and/or conclusions"
+          ],
+          "records": 1696
+        },
+        {
+          "change_date": "2024-10-01",
+          "removed": [
+            "concerns/issues about authorship"
+          ],
+          "added": [
+            "concerns/issues about authorship/affiliation"
+          ],
+          "records": 1691
+        },
+        {
+          "change_date": "2025-03-03",
+          "removed": [
+            "concerns/issues about results",
+            "lack of irb/iacuc approval",
+            "randomly generated content"
+          ],
+          "added": [
+            "computer-aided content or computer-generated content",
+            "concerns/issues about results and/or conclusions",
+            "lack of irb/iacuc approval and/or compliance"
+          ],
+          "records": 1008
+        }
+      ]
+    },
+    "as_of": {
+      "first_snapshot": "2024-09-02",
+      "last_snapshot": "2026-10-16",
+      "series": [
+        {
+          "snapshot_date": "2024-09-02",
+          "retractions_through_2023": 48789,
+          "paper_mill": 4868,
+          "fake_peer_review": 4654,
+          "median_lag_days": 379.0
+        },
+        {
+          "snapshot_date": "2024-10-01",
+          "retractions_through_2023": 49240,
+          "paper_mill": 5318,
+          "fake_peer_review": 4661,
+          "median_lag_days": 383.0
+        },
+        {
+          "snapshot_date": "2024-11-01",
+          "retractions_through_2023": 49406,
+          "paper_mill": 5448,
+          "fake_peer_review": 4809,
+          "median_lag_days": 384.0
+        },
+        {
+          "snapshot_date": "2024-12-02",
+          "retractions_through_2023": 50146,
+          "paper_mill": 6182,
+          "fake_peer_review": 5140,
+          "median_lag_days": 392.0
+        },
+        {
+          "snapshot_date": "2025-01-07",
+          "retractions_through_2023": 50949,
+          "paper_mill": 6981,
+          "fake_peer_review": 5921,
+          "median_lag_days": 400.0
+        },
+        {
+          "snapshot_date": "2025-02-03",
+          "retractions_through_2023": 51796,
+          "paper_mill": 7815,
+          "fake_peer_review": 6546,
+          "median_lag_days": 408.5
+        },
+        {
+          "snapshot_date": "2025-03-03",
+          "retractions_through_2023": 52706,
+          "paper_mill": 8728,
+          "fake_peer_review": 6544,
+          "median_lag_days": 418.0
+        },
+        {
+          "snapshot_date": "2025-04-01",
+          "retractions_through_2023": 52789,
+          "paper_mill": 8786,
+          "fake_peer_review": 6564,
+          "median_lag_days": 418.0
+        },
+        {
+          "snapshot_date": "2025-05-01",
+          "retractions_through_2023": 52848,
+          "paper_mill": 8786,
+          "fake_peer_review": 6609,
+          "median_lag_days": 419.0
+        },
+        {
+          "snapshot_date": "2025-06-02",
+          "retractions_through_2023": 52882,
+          "paper_mill": 8786,
+          "fake_peer_review": 6626,
+          "median_lag_days": 419.0
+        },
+        {
+          "snapshot_date": "2025-07-01",
+          "retractions_through_2023": 52885,
+          "paper_mill": 8786,
+          "fake_peer_review": 6626,
+          "median_lag_days": 419.0
+        },
+        {
+          "snapshot_date": "2025-08-01",
+          "retractions_through_2023": 52896,
+          "paper_mill": 8786,
+          "fake_peer_review": 6626,
+          "median_lag_days": 419.0
+        },
+        {
+          "snapshot_date": "2025-09-02",
+          "retractions_through_2023": 52897,
+          "paper_mill": 8788,
+          "fake_peer_review": 6626,
+          "median_lag_days": 419.0
+        },
+        {
+          "snapshot_date": "2025-10-01",
+          "retractions_through_2023": 52906,
+          "paper_mill": 8790,
+          "fake_peer_review": 6627,
+          "median_lag_days": 419.0
+        },
+        {
+          "snapshot_date": "2025-11-04",
+          "retractions_through_2023": 52897,
+          "paper_mill": 8789,
+          "fake_peer_review": 6627,
+          "median_lag_days": 419.0
+        },
+        {
+          "snapshot_date": "2025-12-01",
+          "retractions_through_2023": 52908,
+          "paper_mill": 8789,
+          "fake_peer_review": 6627,
+          "median_lag_days": 419.0
+        },
+        {
+          "snapshot_date": "2026-01-02",
+          "retractions_through_2023": 52911,
+          "paper_mill": 8789,
+          "fake_peer_review": 0,
+          "median_lag_days": 419.0
+        },
+        {
+          "snapshot_date": "2026-02-02",
+          "retractions_through_2023": 52913,
+          "paper_mill": 8789,
+          "fake_peer_review": 0,
+          "median_lag_days": 419.0
+        },
+        {
+          "snapshot_date": "2026-03-02",
+          "retractions_through_2023": 52933,
+          "paper_mill": 8789,
+          "fake_peer_review": 0,
+          "median_lag_days": 420.0
+        },
+        {
+          "snapshot_date": "2026-04-01",
+          "retractions_through_2023": 52936,
+          "paper_mill": 8789,
+          "fake_peer_review": 0,
+          "median_lag_days": 420.0
+        },
+        {
+          "snapshot_date": "2026-05-01",
+          "retractions_through_2023": 52953,
+          "paper_mill": 8789,
+          "fake_peer_review": 0,
+          "median_lag_days": 420.0
+        },
+        {
+          "snapshot_date": "2026-06-01",
+          "retractions_through_2023": 52973,
+          "paper_mill": 8789,
+          "fake_peer_review": 0,
+          "median_lag_days": 420.0
+        },
+        {
+          "snapshot_date": "2026-07-01",
+          "retractions_through_2023": 53000,
+          "paper_mill": 8789,
+          "fake_peer_review": 0,
+          "median_lag_days": 420.0
+        },
+        {
+          "snapshot_date": "2026-08-03",
+          "retractions_through_2023": 53059,
+          "paper_mill": 8789,
+          "fake_peer_review": 0,
+          "median_lag_days": 419.0
+        },
+        {
+          "snapshot_date": "2026-09-01",
+          "retractions_through_2023": 53091,
+          "paper_mill": 8789,
+          "fake_peer_review": 0,
+          "median_lag_days": 420.0
+        },
+        {
+          "snapshot_date": "2026-09-29",
+          "retractions_through_2023": 53113,
+          "paper_mill": 8790,
+          "fake_peer_review": 0,
+          "median_lag_days": 419.0
+        },
+        {
+          "snapshot_date": "2026-09-30",
+          "retractions_through_2023": 53113,
+          "paper_mill": 8790,
+          "fake_peer_review": 0,
+          "median_lag_days": 419.0
+        },
+        {
+          "snapshot_date": "2026-10-01",
+          "retractions_through_2023": 53114,
+          "paper_mill": 8790,
+          "fake_peer_review": 0,
+          "median_lag_days": 419.0
+        },
+        {
+          "snapshot_date": "2026-10-02",
+          "retractions_through_2023": 53114,
+          "paper_mill": 8790,
+          "fake_peer_review": 0,
+          "median_lag_days": 419.0
+        },
+        {
+          "snapshot_date": "2026-10-05",
+          "retractions_through_2023": 53114,
+          "paper_mill": 8790,
+          "fake_peer_review": 0,
+          "median_lag_days": 419.0
+        },
+        {
+          "snapshot_date": "2026-10-06",
+          "retractions_through_2023": 53130,
+          "paper_mill": 8790,
+          "fake_peer_review": 0,
+          "median_lag_days": 420.0
+        },
+        {
+          "snapshot_date": "2026-10-07",
+          "retractions_through_2023": 53131,
+          "paper_mill": 8790,
+          "fake_peer_review": 0,
+          "median_lag_days": 420.0
+        },
+        {
+          "snapshot_date": "2026-10-08",
+          "retractions_through_2023": 53131,
+          "paper_mill": 8790,
+          "fake_peer_review": 0,
+          "median_lag_days": 420.0
+        },
+        {
+          "snapshot_date": "2026-10-09",
+          "retractions_through_2023": 53167,
+          "paper_mill": 8790,
+          "fake_peer_review": 0,
+          "median_lag_days": 420.0
+        },
+        {
+          "snapshot_date": "2026-10-12",
+          "retractions_through_2023": 53174,
+          "paper_mill": 8790,
+          "fake_peer_review": 0,
+          "median_lag_days": 420.0
+        },
+        {
+          "snapshot_date": "2026-10-13",
+          "retractions_through_2023": 53188,
+          "paper_mill": 8790,
+          "fake_peer_review": 0,
+          "median_lag_days": 420.0
+        },
+        {
+          "snapshot_date": "2026-10-14",
+          "retractions_through_2023": 53188,
+          "paper_mill": 8790,
+          "fake_peer_review": 0,
+          "median_lag_days": 420.0
+        },
+        {
+          "snapshot_date": "2026-10-15",
+          "retractions_through_2023": 53188,
+          "paper_mill": 8790,
+          "fake_peer_review": 0,
+          "median_lag_days": 420.0
+        },
+        {
+          "snapshot_date": "2026-10-16",
+          "retractions_through_2023": 53227,
+          "paper_mill": 8790,
+          "fake_peer_review": 0,
+          "median_lag_days": 420.0
+        }
+      ],
+      "retractions_dated_2023": {
+        "first": 9030,
+        "last": 13337
+      },
+      "late_records": {
+        "records": 4482,
+        "id_above_first_snapshot_max": 4406,
+        "paper_mill": 3924,
+        "dated_2023": 4315,
+        "median_lag_days": 561.0,
+        "by_publisher": [
+          {
+            "publisher": "Hindawi",
+            "records": 3921
+          },
+          {
+            "publisher": "Elsevier",
+            "records": 169
+          },
+          {
+            "publisher": "Springer - Nature Publishing Group",
+            "records": 119
+          },
+          {
+            "publisher": "Inderscience Publishers",
+            "records": 45
+          },
+          {
+            "publisher": "Wiley",
+            "records": 37
+          }
+        ],
+        "by_month_first_seen": [
+          {
+            "month": "2024-10",
+            "records": 451
+          },
+          {
+            "month": "2024-11",
+            "records": 166
+          },
+          {
+            "month": "2024-12",
+            "records": 741
+          },
+          {
+            "month": "2025-01",
+            "records": 803
+          },
+          {
+            "month": "2025-02",
+            "records": 847
+          },
+          {
+            "month": "2025-03",
+            "records": 915
+          },
+          {
+            "month": "2025-04",
+            "records": 86
+          },
+          {
+            "month": "2025-05",
+            "records": 60
+          },
+          {
+            "month": "2025-06",
+            "records": 34
+          },
+          {
+            "month": "2025-07",
+            "records": 3
+          },
+          {
+            "month": "2025-08",
+            "records": 10
+          },
+          {
+            "month": "2025-09",
+            "records": 1
+          },
+          {
+            "month": "2025-10",
+            "records": 12
+          },
+          {
+            "month": "2025-11",
+            "records": 1
+          },
+          {
+            "month": "2025-12",
+            "records": 13
+          },
+          {
+            "month": "2026-01",
+            "records": 4
+          },
+          {
+            "month": "2026-02",
+            "records": 3
+          },
+          {
+            "month": "2026-03",
+            "records": 30
+          },
+          {
+            "month": "2026-04",
+            "records": 4
+          },
+          {
+            "month": "2026-05",
+            "records": 17
+          },
+          {
+            "month": "2026-06",
+            "records": 20
+          },
+          {
+            "month": "2026-07",
+            "records": 27
+          },
+          {
+            "month": "2026-08",
+            "records": 62
+          },
+          {
+            "month": "2026-09",
+            "records": 57
+          },
+          {
+            "month": "2026-10",
+            "records": 115
+          }
+        ]
+      },
+      "left_cohort": {
+        "deleted": 22,
+        "moved_out_of_cohort": 22
+      }
+    }
+  }
+}
