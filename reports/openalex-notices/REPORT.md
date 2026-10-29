@@ -51,7 +51,7 @@ type, Retraction Watch record id, and notice date:
 https://github.com/TanayPratapSingh/afterlife/blob/main/reports/openalex-notices/openalex_retraction_notices_flagged_retracted.csv
 
 This is different from the March 2024 issue (corrections and expressions of
-concern flagged as retracted), which you fixed. Method, code, and data:
+concern flagged as retracted), which you fixed. Preprint: https://doi.org/10.31222/osf.io/9wgpy_v1. Method, code, and data:
 https://github.com/TanayPratapSingh/afterlife and
 https://doi.org/10.17605/OSF.IO/D7GSF
 

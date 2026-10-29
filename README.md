@@ -79,7 +79,7 @@ to 420 days, and "Fake Peer Review" fell from 4,654 to zero on a relabel.
 Nearly all of it is late cataloguing: 4,482 records dated 2023 or earlier were
 added after the first snapshot, 3,921 of them Hindawi. A study of 2023 run in
 September 2024 would have seen 9,030 retractions; the database now holds
-13,337. A draft paper on this is in [paper/](paper/).
+13,337. The paper is a MetaArXiv preprint, https://doi.org/10.31222/osf.io/9wgpy_v1 (source in [paper/](paper/)).
 
 **Most single registry flags are real.** A blind hand audit of 200 of the
 36,401 papers only one registry flags, labelled from publishers' pages against

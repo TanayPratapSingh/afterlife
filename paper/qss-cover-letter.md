@@ -20,7 +20,7 @@ assess retraction metadata over time. It ends with six practices for making
 retraction studies repeatable, starting with citing and archiving the
 snapshot used.
 
-The manuscript is posted as a preprint on MetaArXiv ([link]). All source data
+The manuscript is posted as a preprint on MetaArXiv (https://doi.org/10.31222/osf.io/9wgpy_v1). All source data
 are archived with checksums at https://doi.org/10.17605/OSF.IO/D7GSF, and the
 code and hand labels are at https://github.com/TanayPratapSingh/afterlife. The
 manuscript is not under consideration elsewhere, I have no competing
