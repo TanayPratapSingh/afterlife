@@ -228,6 +228,21 @@ labelled `cannot_determine`, with Wilson 95% intervals. The frame estimate
 weights strata by population with a finite population correction, so the
 PubMed census adds no sampling variance.
 
+### 3.6 Notice links in PMC
+
+To see how PMC keeps notices apart from papers, we read the JATS XML of every
+retraction notice in PMC's open data, fetched on 2026-10-29. The frame is the
+34,110 records PubMed types as retraction notices plus Retraction Watch's
+retraction notice identifiers, mapped through PMC-ids.csv to 22,098 PMCIDs;
+18,574 are in the open data and 18,296 of those are typed `retraction`. A
+notice counts as linked when it carries a `related-article` element of type
+`retracted-article` with an identifier. The XML is PMC's processed copy, so
+this measures PMC's record, not what the publisher deposited. PubMed's term
+for notices is now `"retraction notice"[pt]`; the older `"retraction of
+publication"[pt]` returned no records that day.
+<!-- runs/20261029T045804Z-fetch-pubmed-notices.json,
+runs/20261029T052634Z-fetch-pmc-notices.json, runs/20261029T052743Z-notices.json -->
+
 ## 4. Results
 
 ### 4.1 Retraction Watch revises its past
@@ -332,6 +347,19 @@ work's Crossref `update-to` relation or its `updated-by` relation carries a
 retraction label (OpenAlex, 2026). A retraction notice is the record that
 carries `update-to`, pointing at the paper it retracts, so the rule flags the
 notice along with the paper.
+
+PMC shows that the distinction can be kept. Its flag follows a structured
+link: a notice names the paper it retracts in a `related-article` element of
+type `retracted-article`, and PMC marks that paper. Of the 18,296 records PMC
+types as retraction notices, 18,267 (99.8%) carry the link, and one carries
+the retracted flag itself. The 187 counted above were matched by identifier,
+a rule that also catches papers sharing an identifier with a notice. Every
+paper PMC holds that both the notice's link and PubMed's "Retraction of"
+entry name, 17,398 of 17,398, is flagged, and PMC and PubMed name different
+papers for 4 notices. <!-- runs/20261029T052743Z-notices.json: frame,
+link_classes, target_flagged_retracted, pubmed_agreement --> The two rules
+differ in direction: PMC flags the target of a notice's link, while OpenAlex
+flags the works at both ends of it.
 
 This differs from the failure Hauschke and Nazarovets (2025) reported, which
 flagged corrected papers and ran for three months in early 2024. This one
@@ -438,7 +466,8 @@ Six practices would make retraction studies easier to repeat.
    all of them as retractions is the error behind the 2026 correction of
    Salami et al. (2024a).
 6. **Filter notices before using OpenAlex's flag.** Half of what it marks
-   retracted is a notice, and it flags nine in ten notice DOIs.
+   retracted is a notice, and it flags nine in ten notice DOIs. PMC's rule,
+   which flags only the target of a notice's link, shows the fix.
 
 ## 6. Limitations
 
@@ -451,7 +480,8 @@ Six practices would make retraction studies easier to repeat.
 - OpenAlex and PubMed were fetched as positive sets, so "not flagged" there
   mixes "known and fine" with "unknown to that source".
 - PMC coverage is targeted at the 43,616 articles other registries mention,
-  not every PMC article.
+  not every PMC article. The notice link count covers PMC's open data only:
+  3,524 notices PMC holds outside it could not be read.
 - Citation counts are per year and start in 2012.
 - The second labeller covers 40 of the 200 audit rows, so agreement between
   labellers rests on a fifth of the sample, and blinding is partial
@@ -487,10 +517,13 @@ https://github.com/TanayPratapSingh/afterlife. Findings in this paper come
 from `runs/20261027T005839Z-findings.json`; the audit sample from
 `runs/20261027T004212Z-audit-sample.json`; the audit scores from
 `runs/20261027T221642Z-audit-score.json`; agreement between labellers from
-`runs/20261029T040003Z-audit-agree.json`. `afterlife findings` rebuilds every
-number from the landed snapshots. The 39 Retraction Watch snapshots and every
-other source file, exactly as fetched, with checksums, are archived at
-https://doi.org/10.17605/OSF.IO/D7GSF (Singh, 2026).
+`runs/20261029T040003Z-audit-agree.json`; notice links in PMC from
+`runs/20261029T052743Z-notices.json`. `afterlife findings` and `afterlife
+notices` rebuild every number from the landed files. The 39 Retraction Watch
+snapshots and the other source files fetched on 2026-10-19, exactly as
+fetched, with checksums, are archived at https://doi.org/10.17605/OSF.IO/D7GSF
+(Singh, 2026). The notice files fetched on 2026-10-29 (about 32 MB) are not
+yet in that archive.
 
 ## References
 
