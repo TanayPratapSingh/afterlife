@@ -17,11 +17,8 @@ time to retraction rose from 379 to 420 days, and records citing "Fake Peer
 Review" fell from 4,654 to zero when the label was renamed. Nearly all the
 growth is late cataloguing: 4,482 records added after the first snapshot,
 3,921 of them Hindawi retractions. Joining Retraction Watch with OpenAlex,
-PubMed, and PubMed Central, all eligible registries agree on 51.5% of 89,681
-flagged papers, and 49.3% of the works OpenAlex marks as retracted are
-retraction notices, which its ingest rule flags along with the papers they
-retract. A blind hand audit of 200 papers that only one registry flags
-estimates that 95.0% (91.5% to 98.6%) were retracted, so most
+PubMed, and PubMed Central, all eligible registries agree on 66.1% of 89,706 flagged papers, and 39.2% of the works OpenAlex marks as retracted are retraction notices, which its ingest rule flags along with the papers they
+retract. A blind hand audit of papers that only one registry flags estimates that 97.4% (93.7% to 100%) were retracted, so most
 disagreement is a registry missing a retraction. We recommend citing and
 archiving the snapshot a study uses.
 
@@ -190,8 +187,7 @@ Reason matching is case insensitive substring matching on the reason field.
 Papers are matched across sources on DOI, PMID, and PMCID, using one hop of
 the PMC identifier map. A paper is in the registry if Retraction Watch holds a
 record of it or any source flags it as retracted. Retraction and withdrawal
-notices are excluded before matching: OpenAlex works of type `retraction`, and
-any work whose DOI or PMID Retraction Watch records as a notice.
+notices are excluded before matching: OpenAlex works of type `retraction`, and any work whose DOI or PMID Retraction Watch records as a notice, unless Retraction Watch also records it as the retracted paper's own identifier. IEEE and some other publishers stamp the notice onto the paper's page, so the two share one DOI, and that DOI is the paper.
 
 A registry is eligible for a paper only if it could have flagged it: PubMed
 for papers with a PMID, PMC for papers with a linked open copy, OpenAlex and
@@ -225,8 +221,7 @@ the flagging registry, or the scores (codebook change log, 2026-10-28).
 
 Precision per stratum is the share labelled `retracted` among papers not
 labelled `cannot_determine`, with Wilson 95% intervals. The frame estimate
-weights strata by population with a finite population correction, so the
-PubMed census adds no sampling variance.
+weights strata by population with a finite population correction, so the nearly complete PubMed stratum adds little sampling variance. The frame was later corrected (see Correction): it now holds 22,510 papers, and 60 sampled papers, all from the Retraction Watch stratum, left it because another registry in fact flags them. The sampled papers still in each stratum remain a random sample of it, so the estimates in Section 4.4 use them with the corrected stratum sizes: 6,345 Retraction Watch, 16,141 OpenAlex, and 24 PubMed.
 
 ### 3.6 Notice links in PMC
 
@@ -301,19 +296,17 @@ as_of.left_cohort -->
 
 ### 4.2 The registries disagree
 
-89,681 papers are flagged retracted, or disputed, by at least one registry.
-All eligible registries agree on 46,225 (51.5%), and exactly one flags 36,401
-(40.6%). <!-- registries -->
+89,706 papers are flagged retracted, or disputed, by at least one registry. All eligible registries agree on 59,272 (66.1%), and exactly one flags 22,510 (25.1%). <!-- registries -->
 
 **Table 2.** Each registry against the union. The union is not ground truth;
 Section 4.4 measures it.
 
 | Registry | Eligible papers | Flags | Share of the union |
 | --- | ---: | ---: | ---: |
-| PMC | 19,499 | 18,748 | 96.1% |
-| PubMed | 37,495 | 33,302 | 88.8% |
-| OpenAlex | 84,162 | 68,945 | 81.9% |
-| Retraction Watch | 89,681 | 67,672 | 75.5% |
+| OpenAlex | 84,187 | 82,866 | 98.4% |
+| PMC | 19,867 | 18,880 | 95.0% |
+| PubMed | 37,528 | 34,561 | 92.1% |
+| Retraction Watch | 89,706 | 67,672 | 75.4% |
 
 <!-- registries.agreement -->
 
@@ -322,17 +315,37 @@ agreement over the union of 11 sources without conditioning on whether a
 source could have held a paper. The one registry both studies include
 behaves alike: in Salami et al. (2024a) PubMed had the highest agreement
 score, indexing as retracted 22,766 (87.69%) of the 25,962 union list items it
-covers, and here it covers 88.8% of the eligible union. Retraction Watch sits
-lowest here (75.5%) because the union includes OpenAlex, whose flag reaches many papers no other
+covers, and here it covers 92.1% of the eligible union. Retraction Watch sits lowest here (75.4%) because the union includes OpenAlex, whose flag reaches many papers no other
 registry marks; Section 4.4 asks how many of those are real.
 
-### 4.3 Half of OpenAlex's retracted works are notices
+**By publisher.** Agreement depends more on the publisher than on the
+registry (Table 3). For the 12,468 Hindawi papers, the largest group, all
+eligible registries agree on 94.4%, and for IOS Press on 90.7%. For EDP
+Sciences only 49.1% agree and 50.9% are flagged by a single registry, and
+IEEE, Springer, Elsevier, and Taylor and Francis sit between 60.2% and 67.9%.
+A study's coverage therefore depends on which publishers dominate its sample,
+not only on which registry it uses.
+<!-- registries.by_doi_prefix, runs/20261029T201514Z-findings.json -->
 
-Of the 136,873 OpenAlex works with `is_retracted: true`, 67,544 (49.3%) are
-retraction notices: 38,161 have type `retraction`, and 29,383 more carry a DOI
-or PMID that Retraction Watch records as a notice. Counted as papers, they
-would nearly double the registry. PMC handles the same distinction well: of
-the 17,951 notice articles it holds, 187 carry its retracted flag.
+**Table 3.** Agreement for the ten largest DOI prefixes. The publisher is the
+name Retraction Watch most often gives the prefix.
+
+| Publisher (prefix) | Papers | All eligible agree | One registry only |
+| --- | ---: | ---: | ---: |
+| Hindawi (10.1155) | 12,468 | 94.4% | 2.2% |
+| Elsevier (10.1016) | 11,821 | 60.2% | 23.8% |
+| IEEE (10.1109) | 11,439 | 67.9% | 32.1% |
+| Springer (10.1007) | 9,389 | 66.7% | 26.0% |
+| Wiley (10.1002) | 2,820 | 64.2% | 8.5% |
+| Taylor and Francis (10.1080) | 2,380 | 60.3% | 24.0% |
+| Wiley (10.1111) | 1,923 | 62.6% | 12.6% |
+| IOS Press (10.3233) | 1,892 | 90.7% | 6.8% |
+| SAGE (10.1177) | 1,608 | 72.8% | 13.7% |
+| EDP Sciences (10.1051) | 1,571 | 49.1% | 50.9% |
+
+### 4.3 Two in five of OpenAlex's retracted works are notices
+
+Of the 136,873 OpenAlex works with `is_retracted: true`, 53,618 (39.2%) are retraction notices: 35,976 have type `retraction`, and 17,642 more carry a DOI or PMID that Retraction Watch records as a notice and not also as a paper. Counted as papers, they would add about 60% to the registry. PMC handles the same distinction well: of the 17,533 notice articles it holds, 55 carry its retracted flag.
 <!-- registries.excluded_as_notices, registries.pmc_notice_articles -->
 
 From the notice's side the picture is the same. Of the 44,651 Retraction
@@ -340,7 +353,7 @@ Watch retraction notice DOIs that are not also some paper's DOI, OpenAlex
 flags 41,460 (92.9%) as retracted. This independently reproduces, within two
 points, the 94.5% in the Tesseract Semantics (2026) report, on data fetched
 two months later. <!-- registries.rw_notice_dois_flagged_by_openalex,
-runs/20261027T005839Z-findings.json -->
+runs/20261029T201514Z-findings.json -->
 
 OpenAlex's public ingest code shows why. It sets `is_retracted` when either a
 work's Crossref `update-to` relation or its `updated-by` relation carries a
@@ -352,7 +365,7 @@ PMC shows that the distinction can be kept. Its flag follows a structured
 link: a notice names the paper it retracts in a `related-article` element of
 type `retracted-article`, and PMC marks that paper. Of the 18,296 records PMC
 types as retraction notices, 18,267 (99.8%) carry the link, and one carries
-the retracted flag itself. The 187 counted above were matched by identifier,
+the retracted flag itself. The 55 counted above were matched by identifier,
 a rule that also catches papers sharing an identifier with a notice. Every
 paper PMC holds that both the notice's link and PubMed's "Retraction of"
 entry name, 17,398 of 17,398, is flagged, and PMC and PubMed name different
@@ -371,36 +384,32 @@ ten notices.
 Of the 200 sampled papers, 183 could be decided from the publisher's page.
 The other 17 could not: 14 of them are papers only Retraction Watch flags,
 and 12 of those 14 have no DOI, PMID, or PMCID to follow. Across all 200, the
-labels were `retracted` 173 times, `notice` 6, `not_retracted` 3, and `concern` once.
-<!-- runs/20261027T221642Z-audit-score.json -->
+labels were `retracted` 173 times, `notice` 6, `not_retracted` 3, and `concern` once. After the correction, 140 of the 200 remain in the frame.
+<!-- runs/20261029T201440Z-audit-score.json -->
 
-**Table 3.** Precision of a flag that no other registry shares: the share the
+**Table 4.** Precision of a flag that no other registry shares: the share the
 publisher actually retracted, among papers that could be decided.
 
-| Flagged only by | Papers in frame | Sampled | Decided | Precision (95% CI) | Notices |
+| Flagged only by | Papers in frame | Sampled, still in frame | Decided | Precision (95% CI) | Notices |
 | --- | ---: | ---: | ---: | --- | ---: |
-| OpenAlex | 16,120 | 89 | 86 | 98.8% (93.7% to 99.8%) | 1 |
-| PubMed | 22 | 22 | 22 | 86.4% (66.7% to 95.2%) | 1 |
-| Retraction Watch | 20,259 | 89 | 75 | 92.0% (83.6% to 96.3%) | 4 |
+| OpenAlex | 16,141 | 89 | 86 | 98.8% (93.7% to 99.8%) | 1 |
+| PubMed | 24 | 22 | 22 | 86.4% (66.7% to 95.2%) | 1 |
+| Retraction Watch | 6,345 | 29 | 16 | 93.8% (71.7% to 98.9%) | 1 |
 
 <!-- audit score strata -->
 
-Weighted by stratum size, with a finite population correction for the PubMed
-census, 95.0% (91.5% to 98.6%) of the 36,401 single registry flags are real
-retractions. <!-- audit score frame_estimate --> Most disagreement, then,
+Weighted by stratum size, with a finite population correction, 97.4% (93.7% to 100%) of the 22,510 single registry flags are real retractions. <!-- audit score frame_estimate --> Most disagreement, then,
 comes from one registry holding a retraction the others miss; few single
 flags point at papers that were never retracted. Treated as a measure of
 coverage, the union in Table 2 is close to right.
 
 Three cautions apply. The OpenAlex figure is precision after the notice filter of
-Section 3.4, not of the raw `is_retracted` flag, which Section 4.3 shows is
-half notices. Papers flagged only by OpenAlex may still be in Retraction Watch
+Section 3.4, not of the raw `is_retracted` flag, which Section 4.3 shows is two
+fifths notices. Papers flagged only by OpenAlex may still be in Retraction Watch
 under a record with no DOI or PMID, which one hop identity resolution cannot
-match. And the Retraction Watch stratum rests on 75 decided papers: counting
-all 14 undecided ones as not retracted, the worst case, it would be 69 of 89.
+match. And the Retraction Watch stratum rests on 16 decided papers: counting all 13 undecided ones as not retracted, the worst case, it would be 15 of 29.
 
-Notices counted as papers make up 6 of the 200, the same failure as Section
-4.3 at a smaller scale, and they turn up in all three strata.
+Notices counted as papers make up 3 of the 140 papers still in the frame, one in each stratum, the same failure as Section 4.3 at a smaller scale.
 
 The two labellers agree on 37 of the 40 rows they share (92.5%, Cohen's kappa
 0.80 over all labels) and on every row's split between `retracted` and the
@@ -427,10 +436,8 @@ trend in which publishers retracted in bulk that year.
 
 **Figure 3.** Median days from publication to retraction by notice year.
 
-**Retracted papers keep being cited.** Of 44,557 retracted papers whose whole
-post retraction period falls inside OpenAlex's citation window, 29,024 (65.1%)
-were cited in at least one year after their retraction year, 217,376 citations
-in all; the median paper received 1 and the 90th percentile 11. Year
+**Retracted papers keep being cited.** Of 54,737 retracted papers whose whole
+post retraction period falls inside OpenAlex's citation window, 32,848 (60.0%) were cited in at least one year after their retraction year, 241,815 citations in all; the median paper received 1 and the 90th percentile 10. Year
 granularity undercounts, and these counts do not distinguish citations that
 acknowledge the retraction from those that do not.
 <!-- afterlife.headline_excluding_retract_and_replace -->
@@ -450,6 +457,21 @@ that for Retraction Watch, and agrees with their conclusion that researchers
 data are collected". It adds a measure of how much the results differ and a
 split of that difference into causes.
 
+The pattern has consequences for work already published. Counts for recent
+years are the most fragile: the record of 2023 grew by about half within two
+years, so in the current snapshot the drop from 13,336 notices dated 2023 to
+6,501 dated 2024 should not yet be read as a decline. Reason based series are
+fragile in a second way, because a relabel moves a whole category at once on
+every year of the series. Studies that combine registries inherit both
+problems from each source, each on its own update schedule. Derived data are
+not exempt either: one identity rule in this study's own pipeline, corrected
+between preprint versions, moved 13,891 papers out of the single registry
+group. For systems that act on retraction status, such as reference managers
+that warn authors and retrieval systems that filter citations, the safe
+default is to treat absence from a registry as unknown, not as evidence that
+a paper stands.
+<!-- retraction_lag.by_retraction_year, as_of.retractions_dated_2023 -->
+
 Six practices would make retraction studies easier to repeat.
 
 1. **Cite the snapshot.** Report the snapshot date and the Crossref commit
@@ -465,8 +487,7 @@ Six practices would make retraction studies easier to repeat.
    of concern, corrections, and reinstatements beside retractions; counting
    all of them as retractions is the error behind the 2026 correction of
    Salami et al. (2024a).
-6. **Filter notices before using OpenAlex's flag.** Half of what it marks
-   retracted is a notice, and it flags nine in ten notice DOIs. PMC's rule,
+6. **Filter notices before using OpenAlex's flag.** Two in five of the works it marks retracted are notices, and it flags nine in ten notice DOIs. PMC's rule,
    which flags only the target of a notice's link, shows the fix.
 
 ## 6. Limitations
@@ -487,6 +508,19 @@ Six practices would make retraction studies easier to repeat.
   labellers rests on a fifth of the sample, and blinding is partial
   (Section 3.5). Three clarifications
   of the codebook were made during labelling; each is logged with its date.
+
+## Correction
+
+Version 1 of this preprint (2026-10-29) treated every DOI that Retraction
+Watch lists as a notice as a notice, including DOIs it also lists as the
+retracted paper's own. Because IEEE and some other publishers stamp the
+notice onto the paper's page, the filter discarded 11,852 OpenAlex, 1,220
+PubMed, and 399 PMC flags on real papers. Version 2 fixes the rule
+(Section 3.4). All eligible registries now agree on 66.1% of flagged papers,
+not 51.5%; 22,510 papers are flagged by one registry, not 36,401; 39.2% of
+OpenAlex's retracted works are notices, not 49.3%; and the audit estimates
+97.4% (93.7% to 100%), not 95.0%, on the corrected frame. The results of
+Section 4.1 are unchanged.
 
 ## Use of AI tools
 
@@ -514,9 +548,9 @@ This work received no specific funding.
 
 Code, run reports, the audit codebook, and the labelled sheet:
 https://github.com/TanayPratapSingh/afterlife. Findings in this paper come
-from `runs/20261027T005839Z-findings.json`; the audit sample from
+from `runs/20261029T201514Z-findings.json`; the audit sample from
 `runs/20261027T004212Z-audit-sample.json`; the audit scores from
-`runs/20261027T221642Z-audit-score.json`; agreement between labellers from
+`runs/20261029T201440Z-audit-score.json`; agreement between labellers from
 `runs/20261029T040003Z-audit-agree.json`; notice links in PMC from
 `runs/20261029T052743Z-notices.json`. `afterlife findings` and `afterlife
 notices` rebuild every number from the landed files. The 39 Retraction Watch

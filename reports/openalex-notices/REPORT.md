@@ -27,7 +27,7 @@ What I measured, on works fetched from the API on 2026-10-19:
 - Of those 41,460, you type 24,225 as retraction and 16,396 as article, so for
   the second group a notice looks like a retracted research article on both
   fields.
-- Of all 136,873 works with is_retracted true that I fetched, 67,544 (49.3%)
+- Of all 136,873 works with is_retracted true that I fetched, 53,618 (39.2%)
   are notices.
 
 Likely cause: notebooks/ingest/Crossref.py in openalex-walden, lines 507 to

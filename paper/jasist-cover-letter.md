@@ -13,8 +13,8 @@ its public history and asked each the same questions about retractions dated
 9.1% and those citing "Paper Mill" 80.6%, mostly through late cataloguing of
 Hindawi retractions, while a renamed reason made one common query return
 zero. The paper also compares four retraction registries, shows from
-OpenAlex's public code why half of its retracted works are retraction
-notices, and reports a blind hand audit estimating that 95% of flags held by
+OpenAlex's public code why two in five of its retracted works are retraction
+notices, and reports a blind hand audit estimating that 97% of flags held by
 a single registry are real retractions.
 
 For JASIST readers who build or use bibliographic infrastructure, the paper

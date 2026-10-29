@@ -18,39 +18,39 @@ Everything below was run on real public data on 2026-10-19, on a laptop, and
 the same code was then deployed to a live AWS account and a Databricks Free
 Edition workspace (see [Live deployment](#live-deployment)). Every number
 names the run report it came from. The canonical one is
-`runs/20261019T224600Z-findings.json`; [RESULTS.md](RESULTS.md) has every
+`runs/20261029T201514Z-findings.json`; [RESULTS.md](RESULTS.md) has every
 table with its key.
 
 ---
 
 ## What it found
 
-**No registry is complete.** 89,681 papers are flagged as retracted by at
+**No registry is complete.** 89,706 papers are flagged as retracted by at
 least one registry. The registries that could have flagged a paper all agree
-on only 46,225 of them (51.5%), and 36,401 (40.6%) are flagged by exactly one.
+on only 59,272 of them (66.1%), and 22,510 (25.1%) are flagged by exactly one.
 
 | Registry | Eligible papers | Eligible | Flags | Recall against the union |
 | --- | --- | ---: | ---: | ---: |
-| PMC | with a linked PMC open copy | 19,499 | 18,748 | 96.1% |
-| PubMed | with a PMID | 37,495 | 33,302 | 88.8% |
-| OpenAlex | with a DOI or PMID | 84,162 | 68,945 | 81.9% |
-| Retraction Watch | every paper | 89,681 | 67,672 | 75.5% |
+| PMC | with a linked PMC open copy | 19,867 | 18,880 | 95.0% |
+| PubMed | with a PMID | 37,528 | 34,561 | 92.1% |
+| OpenAlex | with a DOI or PMID | 84,187 | 82,866 | 98.4% |
+| Retraction Watch | every paper | 89,706 | 67,672 | 75.4% |
 
 The union is not ground truth. It is the most generous reading of "somebody
 says this is retracted" ([ADR 0001](docs/adr/0001-no-registry-is-ground-truth.md)).
 
-**Half of OpenAlex's "retracted works" are retraction notices.** OpenAlex
+**Two in five of OpenAlex's "retracted works" are retraction notices.** OpenAlex
 reports 136,970 works with `is_retracted: true`. Of the 136,873 fetched,
-67,544 (49.3%) are the notices rather than the papers they retract: 38,161
-have type `retraction`, and 29,383 more carry a DOI or PMID that Retraction
+53,618 (39.2%) are the notices rather than the papers they retract: 35,976
+have type `retraction`, and 17,642 more carry a DOI or PMID that Retraction
 Watch records as a notice. Counted as papers, they would nearly double the
-registry. PMC gets this right: of the 17,951 notice articles it holds, 187
+registry. PMC gets this right: of the 17,533 notice articles it holds, 187
 carry `is_retracted`.
 
-**Retracted papers keep getting cited.** Of 44,557 retracted papers whose
+**Retracted papers keep getting cited.** Of 54,737 retracted papers whose
 whole post retraction period falls inside OpenAlex's citation window
-(excluding 486 "retract and replace" papers, reported separately), 29,024
-(65.1%) were cited at least once in a year after their retraction year: 217,376
+(excluding 486 "retract and replace" papers, reported separately), 32,848
+(60.0%) were cited at least once in a year after their retraction year: 241,815
 citations in total. The median paper got 1 and the 90th percentile 11.
 
 **Retraction is slow.** Across 67,845 dated retraction notices, the median time
@@ -81,12 +81,11 @@ added after the first snapshot, 3,921 of them Hindawi. A study of 2023 run in
 September 2024 would have seen 9,030 retractions; the database now holds
 13,337. The paper is a MetaArXiv preprint, https://doi.org/10.31222/osf.io/9wgpy_v1 (source in [paper/](paper/)).
 
-**Most single registry flags are real.** A blind hand audit of 200 of the
-36,401 papers only one registry flags, labelled from publishers' pages against
+**Most single registry flags are real.** A blind hand audit of papers only one registry flags, labelled from publishers' pages against
 a codebook committed before any label ([docs/audit-codebook.md](docs/audit-codebook.md)),
-estimates that 95.0% (91.5% to 98.6%) were in fact retracted
-(`runs/20261027T221642Z-audit-score.json`). The registries disagree mostly by
-omission, not by error; notices counted as papers were 6 of the 200. A second
+estimates that 97.4% (93.7% to 100%) of the 22,510 such papers were in fact retracted
+(`runs/20261029T201440Z-audit-score.json`). The registries disagree mostly by
+omission, not by error; notices counted as papers were 3 of the 140 still in the frame. A second
 labeller, blind to the first, agreed on 37 of 40 shared rows (Cohen's kappa
 0.80) and on every retracted or not call
 (`runs/20261029T040003Z-audit-agree.json`).
@@ -160,7 +159,7 @@ a test. They are why the design looks the way it does.
 | CI | GitHub Actions | Core on Python 3.11 and 3.12, Spark on 3.5.3 and 4.0.1, dbt parse, Terraform | green; its first run found two bugs (incidents 9 and 10) |
 
 **Cross engine conformance.** The same dbt models are built on DuckDB and on
-Spark SQL, then every row of every mart is compared: 7 marts, 210,111 rows,
+Spark SQL, then every row of every mart is compared: 7 marts, 224,009 rows,
 identical (`runs/20261019T203151Z-conformance.json`). Engine differences live
 in `adapter.dispatch` macros (`warehouse/macros/cross_engine.sql`), never
 inline in a model.
