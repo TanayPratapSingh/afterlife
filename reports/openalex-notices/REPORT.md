@@ -1,5 +1,11 @@
 # Report to OpenAlex: retraction notices flagged as retracted
 
+**Status:** filed 2026-10-29 through openalex.org/contact. On 2026-10-30
+OpenAlex replied that it had checked the flagged records, confirmed the
+problem, and logged it for its engineering team (internal reference #1500);
+it will reply on the ticket when the fix ships. It did not comment on the
+cause traced below.
+
 Paste the subject and message below into https://openalex.org/contact (log in
 with a free OpenAlex account first). The form has no attachments, so the
 evidence is linked.
