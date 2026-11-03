@@ -2,65 +2,56 @@
 
 **What happens to a scientific paper after it is retracted, and who notices.**
 
-A lakehouse that builds one retraction registry out of four public ones
-(Retraction Watch, OpenAlex, PubMed, PMC), measures how badly they disagree,
-historizes two years of daily Retraction Watch snapshots, and serves a lookup
-API that never answers "ok", only "no registry here flags this, as of this
-date". Ingest and serving are built for AWS, transformation for Databricks,
-and the gold layer is dbt that runs on four warehouses.
+[![Preprint](https://img.shields.io/badge/preprint-MetaArXiv%20v2-1a1a1a)](https://doi.org/10.31222/osf.io/9wgpy_v2)
+[![Data](https://img.shields.io/badge/data-OSF%20D7GSF-1a1a1a)](https://doi.org/10.17605/OSF.IO/D7GSF)
+[![Status](https://img.shields.io/badge/journal-submitted%20to%20JASIST-8c8c8c)](paper/)
+[![CI](https://github.com/TanayPratapSingh/afterlife/actions/workflows/ci.yml/badge.svg)](https://github.com/TanayPratapSingh/afterlife/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-8c8c8c)](LICENSE)
 
-It is the upstream half of EvidenceOps, a separate retrieval system (not yet
-published) that refuses to cite retracted papers. EvidenceOps needs a registry to check
-against. This project builds one, and found that no single public source is
-good enough to be it.
+afterlife joins four public retraction registries (Retraction Watch, OpenAlex,
+PubMed, PubMed Central) into one, keeps every version of every Retraction
+Watch record across 39 public snapshots, and asks how much the answers to a
+fixed question move from one snapshot to the next. Everything ran on real
+public data on a laptop, and the same code was then deployed to a live AWS
+account and a Databricks workspace.
 
-Everything below was run on real public data on 2026-10-19, on a laptop, and
-the same code was then deployed to a live AWS account and a Databricks Free
-Edition workspace (see [Live deployment](#live-deployment)). Every number
-names the run report it came from. The canonical one is
+**Paper.** Singh, T. P. (2026). *Asking Retraction Watch Twice: Retraction
+Data Revise Their Own Past.* MetaArXiv preprint,
+https://doi.org/10.31222/osf.io/9wgpy_v2. Submitted to the Journal of the
+Association for Information Science and Technology. Source in [paper/](paper/).
+
+![Four panels, one per question, each asked of all 39 Retraction Watch snapshots from September 2024 to October 2026](paper/figures/fig1_same_question.png)
+
+*Figure 1. The same four questions about retractions dated 2023 or earlier,
+asked of every snapshot. Key `as_of` in `runs/20261029T201514Z-findings.json`.*
+
+## Findings at a glance
+
+Every number names the run report it came from. The canonical one is
 `runs/20261029T201514Z-findings.json`; [RESULTS.md](RESULTS.md) has every
 table with its key.
 
----
+| Finding | Number | Key |
+| --- | --- | --- |
+| The same question gets a different answer | Retractions dated 2023 or earlier: 48,789 in Sep 2024, 53,227 in Oct 2026 (+9.1%) | `as_of` |
+| Most of the growth is late cataloguing | 4,482 such records added after the first snapshot, 3,921 of them Hindawi | `as_of` |
+| No registry is complete | All eligible registries agree on 66.1% of 89,706 flagged papers | `registries` |
+| Notices posing as papers | 39.2% of OpenAlex's retracted works are retraction notices | `registries` |
+| Most single registry flags are real | An estimated 97.4% (93.7% to 100%) in a blind hand audit | audit score run |
+| Retracted papers keep getting cited | 60.0% of 54,737 were cited after their retraction year | `afterlife` |
+| Retraction is slow | Median 493 days from publication to retraction | `retraction_lag` |
 
 ## What it found
 
-**No registry is complete.** 89,706 papers are flagged as retracted by at
-least one registry. The registries that could have flagged a paper all agree
-on only 59,272 of them (66.1%), and 22,510 (25.1%) are flagged by exactly one.
-
-| Registry | Eligible papers | Eligible | Flags | Recall against the union |
-| --- | --- | ---: | ---: | ---: |
-| PMC | with a linked PMC open copy | 19,867 | 18,880 | 95.0% |
-| PubMed | with a PMID | 37,528 | 34,561 | 92.1% |
-| OpenAlex | with a DOI or PMID | 84,187 | 82,866 | 98.4% |
-| Retraction Watch | every paper | 89,706 | 67,672 | 75.4% |
-
-The union is not ground truth. It is the most generous reading of "somebody
-says this is retracted" ([ADR 0001](docs/adr/0001-no-registry-is-ground-truth.md)).
-
-**Two in five of OpenAlex's "retracted works" are retraction notices.** OpenAlex
-reports 136,970 works with `is_retracted: true`. Of the 136,873 fetched,
-53,618 (39.2%) are the notices rather than the papers they retract: 35,976
-have type `retraction`, and 17,642 more carry a DOI or PMID that Retraction
-Watch records as a notice. Counted as papers, they would nearly double the
-registry. PMC gets this right: of the 17,533 notice articles it holds, 187
-carry `is_retracted`.
-
-**Retracted papers keep getting cited.** Of 54,737 retracted papers whose
-whole post retraction period falls inside OpenAlex's citation window
-(excluding 486 "retract and replace" papers, reported separately), 32,848
-(60.0%) were cited at least once in a year after their retraction year: 241,815
-citations in total. The median paper got 1 and the 90th percentile 11.
-
-**Retraction is slow.** Across 67,845 dated retraction notices, the median time
-from publication to retraction is 493 days (interquartile range 156 to 1,074).
-For notices issued so far in 2026 it is 1,001 days.
-
-**The 2023 wave was paper mills and broken peer review.** Notices citing
-"Paper Mill" went from 4 in 2019 to 6,782 in 2023; "Computer-Aided Content or
-Computer-Generated Content" from 1 to 5,588; "Concerns/Issues about Peer
-Review" from 0 to 7,870.
+**Ask the same question twice, get two answers.** Four questions about
+retractions dated 2023 or earlier, fixed before any was computed, were asked
+of every snapshot. From 2024-09-02 to 2026-10-16 the count grew 9.1% (48,789
+to 53,227), the count citing "Paper Mill" grew 80.6% (4,868 to 8,790), the
+median lag rose from 379 to 420 days, and "Fake Peer Review" fell from 4,654
+to zero on a relabel. Nearly all of it is late cataloguing: 4,482 records
+dated 2023 or earlier were added after the first snapshot, 3,921 of them
+Hindawi. A study of 2023 run in September 2024 would have seen 9,030
+retractions; the database now holds 13,337.
 
 **The source rewrites its own history.** Of 73,334 Retraction Watch records
 seen across 39 snapshots, 50,518 (68.9%) were edited after they first
@@ -70,30 +61,104 @@ Review" became "Compromised Peer Review" on 10,426 records on 2026-01-02).
 whose DOI changed and 54 whose retraction date changed. A pipeline that only
 appends new rows sees none of it.
 
-**Ask the same question twice, get two answers.** Four questions about
-retractions dated 2023 or earlier, fixed before any was computed, asked of
-every snapshot (key `as_of` in `runs/20261027T004647Z-findings.json`). From
-2024-09-02 to 2026-10-16 the count grew 9.1% (48,789 to 53,227), the count
-citing "Paper Mill" grew 80.6% (4,868 to 8,790), the median lag rose from 379
-to 420 days, and "Fake Peer Review" fell from 4,654 to zero on a relabel.
-Nearly all of it is late cataloguing: 4,482 records dated 2023 or earlier were
-added after the first snapshot, 3,921 of them Hindawi. A study of 2023 run in
-September 2024 would have seen 9,030 retractions; the database now holds
-13,337. The paper is a MetaArXiv preprint, https://doi.org/10.31222/osf.io/9wgpy_v2 (source in [paper/](paper/)).
+**No registry is complete.** 89,706 papers are flagged as retracted by at
+least one registry. The registries that could have flagged a paper all agree
+on only 59,272 of them (66.1%), and 22,510 (25.1%) are flagged by exactly one.
 
-**Most single registry flags are real.** A blind hand audit of papers only one registry flags, labelled from publishers' pages against
-a codebook committed before any label ([docs/audit-codebook.md](docs/audit-codebook.md)),
-estimates that 97.4% (93.7% to 100%) of the 22,510 such papers were in fact retracted
+| Registry | Eligible papers | Eligible | Flags | Recall against the union |
+| --- | --- | ---: | ---: | ---: |
+| OpenAlex | with a DOI or PMID | 84,187 | 82,866 | 98.4% |
+| PMC | with a linked PMC open copy | 19,867 | 18,880 | 95.0% |
+| PubMed | with a PMID | 37,528 | 34,561 | 92.1% |
+| Retraction Watch | every paper | 89,706 | 67,672 | 75.4% |
+
+The union is not ground truth. It is the most generous reading of "somebody
+says this is retracted" ([ADR 0001](docs/adr/0001-no-registry-is-ground-truth.md)).
+
+**Most single registry flags are real.** A blind hand audit of papers only one
+registry flags, labelled from publishers' pages against a codebook committed
+before any label ([docs/audit-codebook.md](docs/audit-codebook.md)), estimates
+that 97.4% (93.7% to 100%) of the 22,510 such papers were in fact retracted
 (`runs/20261029T201440Z-audit-score.json`). The registries disagree mostly by
-omission, not by error; notices counted as papers were 3 of the 140 still in the frame. A second
-labeller, blind to the first, agreed on 37 of 40 shared rows (Cohen's kappa
-0.80) and on every retracted or not call
+omission, not by error; notices counted as papers were 3 of the 140 sampled
+papers still in the frame. A second labeller, blind to the first, agreed on 37
+of 40 shared rows (Cohen's kappa 0.80) and on every retracted or not call
 (`runs/20261029T040003Z-audit-agree.json`).
+
+**Two in five of OpenAlex's "retracted works" are retraction notices.**
+OpenAlex reports 136,970 works with `is_retracted: true`. Of the 136,873
+fetched, 53,618 (39.2%) are the notices rather than the papers they retract:
+35,976 have type `retraction`, and 17,642 more carry a DOI or PMID that
+Retraction Watch records as a notice. Counted as papers, they would nearly
+double the registry. PMC gets this right: of the 17,533 notice articles it
+holds, 55 carry `is_retracted`. The cause is a rule in OpenAlex's public
+ingest code; OpenAlex confirmed the problem on 2026-10-30 and logged it for a
+fix (internal reference #1500). Report and evidence:
+[reports/openalex-notices/](reports/openalex-notices/REPORT.md).
+
+**Retracted papers keep getting cited.** Of 54,737 retracted papers whose
+whole post retraction period falls inside OpenAlex's citation window
+(excluding 548 "retract and replace" papers, reported separately), 32,848
+(60.0%) were cited at least once in a year after their retraction year:
+241,815 citations in total. The median paper got 1 and the 90th percentile
+10.
+
+**Retraction is slow.** Across 67,845 dated retraction notices, the median
+time from publication to retraction is 493 days (interquartile range 156 to
+1,074). For notices issued so far in 2026 it is 1,001 days.
+
+**The 2023 wave was paper mills and broken peer review.** Notices citing
+"Paper Mill" went from 4 in 2019 to 6,782 in 2023; "Computer-Aided Content or
+Computer-Generated Content" from 1 to 5,588; "Concerns/Issues about Peer
+Review" from 0 to 7,870.
+
+## How it is built
+
+```
+public sources -> S3 landing (immutable) -> bronze -> silver (SCD2, quality gate) -> gold (dbt)
+                                                                                      |
+   DynamoDB <- loader Lambda <- export: JSONL, Parquet, coverage <-------------------+
+      |                                  |
+ HTTP API lookup                   Athena and Glue
+```
+
+Raw files land unchanged with checksums. Bronze reads them as they are.
+Silver keeps every version of every Retraction Watch record with a validity
+interval (a type 2 slowly changing dimension), so the database can be queried
+as it stood on any snapshot date. Gold is dbt: identity across DOI, PMID, and
+PMCID, then the registry, agreement, lag, citation, reason, and mutability
+marts. A lookup API serves the result, and it never answers "ok", only "no
+registry here flags this, as of this date".
+
+| Layer | Technology | What it does here | Status |
+| --- | --- | --- | --- |
+| Landing | S3 (locally, a directory) | Raw bytes, sha256 manifests, `If-None-Match: *` writes that refuse to overwrite | executed locally; S3 path tested with moto |
+| Ingest | Lambda, ECS Fargate, ECR, EventBridge Scheduler, Step Functions, SQS | Daily fetchers. OpenAlex runs on Fargate: its fetch took 9 minutes 42 seconds, two thirds of Lambda's 15 minute ceiling | **deployed**: Lambda and Fargate fetches and the Step Functions run succeeded live |
+| Transform | Spark 3.5 and Delta Lake, Databricks Unity Catalog, serverless | Manifest driven bronze; SCD2 replay of 39 snapshots with Delta MERGE and change data feed; the quality gate | **deployed**: the Databricks job built the same SCD2 history as the laptop (152,336 versions) |
+| Orchestration | Databricks Asset Bundle, Lakeflow Jobs, Lakeflow Declarative Pipeline | Daily DAG; pipeline expectations as a publication contract | **deployed**: job and pipeline ran green on Free Edition |
+| Gold | dbt on DuckDB, Spark SQL, Databricks, Snowflake, BigQuery | Identity across DOI, PMID, PMCID; registry, agreement, lag, afterlife, reasons, mutability | DuckDB and Spark compared row by row; **ran on a Databricks SQL warehouse**; Snowflake and BigQuery `dbt parse` only |
+| Serving | DynamoDB, Lambda, API Gateway HTTP API | `GET /v1/lookup/{id}` with a plain English, per source explanation | **deployed**: 214,646 items loaded, lookups answered live |
+| Analytics | Glue Data Catalog, Athena | Partition projected Parquet, a bytes scanned cutoff per query | **deployed**: a live query matched gold, 5,012 bytes scanned |
+| Platform | Terraform, KMS, IAM, GitHub OIDC, CloudWatch, SNS, AWS Budgets | Least privilege roles, alarms, a monthly cost budget | **deployed** except the GitHub OIDC role (the account's SCP denies it); checkov 390 passed, 0 failed, 25 skipped with reasons (`runs/20261019T203857Z-checkov.json`) |
+| CI | GitHub Actions | Core on Python 3.11 and 3.12, Spark on 3.5.3 and 4.0.1, dbt parse, Terraform | green; its first run found two bugs (incidents 9 and 10) |
+
+**Cross engine conformance.** The same dbt models are built on DuckDB and on
+Spark SQL, then every row of every mart is compared: 7 marts, 224,009 rows,
+identical (`runs/20261029T201340Z-conformance.json`). Engine differences live
+in `adapter.dispatch` macros (`warehouse/macros/cross_engine.sql`), never
+inline in a model.
+
+Full diagram: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). Decisions:
+[docs/adr/](docs/adr/). Cloud specifics: [aws/README.md](aws/README.md) and
+[databricks/README.md](databricks/README.md).
 
 ## Incidents the pipeline caught
 
 Each was found on real data, broke something, and is now handled in code with
 a test. They are why the design looks the way it does.
+
+<details>
+<summary><b>Ten incidents found on real data</b> (encoding loss, format churn, version skew, and more)</summary>
 
 1. **A daily snapshot in the wrong encoding, and lossy.** The Retraction Watch
    file for 2026-10-15 was Windows-1252 instead of UTF-8 (35,954 invalid UTF-8
@@ -144,60 +209,12 @@ a test. They are why the design looks the way it does.
     Linux CI, which is what Databricks runs. The sentinel is now built inside
     Spark. Also found by CI on its first run.
 
-## The stack
-
-| Layer | Technology | What it does here | Status |
-| --- | --- | --- | --- |
-| Landing | S3 (locally, a directory) | Raw bytes, sha256 manifests, `If-None-Match: *` writes that refuse to overwrite | executed locally; S3 path tested with moto |
-| Ingest | Lambda, ECS Fargate, ECR, EventBridge Scheduler, Step Functions, SQS | Daily fetchers. OpenAlex runs on Fargate: its fetch took 9 minutes 42 seconds, two thirds of Lambda's 15 minute ceiling | **deployed**: Lambda and Fargate fetches and the Step Functions run succeeded live |
-| Transform | Spark 3.5 and Delta Lake, Databricks Unity Catalog, serverless | Manifest driven bronze; SCD2 replay of 39 snapshots with Delta MERGE and change data feed; the quality gate | **deployed**: the Databricks job built the same SCD2 history as the laptop (152,336 versions) |
-| Orchestration | Databricks Asset Bundle, Lakeflow Jobs, Lakeflow Declarative Pipeline | Daily DAG; pipeline expectations as a publication contract | **deployed**: job and pipeline ran green on Free Edition |
-| Gold | dbt on DuckDB, Spark SQL, Databricks, Snowflake, BigQuery | Identity across DOI, PMID, PMCID; registry, agreement, lag, afterlife, reasons, mutability | DuckDB and Spark compared row by row; **ran on a Databricks SQL warehouse**; Snowflake and BigQuery `dbt parse` only |
-| Serving | DynamoDB, Lambda, API Gateway HTTP API | `GET /v1/lookup/{id}` with a plain English, per source explanation | **deployed**: 214,646 items loaded, lookups answered live |
-| Analytics | Glue Data Catalog, Athena | Partition projected Parquet, a bytes scanned cutoff per query | **deployed**: a live query matched gold, 5,012 bytes scanned |
-| Platform | Terraform, KMS, IAM, GitHub OIDC, CloudWatch, SNS, AWS Budgets | Least privilege roles, alarms, a monthly cost budget | **deployed** except the GitHub OIDC role (the account's SCP denies it); checkov 390 passed, 0 failed, 25 skipped with reasons (`runs/20261019T203857Z-checkov.json`) |
-| CI | GitHub Actions | Core on Python 3.11 and 3.12, Spark on 3.5.3 and 4.0.1, dbt parse, Terraform | green; its first run found two bugs (incidents 9 and 10) |
-
-**Cross engine conformance.** The same dbt models are built on DuckDB and on
-Spark SQL, then every row of every mart is compared: 7 marts, 224,009 rows,
-identical (`runs/20261019T203151Z-conformance.json`). Engine differences live
-in `adapter.dispatch` macros (`warehouse/macros/cross_engine.sql`), never
-inline in a model.
-
-```
-public sources -> S3 landing (immutable) -> bronze -> silver (SCD2, quality gate) -> gold (dbt)
-                                                                                      |
-   DynamoDB <- loader Lambda <- export: JSONL, Parquet, coverage <-------------------+
-      |                                  |                                           |
- HTTP API lookup                   Athena and Glue                    EvidenceOps trust registry
-```
-
-Full diagram: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). Decisions:
-[docs/adr/](docs/adr/). Cloud specifics: [aws/README.md](aws/README.md) and
-[databricks/README.md](databricks/README.md).
-
-## Reproduce
-
-```bash
-make install       # venv: Spark 3.5.3, Delta 3.3.2, a bundled Java runtime, dbt for DuckDB and Spark
-make pipeline      # fetch, bronze, silver, pmc, gold, export, findings; each step writes runs/*.json
-make conformance   # gold on DuckDB and on Spark SQL, every row compared
-make test          # 137 tests; the real data checks run when data/lake exists
-```
-
-The fetch lands 2.78 GB of raw bytes (39 Retraction Watch snapshots, NCBI's
-PMC id map, 43,616 PMC metadata objects, OpenAlex, PubMed) and spends about
-seven cents of the shared OpenAlex daily allowance. `make test-core` runs the
-standard library core in under a second with no network.
-
-To deploy, follow [aws/README.md](aws/README.md) (an AWS free tier account,
-then `terraform apply`) and [databricks/README.md](databricks/README.md)
-(Databricks Free Edition, then `databricks bundle deploy -t free`).
+</details>
 
 ## Live deployment
 
 On 2026-10-19 the stack was applied to a new AWS free plan account
-(`us-east-2`) and the bundle to a Databricks Free Edition workspace. What ran:
+(`us-east-2`) and the bundle to a Databricks Free Edition workspace.
 
 - **AWS.** Terraform created the stack (everything except the GitHub OIDC
   deploy role, which the account's Organization denies by SCP). The fetch
@@ -213,8 +230,11 @@ On 2026-10-19 the stack was applied to a new AWS free plan account
   records), and after one fix the uncompressed export is byte identical to the
   laptop's, all 92,097 documents.
 
-The live run found six bugs the local suite had not, each now fixed with a
-test or a documented change:
+Live endpoint, while the stack is up:
+`https://76gt9n1650.execute-api.us-east-2.amazonaws.com/v1/lookup/10.1056/NEJMoa2007621`
+
+<details>
+<summary><b>Six more bugs the live run found</b>, each now fixed with a test or a documented change</summary>
 
 11. **An SCP on free plan accounts denies `iam:CreateOpenIDConnectProvider`.**
     The GitHub deploy role is optional (`enable_github_deploy_role`).
@@ -232,10 +252,10 @@ test or a documented change:
     papers whose Retraction Watch records disagree (3 papers in all). The
     choice is now deterministic: the retraction record's PMID first.
 
-Live endpoint, while the stack is up:
-`https://76gt9n1650.execute-api.us-east-2.amazonaws.com/v1/lookup/10.1056/NEJMoa2007621`
+</details>
 
-## What ran where
+<details>
+<summary><b>What ran where</b></summary>
 
 | | Executed live in the cloud | Executed on real data locally | Executed on synthetic data | Validated statically |
 | --- | --- | --- | --- | --- |
@@ -246,6 +266,26 @@ Live endpoint, while the stack is up:
 | Terraform | applied | | `terraform test`, mock provider | fmt, validate, checkov |
 | Databricks bundle and pipeline | deployed and run | | pipeline transforms, entry points | CLI schema |
 | GitHub deploy role | blocked by the account's SCP | | | |
+
+</details>
+
+## Reproduce
+
+```bash
+make install       # venv: Spark 3.5.3, Delta 3.3.2, a bundled Java runtime, dbt for DuckDB and Spark
+make pipeline      # fetch, bronze, silver, pmc, gold, export, findings; each step writes runs/*.json
+make conformance   # gold on DuckDB and on Spark SQL, every row compared
+make test          # 163 tests; the real data checks run when data/lake exists
+```
+
+The fetch lands 2.78 GB of raw bytes (39 Retraction Watch snapshots, NCBI's
+PMC id map, 43,616 PMC metadata objects, OpenAlex, PubMed) and spends about
+seven cents of the shared OpenAlex daily allowance. `make test-core` runs the
+standard library core in under a second with no network.
+
+To deploy, follow [aws/README.md](aws/README.md) (an AWS free tier account,
+then `terraform apply`) and [databricks/README.md](databricks/README.md)
+(Databricks Free Edition, then `databricks bundle deploy -t free`).
 
 ## Limitations
 
@@ -281,3 +321,15 @@ No raw data is stored in this repository; `make pipeline` fetches it. The exact
 files the numbers above came from, all 39 Retraction Watch snapshots included,
 are archived with checksums at https://doi.org/10.17605/OSF.IO/D7GSF. Code
 under the MIT license.
+
+## Cite
+
+```bibtex
+@misc{singh2026asking,
+  author       = {Singh, Tanay Pratap},
+  title        = {Asking Retraction Watch Twice: Retraction Data Revise Their Own Past},
+  year         = {2026},
+  howpublished = {MetaArXiv preprint},
+  doi          = {10.31222/osf.io/9wgpy_v2}
+}
+```
