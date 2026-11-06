@@ -107,3 +107,28 @@ def test_a_range_endpoint_is_cited_by_its_own_xref_not_by_the_range():
     c = jats.citances(RANGE_AND_TABLE, doi="10.1000/one", pmid=None, title=None)
     assert c["ranges"] == 0 and c["xrefs"] == 1
     assert c["sentences"] == ["Several trials found benefit [ [CITED] \u2013 3 ]."]
+
+
+def test_practice_workbook_has_the_dropdown_and_refuses_to_overwrite(tmp_path):
+    from openpyxl import load_workbook
+
+    row = {
+        "id": "P01",
+        "title": "A retracted trial",
+        "paper_url": "https://doi.org/10.1000/x",
+        "retraction_year": 2020,
+        "citing_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1/",
+        "citing_year": 2022,
+        "text": "Drug X works [CITED].",
+        "reference": "A retracted trial. 10.1000/x",
+    }
+    path = tmp_path / "practice.xlsx"
+    assert citances.write_practice([row], path)["rows"] == 1
+    ws = load_workbook(path)["Label"]
+    assert [c.value for c in ws[3]] == list(citances._HEADER)
+    assert ws["F4"].value == "Drug X works [CITED]." and ws["H4"].value is None
+    assert "relies" in ws.data_validations.dataValidation[0].formula1
+    import pytest
+
+    with pytest.raises(SystemExit):
+        citances.write_practice([row], path)

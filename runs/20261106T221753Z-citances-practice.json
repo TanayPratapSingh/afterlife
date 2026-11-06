@@ -1,0 +1,15 @@
+{
+  "command": "citances-practice",
+  "argv": [
+    "citances",
+    "practice"
+  ],
+  "started_at": "2026-11-06T22:17:44.519980+00:00",
+  "finished_at": "2026-11-06T22:17:53.533813+00:00",
+  "seconds": 9.0,
+  "report": {
+    "workbook": "data/citances/practice.xlsx",
+    "rows": 53,
+    "from_pilot": "data/citances/20261106T205748Z-pilot.jsonl"
+  }
+}

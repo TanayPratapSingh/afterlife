@@ -214,6 +214,8 @@ def cmd_notices(args) -> dict:
 def cmd_citances(args) -> dict:
     from afterlife import citances
 
+    if args.action == "practice":
+        return citances.practice()
     return citances.pilot(n=args.n, budget_usd=args.budget, store=store_from_env())
 
 
@@ -278,7 +280,7 @@ def main(argv: list[str] | None = None) -> int:
     c.add_argument("--no-build", action="store_true")
     c.set_defaults(func=cmd_conformance)
     ct = sub.add_parser("citances", help="feasibility of reading post retraction citing sentences")
-    ct.add_argument("action", choices=["pilot"])
+    ct.add_argument("action", choices=["pilot", "practice"])
     ct.add_argument("--n", type=int, default=200)
     ct.add_argument("--budget", type=float, default=0.05, help="USD cap for OpenAlex")
     ct.set_defaults(func=cmd_citances)
