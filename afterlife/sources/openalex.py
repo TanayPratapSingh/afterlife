@@ -199,6 +199,30 @@ def fetch_retracted(
     return list(unique.values()), info
 
 
+CITING_FIELDS = "id,doi,ids,publication_year,type"
+
+
+def sample_citing(
+    openalex_id: str, after_year: int, seed: int, budget: Budget, get=http.get
+) -> dict | None:
+    """One work, drawn by OpenAlex's own seeded sampler, among those citing
+    `openalex_id` and published in a year after `after_year`; None if none do.
+    Drawing one citing work per paper picked in proportion to its post
+    retraction citations makes every such citation equally likely."""
+    body = _call(
+        get,
+        budget,
+        {
+            "filter": f"cites:{openalex_id},publication_year:>{after_year}",
+            "sample": 1,
+            "seed": seed,
+            "select": CITING_FIELDS,
+        },
+    )
+    results = body.get("results") or []
+    return results[0] if results else None
+
+
 def to_jsonl(rows: Iterable[dict]) -> bytes:
     return "".join(json.dumps(r, sort_keys=True) + "\n" for r in rows).encode()
 

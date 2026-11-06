@@ -85,6 +85,121 @@ def notice(xml: str) -> dict:
     }
 
 
+_REF = re.compile(r"<ref(?=[\s>])([^>]*)>(.*?)</ref>", re.S)  # not <ref-list>
+_PUB_ID = re.compile(r'<pub-id\s+pub-id-type="(doi|pmid)"[^>]*>([^<]+)</pub-id>')
+_BODY = re.compile(r"<body\b[^>]*>(.*?)</body>", re.S)
+_XREF = re.compile(r"<xref\b([^>]*?)(?:/>|>(.*?)</xref>)", re.S)
+_PARA = re.compile(r"<p\b[^>]*>(.*?)</p>", re.S)
+_REF_LIST = re.compile(r"<ref-list\b.*?</ref-list>", re.S)
+_ROW = re.compile(r"<tr\b[^>]*>(.*?)</tr>", re.S)
+_CELL_BREAK = re.compile(r"</t[dh]>\s*<t[dh]\b[^>]*>")
+_DASH = r"(?:\u2013|&#x2013;|&#8211;|&ndash;|-|\u2014)"
+_INNER = r"((?:(?!</?xref\b).)*?)"  # an xref's content, never running into the next xref
+_RANGE = re.compile(
+    rf"<xref\b([^>]*?)>{_INNER}</xref>\s*{_DASH}\s*<xref\b([^>]*?)>{_INNER}</xref>", re.S
+)
+_SENTENCE_END = re.compile(r"(?<=[.!?])\s+(?=[A-Z])")
+_NO_BREAK_AFTER = ("et al.", "e.g.", "i.e.", "Fig.", "Figs.", "vs.", "cf.", "No.", "Ref.", "Refs.")
+CITED = "[CITED]"
+
+
+def _words(s: str) -> list[str]:
+    return re.findall(r"[a-z0-9]+", s.lower())
+
+
+def _ref_matches(body: str, doi: str | None, pmid: str | None, title: str | None) -> str | None:
+    """How a reference entry identifies the target paper: doi, pmid, or title."""
+    pub = {k: v.strip() for k, v in _PUB_ID.findall(body)}
+    dois = {ids.doi(pub.get("doi"))} | {ids.doi(d.rstrip(".,;)]")) for d in _TEXT_DOI.findall(body)}
+    target_doi, target_pmid = ids.doi(doi), ids.pmid(pmid)
+    if target_doi and target_doi in dois:
+        return "doi"
+    if target_pmid and ids.pmid(pub.get("pmid")) == target_pmid:
+        return "pmid"
+    # shortcut: the first eight title words in order, enough to tell papers apart in one
+    # reference list; a title shorter than six words is too generic to match on.
+    head = _words(title or "")[:8]
+    if len(head) >= 6 and " ".join(head) in " ".join(_words(_clean(body))):
+        return "title"
+    return None
+
+
+def _sentences(text: str) -> list[str]:
+    out: list[str] = []
+    for piece in _SENTENCE_END.split(text):
+        if out and out[-1].endswith(_NO_BREAK_AFTER):
+            out[-1] += " " + piece
+        else:
+            out.append(piece)
+    return out
+
+
+def citances(xml: str, *, doi: str | None, pmid: str | None, title: str | None) -> dict:
+    """The sentences and table rows of an article that cite one target paper.
+
+    The target is found in the reference list by DOI, then PMID, then title.
+    Each `<xref ref-type="bibr">` pointing at a matching reference is marked,
+    and so is a collapsed range ("10-13") whose two ends bracket the target in
+    reference list order, since the target then has no xref of its own. Marks
+    in table rows come back as `table_rows` (tables can sit outside `<body>`,
+    in `<floats-group>`); marks in prose as `sentences`, shown as [CITED].
+    """
+    order, matched, entries = [], {}, []
+    for tag, body in _REF.findall(xml):
+        rid = _attrs(tag).get("id")
+        order.append(rid)
+        if rid and (how := _ref_matches(body, doi, pmid, title)):
+            matched[rid] = how
+            entries.append(_clean(body))
+    out = {
+        "has_body": _BODY.search(xml) is not None,
+        "ref_ids": sorted(matched),
+        "matched_by": sorted(set(matched.values())),
+        "references": entries,
+        "xrefs": 0,
+        "ranges": 0,
+        "sentences": [],
+        "table_rows": [],
+    }
+    if not matched:
+        return out
+    pos = {r: i for i, r in enumerate(order) if r}
+    inside = [pos[r] for r in matched if r in pos]
+
+    def bibr(tag_attrs: str) -> list[str]:
+        a = _attrs(tag_attrs)
+        return (a.get("rid") or "").split() if a.get("ref-type") == "bibr" else []
+
+    def mark_range(m: re.Match) -> str:
+        lo, hi = bibr(m.group(1)), bibr(m.group(3))
+        if lo and hi and lo[-1] in pos and hi[0] in pos:
+            a, b = pos[lo[-1]], pos[hi[0]]
+            if any(a < i < b for i in inside):
+                out["ranges"] += 1
+                return f" {CITED} "
+        return m.group(0)
+
+    def mark(m: re.Match) -> str:
+        if set(bibr(m.group(1))) & matched.keys():
+            out["xrefs"] += 1
+            return f" {CITED} "
+        return m.group(0)
+
+    text = _REF_LIST.sub(" ", xml)
+    text = _RANGE.sub(mark_range, text)
+    text = _XREF.sub(mark, text)
+
+    def take_row(m: re.Match) -> str:
+        if CITED in (row := _clean(_CELL_BREAK.sub(" | ", m.group(1)))):
+            out["table_rows"].append(row.strip(" |"))
+        return " "
+
+    text = _ROW.sub(take_row, text)
+    for para in _PARA.findall(text):
+        out["sentences"] += [s for s in _sentences(_clean(para)) if CITED in s]
+    return out
+
+
 def retracted(n: dict) -> list[dict]:
     return [r for r in n["related"] if (r["type"] or "").lower() == RETRACTED]
 

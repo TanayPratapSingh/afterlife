@@ -1,0 +1,116 @@
+{
+  "command": "citances-pilot",
+  "argv": [
+    "citances",
+    "pilot",
+    "--n",
+    "200",
+    "--budget",
+    "0.05"
+  ],
+  "started_at": "2026-11-06T20:55:20.011964+00:00",
+  "finished_at": "2026-11-06T20:57:48.786791+00:00",
+  "seconds": 148.8,
+  "report": {
+    "seed": "afterlife-citances-pilot-2026-11-06",
+    "frame": {
+      "papers": 32848,
+      "citations_after": 241815
+    },
+    "drawn": 200,
+    "requested": 200,
+    "distinct_papers": 195,
+    "citing_work_found": {
+      "k": 200,
+      "n": 200,
+      "share": 1.0,
+      "ci95": [
+        0.9812,
+        1.0
+      ]
+    },
+    "citing_types": {
+      "article": 145,
+      "review": 27,
+      "book-chapter": 11,
+      "conference-paper": 9,
+      "dissertation": 2,
+      "editorial": 1,
+      "data-paper": 1,
+      "preprint": 1,
+      "retraction": 1,
+      "other": 1,
+      "peer-review": 1
+    },
+    "with_pmcid": {
+      "k": 60,
+      "n": 200,
+      "share": 0.3,
+      "ci95": [
+        0.2407,
+        0.3668
+      ]
+    },
+    "pmcid_from": {
+      "openalex": 60
+    },
+    "in_pmc_open_data": {
+      "k": 55,
+      "n": 200,
+      "share": 0.275,
+      "ci95": [
+        0.2178,
+        0.3407
+      ]
+    },
+    "with_xml": {
+      "k": 55,
+      "n": 200,
+      "share": 0.275,
+      "ci95": [
+        0.2178,
+        0.3407
+      ]
+    },
+    "licenses": {
+      "CC BY": 34,
+      "CC BY-NC-ND": 8,
+      "TDM": 5,
+      "CC BY-NC": 6,
+      "CC BY-NC-SA": 1,
+      "null": 1
+    },
+    "reference_matched": {
+      "k": 54,
+      "n": 200,
+      "share": 0.27,
+      "ci95": [
+        0.2132,
+        0.3354
+      ]
+    },
+    "matched_by": {
+      "doi": 53,
+      "title": 2
+    },
+    "with_citing_text": {
+      "k": 53,
+      "n": 200,
+      "share": 0.265,
+      "ci95": [
+        0.2087,
+        0.3302
+      ]
+    },
+    "with_sentence": 48,
+    "only_in_table": 5,
+    "found_through_range": 8,
+    "matched_but_no_text": 1,
+    "rows": "data/citances/20261106T205748Z-pilot.jsonl",
+    "openalex": {
+      "limit_usd": 0.05,
+      "spent_usd": 0.02,
+      "calls": 200
+    }
+  }
+}

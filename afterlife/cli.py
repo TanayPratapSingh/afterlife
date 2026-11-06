@@ -211,6 +211,12 @@ def cmd_notices(args) -> dict:
     return notices.run(store_from_env())
 
 
+def cmd_citances(args) -> dict:
+    from afterlife import citances
+
+    return citances.pilot(n=args.n, budget_usd=args.budget, store=store_from_env())
+
+
 def cmd_audit(args) -> dict:
     from afterlife import audit
 
@@ -271,6 +277,11 @@ def main(argv: list[str] | None = None) -> int:
     c = sub.add_parser("conformance", help="build gold on DuckDB and Spark, compare every row")
     c.add_argument("--no-build", action="store_true")
     c.set_defaults(func=cmd_conformance)
+    ct = sub.add_parser("citances", help="feasibility of reading post retraction citing sentences")
+    ct.add_argument("action", choices=["pilot"])
+    ct.add_argument("--n", type=int, default=200)
+    ct.add_argument("--budget", type=float, default=0.05, help="USD cap for OpenAlex")
+    ct.set_defaults(func=cmd_citances)
     a = sub.add_parser("audit", help="hand audit of papers that exactly one registry flags")
     a.add_argument("action", choices=["sample", "sheet", "score", "second", "agree"])
     a.add_argument("--n", type=int, default=200)
