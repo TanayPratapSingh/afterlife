@@ -1,7 +1,7 @@
 # Second study plan: do post retraction citations warn or rely?
 
-Draft of 2026-11-06. Not yet frozen: freeze it, with the codebook, in one
-commit before the first label of the main sample is entered.
+Frozen with the codebook on 2026-11-07, before any label of the main sample.
+Changes from here on are logged in the codebook's change log.
 
 ## Question
 
@@ -66,20 +66,25 @@ frame is then equally likely (`afterlife/citances.py`).
 - **Pilot (done).** Seed `afterlife-citances-pilot-2026-11-06`, 200 draws, 53
   readable. Used only to develop the codebook and the extractor. Never part of
   any estimate.
+- **Practice (done).** 23 pilot rows labelled on 2026-11-07 set where the
+  line between `relies` (this paper's own result) and `mentions` (general
+  background) falls; see the codebook change log. Practice labels are never
+  part of any estimate.
 - **Main sample.** A new seed, drawn after the codebook is frozen, enough
-  draws for 300 readable citations (about 1,150 at the pilot's 26.5%).
-  Labelled by Tanay by hand. 300 gives a 95% interval of at most about
-  plus or minus 5.7 points on any share.
-- **Second labeller.** 60 of the 300, blind to the first labels; Cohen's
+  draws for 200 readable citations (about 760 at the pilot's 26.5%).
+  Labelled by Tanay by hand, 30 rows a sitting. 200 gives a 95% interval of
+  at most about plus or minus 6.9 points on any share.
+- **Second labeller.** 40 of the 200, blind to the first labels; Cohen's
   kappa, as in the first paper's audit.
 
 ## Unit of labelling
 
 One citation: every citing sentence and table row in one citing article that
-points at one retracted paper, plus that article's reference entry for it
-(a reference that says "Retracted" counts as acknowledgement). The sheet shows
-the citing text with the citation marked [CITED], the retracted paper's
-title, and links to both articles.
+points at one retracted paper. The sheet shows the citing text with the
+citation marked [CITED], the retracted paper's title, and links to both
+articles. Whether the citing article's reference entry shows the retraction
+is detected by code and reported as its own share, beside the hand labels,
+never merged into `acknowledges`.
 
 ## Analysis
 
@@ -93,7 +98,7 @@ title, and links to both articles.
 
 ## Model triage
 
-After hand labelling: a model labels the same 300 from the same codebook
+After hand labelling: a model labels the same 200 from the same codebook
 text, never seeing the hand labels. Report agreement with Tanay (kappa and per
 label precision and recall), then calibrate its confidence on half and check
 it on the other half (expected calibration error). Only if both hold up does
@@ -118,7 +123,7 @@ estimate beside the hand estimate, never in place of it.
 
 - November: applications first. Read the two papers above; revise the
   codebook on the pilot rows; freeze.
-- December: draw the main sample and label 300.
+- December: draw the main sample and label 200.
 - January: second labeller, model triage, calibration.
 - February: write. Target venues: Quantitative Science Studies, Scientometrics,
   or JASIST.
