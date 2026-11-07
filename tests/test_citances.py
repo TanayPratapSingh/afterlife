@@ -5,6 +5,8 @@ from __future__ import annotations
 
 from collections import Counter
 
+import pytest
+
 from afterlife import citances
 from afterlife.core import jats
 from afterlife.core.budget import Budget
@@ -110,7 +112,7 @@ def test_a_range_endpoint_is_cited_by_its_own_xref_not_by_the_range():
 
 
 def test_practice_workbook_has_the_dropdown_and_refuses_to_overwrite(tmp_path):
-    from openpyxl import load_workbook
+    openpyxl = pytest.importorskip("openpyxl")
 
     row = {
         "id": "P01",
@@ -124,11 +126,9 @@ def test_practice_workbook_has_the_dropdown_and_refuses_to_overwrite(tmp_path):
     }
     path = tmp_path / "practice.xlsx"
     assert citances.write_practice([row], path)["rows"] == 1
-    ws = load_workbook(path)["Label"]
+    ws = openpyxl.load_workbook(path)["Label"]
     assert [c.value for c in ws[3]] == list(citances._HEADER)
     assert ws["F4"].value == "Drug X works [CITED]." and ws["H4"].value is None
     assert "relies" in ws.data_validations.dataValidation[0].formula1
-    import pytest
-
     with pytest.raises(SystemExit):
         citances.write_practice([row], path)
