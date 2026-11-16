@@ -1,0 +1,17 @@
+{
+  "checked_at": "2026-11-16T22:50:25Z",
+  "counts": {
+    "notices_landed": 34110,
+    "notices_without_a_link_to_another_pmid": 1222,
+    "rw_pairs_for_those_notices": 63,
+    "paper_not_flagged_2026_10_19": 60,
+    "dropped_notice_title_does_not_name_paper": 13,
+    "dropped_paper_record_typed_notice": 11,
+    "dropped_paper_pmid_missing": 5,
+    "dropped_other_record_for_doi": 0,
+    "dropped_notice_linked_live": 0,
+    "reported": 31,
+    "reported_not_cochrane": 28,
+    "headline": 11
+  }
+}
