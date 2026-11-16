@@ -58,10 +58,12 @@ Correct values: on each paper, add the Retracted Publication type and a
 the paper's PMID.
 
 The full list of 11, with DOIs, notice PMIDs, Retraction Watch record IDs, and
-Crossref retraction DOIs, is attached (pubmed_unlinked_retractions.csv; the
-11 are the rows with notice_newer_than_paper and crossref_confirms_same_publisher
-true, cochrane false, and hand_excluded empty). The other 1,211 unlinked notices may hide more
-cases; I could not confirm those from public data alone.
+Crossref retraction DOIs, is here (the 11 are the rows with
+notice_newer_than_paper and crossref_confirms_same_publisher true, cochrane
+false, and hand_excluded empty):
+https://github.com/TanayPratapSingh/afterlife/blob/main/reports/pubmed-unlinked-notices/pubmed_unlinked_retractions.csv
+The other 1,211 unlinked notices may hide more cases; I could not confirm
+those from public data alone.
 
 Method, code, and data: https://github.com/TanayPratapSingh/afterlife
 (reports/pubmed-unlinked-notices). Related preprint:
