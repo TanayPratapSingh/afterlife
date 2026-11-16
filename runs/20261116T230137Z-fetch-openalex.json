@@ -1,0 +1,31 @@
+{
+  "command": "fetch-openalex",
+  "argv": [
+    "fetch",
+    "openalex",
+    "--budget",
+    "0.09"
+  ],
+  "started_at": "2026-11-16T22:57:36.775821+00:00",
+  "finished_at": "2026-11-16T23:01:37.054354+00:00",
+  "seconds": 240.3,
+  "report": {
+    "object_key": "landing/openalex/snapshot_date=2026-11-16/works_retracted.jsonl.gz",
+    "records": 91389,
+    "new": true,
+    "notes": {
+      "mode": "basic",
+      "expected": 91464,
+      "complete": true,
+      "slice_count_sum": 91397,
+      "uncovered_by_date_slices": 67,
+      "fetched": 91397,
+      "unique": 91389,
+      "filter": "is_retracted:true",
+      "counts_by_year_min_year": 2012,
+      "limit_usd": 0.09,
+      "spent_usd": 0.0475,
+      "calls": 475
+    }
+  }
+}
