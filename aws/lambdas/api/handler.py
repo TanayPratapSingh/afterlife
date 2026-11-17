@@ -185,6 +185,11 @@ def lookup(raw_id: str) -> dict[str, Any]:
         # Items have expired while meta#coverage has not, so absence would read as not_flagged.
         return respond(503, {"error": "registry_stale", "query": query, "as_of": loaded_as_of})
     item = table().get_item(Key={"pk": f"{kind}#{normalized}"}).get("Item")
+    if item is None and kind == "doi" and normalized[-1] in ".,;":
+        # ids.doi keeps trailing punctuation on purpose; a DOI pasted from a sentence carries one.
+        item = table().get_item(Key={"pk": f"doi#{normalized[:-1]}"}).get("Item")
+        if item is not None:
+            normalized = normalized[:-1]
     base = {"query": query, "kind": kind, "normalized": normalized}
     if item is None:
         return respond(

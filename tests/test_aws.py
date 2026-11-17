@@ -405,6 +405,12 @@ def test_api_not_flagged_is_never_ok(api):
     assert "ok" not in body.values()
 
 
+def test_api_strips_one_trailing_sentence_mark_from_a_doi(api):
+    status, _, body = _get(api, LOOKUP, "10.1000/XYZ.")
+    assert status == 200 and body["found"] is True and body["normalized"] == "10.1000/xyz"
+    assert _get(api, LOOKUP, "10.1000/never-seen;")[2]["verdict"] == "not_flagged"
+
+
 def test_api_refuses_when_the_export_is_older_than_the_item_ttl(loaded, monkeypatch):
     monkeypatch.setenv("ITEM_TTL_DAYS", "7")
     module = _handler("api")
