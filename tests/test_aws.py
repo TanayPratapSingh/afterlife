@@ -348,7 +348,9 @@ def _get(api, route, id_=None):
 
 
 @pytest.fixture
-def api(loaded):
+def api(loaded, monkeypatch):
+    # AS_OF is fixed in the past, so the real clock would mark it stale.
+    monkeypatch.setenv("ITEM_TTL_DAYS", "36500")
     module = _handler("api")
     module.reset()
     return module
@@ -401,6 +403,14 @@ def test_api_not_flagged_is_never_ok(api):
         "is not evidence of good standing; coverage differs by source, see /v1/coverage."
     )
     assert "ok" not in body.values()
+
+
+def test_api_refuses_when_the_export_is_older_than_the_item_ttl(loaded, monkeypatch):
+    monkeypatch.setenv("ITEM_TTL_DAYS", "7")
+    module = _handler("api")
+    module.reset()
+    status, _, body = _get(module, LOOKUP, "10.1000/never-seen")
+    assert status == 503 and body["error"] == "registry_stale" and body["as_of"] == AS_OF
 
 
 def test_api_rejects_unclassifiable_ids(api):

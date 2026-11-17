@@ -25,6 +25,7 @@ import logging
 import os
 import time
 import urllib.parse
+from datetime import UTC, date, datetime, timedelta
 from typing import Any
 
 import boto3
@@ -37,6 +38,8 @@ log.setLevel(logging.INFO)
 COVERAGE_PK = "meta#coverage"
 COVERAGE_TTL_SECONDS = 60.0
 MAX_QUERY_CHARS = 512
+# Must match the loader's ITEM_TTL_DAYS: past it, DynamoDB TTL has deleted the paper items.
+ITEM_TTL_DAYS = int(os.environ.get("ITEM_TTL_DAYS", "7"))
 LOOKUP_ROUTES = {"GET /v1/lookup/{id+}", "GET /v1/lookup/{id}"}
 
 SOURCE_NAMES = {"openalex": "OpenAlex", "pubmed": "PubMed", "pmc": "PMC"}
@@ -178,6 +181,9 @@ def lookup(raw_id: str) -> dict[str, Any]:
         # table. Refuse instead.
         return respond(503, {"error": "registry_not_loaded", "query": query})
     loaded_as_of = meta["as_of"]
+    if date.fromisoformat(loaded_as_of) + timedelta(days=ITEM_TTL_DAYS) <= datetime.now(UTC).date():
+        # Items have expired while meta#coverage has not, so absence would read as not_flagged.
+        return respond(503, {"error": "registry_stale", "query": query, "as_of": loaded_as_of})
     item = table().get_item(Key={"pk": f"{kind}#{normalized}"}).get("Item")
     base = {"query": query, "kind": kind, "normalized": normalized}
     if item is None:

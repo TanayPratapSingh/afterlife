@@ -293,6 +293,7 @@ resource "aws_lambda_function" "api" {
     variables = {
       TABLE_NAME        = aws_dynamodb_table.registry.name
       CORS_ALLOW_ORIGIN = var.cors_allow_origins[0]
+      ITEM_TTL_DAYS     = tostring(var.item_ttl_days)
     }
   }
 
